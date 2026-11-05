@@ -1,0 +1,556 @@
+[
+ {
+  "id": "old_v1_s10",
+  "kind": "old",
+  "diff": 0.533,
+  "ai": [
+   "fengbai",
+   "shuangchao",
+   "shanhong"
+  ],
+  "delay": 5,
+  "eps": 0.1,
+  "sub": "風擺柳碎步／雙抄花／山洪爆發式",
+  "v": 1,
+  "s": 10,
+  "char": "master",
+  "src": "舊模型・入門版第 10 關・反應 0.33 秒・失誤 10%",
+  "n": "鼓子秧歌大師",
+  "counters": [
+   [
+    [
+     "fengbai",
+     "xiaolun",
+     "baishi"
+    ],
+    "風擺柳碎步／小掄臂／敗式",
+    1.0
+   ],
+   [
+    [
+     "shanhong",
+     "sandian",
+     "pinghu"
+    ],
+    "山洪爆發式／三點頭／平護",
+    1.0
+   ],
+   [
+    [
+     "xiachuan",
+     "sandian",
+     "pinghu"
+    ],
+    "下穿掌／三點頭／平護",
+    0.983
+   ]
+  ]
+ },
+ {
+  "id": "new_now_yunbu+zhuafen+shuangchao_3",
+  "kind": "new",
+  "diff": 0.569,
+  "ai": [
+   "yunbu",
+   "zhuafen",
+   "shuangchao"
+  ],
+  "delay": 3,
+  "eps": 0,
+  "sub": "雲步／抓分手／雙抄花",
+  "gen": "h_new_now",
+  "file": "mc_hard/new_now.json",
+  "char": "auntie",
+  "src": "新模型・現在最新的一代（it23010）・反應 0.20 秒・失誤 0%",
+  "counters": [
+   [
+    [
+     "shanhong",
+     "yunbu",
+     "pinghu"
+    ],
+    "山洪爆發式／雲步／平護",
+    1.0
+   ],
+   [
+    [
+     "bear",
+     "fengbai",
+     "feiji"
+    ],
+    "狗熊哆嗦毛／風擺柳碎步／飛機輪",
+    1.0
+   ],
+   [
+    [
+     "fengbai",
+     "xiachuan",
+     "feiji"
+    ],
+    "風擺柳碎步／下穿掌／飛機輪",
+    0.983
+   ]
+  ]
+ },
+ {
+  "id": "new_78_shuangchao+yunbu+shanhong_5",
+  "kind": "new",
+  "diff": 0.596,
+  "ai": [
+   "shuangchao",
+   "yunbu",
+   "shanhong"
+  ],
+  "delay": 5,
+  "eps": 0.1,
+  "sub": "雙抄花／雲步／山洪爆發式",
+  "gen": "h_new_78",
+  "file": "mc_hard/new_78.json",
+  "char": "trump",
+  "src": "新模型・特訓 78% 階段（it21300）・反應 0.33 秒・失誤 10%",
+  "counters": [
+   [
+    [
+     "shan",
+     "shanhong",
+     "pinghu"
+    ],
+    "閃身步／山洪爆發式／平護",
+    1.0
+   ],
+   [
+    [
+     "guabian",
+     "shanhong",
+     "pinghu"
+    ],
+    "掛鞭式／山洪爆發式／平護",
+    1.0
+   ],
+   [
+    [
+     "bear",
+     "dalun",
+     "pinghu"
+    ],
+    "狗熊哆嗦毛／大掄臂／平護",
+    1.0
+   ]
+  ]
+ },
+ {
+  "id": "new_68_shanhong+shuangchao+pinghu_3",
+  "kind": "new",
+  "diff": 0.617,
+  "ai": [
+   "shanhong",
+   "shuangchao",
+   "pinghu"
+  ],
+  "delay": 3,
+  "eps": 0,
+  "sub": "山洪爆發式／雙抄花／平護",
+  "gen": "h_new_68",
+  "file": "mc_hard/new_68.json",
+  "char": "bear",
+  "src": "新模型・特訓 68% 階段（it05300）・反應 0.20 秒・失誤 0%",
+  "counters": [
+   [
+    [
+     "bear",
+     "xiaolun",
+     "baishi"
+    ],
+    "狗熊哆嗦毛／小掄臂／敗式",
+    0.95
+   ],
+   [
+    [
+     "xiaolun",
+     "zhuafen",
+     "pinghu"
+    ],
+    "小掄臂／抓分手／平護",
+    0.95
+   ],
+   [
+    [
+     "bear",
+     "laoying",
+     "pinghu"
+    ],
+    "狗熊哆嗦毛／老鷹展翅／平護",
+    0.917
+   ]
+  ]
+ },
+ {
+  "id": "new_now_shan+bear+xiaolun_3",
+  "kind": "new",
+  "diff": 0.645,
+  "ai": [
+   "shan",
+   "bear",
+   "xiaolun"
+  ],
+  "delay": 3,
+  "eps": 0,
+  "sub": "閃身步／狗熊哆嗦毛／小掄臂",
+  "gen": "h_new_now",
+  "file": "mc_hard/new_now.json",
+  "char": "teacher",
+  "src": "新模型・現在最新的一代（it23010）・反應 0.20 秒・失誤 0%",
+  "counters": [
+   [
+    [
+     "fengbai",
+     "shuangchao",
+     "zhuafen"
+    ],
+    "風擺柳碎步／雙抄花／抓分手",
+    0.85
+   ],
+   [
+    [
+     "xiaolun",
+     "zhuafen",
+     "sandian"
+    ],
+    "小掄臂／抓分手／三點頭",
+    0.833
+   ],
+   [
+    [
+     "dalun",
+     "shanhong",
+     "yunbu"
+    ],
+    "大掄臂／山洪爆發式／雲步",
+    0.783
+   ]
+  ]
+ },
+ {
+  "id": "old_v7_s9",
+  "kind": "old",
+  "diff": 0.668,
+  "ai": [
+   "fengbai",
+   "xiaolun",
+   "feiji"
+  ],
+  "delay": 3,
+  "eps": 0,
+  "sub": "風擺柳碎步／小掄臂／飛機輪",
+  "v": 7,
+  "s": 9,
+  "char": "master",
+  "src": "舊模型・防守反擊版第 9 關・反應 0.20 秒・失誤 0%",
+  "counters": [
+   [
+    [
+     "shan",
+     "baishi",
+     "shanhong"
+    ],
+    "閃身步／敗式／山洪爆發式",
+    0.983
+   ],
+   [
+    [
+     "shan",
+     "shanhong",
+     "feiji"
+    ],
+    "閃身步／山洪爆發式／飛機輪",
+    0.867
+   ],
+   [
+    [
+     "fengbai",
+     "shuangchao",
+     "pinghu"
+    ],
+    "風擺柳碎步／雙抄花／平護",
+    0.85
+   ]
+  ]
+ },
+ {
+  "id": "new_now_shanhong+fengbai+xiachuan_3",
+  "kind": "new",
+  "diff": 0.704,
+  "ai": [
+   "shanhong",
+   "fengbai",
+   "xiachuan"
+  ],
+  "delay": 3,
+  "eps": 0,
+  "sub": "山洪爆發式／風擺柳碎步／下穿掌",
+  "gen": "h_new_now",
+  "file": "mc_hard/new_now.json",
+  "char": "mascot",
+  "src": "新模型・現在最新的一代（it23010）・反應 0.20 秒・失誤 0%",
+  "counters": [
+   [
+    [
+     "xiaolun",
+     "baishi",
+     "shuangchao"
+    ],
+    "小掄臂／敗式／雙抄花",
+    1.0
+   ],
+   [
+    [
+     "fengbai",
+     "baishi",
+     "pinghu"
+    ],
+    "風擺柳碎步／敗式／平護",
+    0.95
+   ],
+   [
+    [
+     "xiaolun",
+     "zhuafen",
+     "shanhong"
+    ],
+    "小掄臂／抓分手／山洪爆發式",
+    0.9
+   ]
+  ]
+ },
+ {
+  "id": "new_78_sandian+dalun+fengbai_3",
+  "kind": "new",
+  "diff": 0.725,
+  "ai": [
+   "sandian",
+   "dalun",
+   "fengbai"
+  ],
+  "delay": 3,
+  "eps": 0,
+  "sub": "三點頭／大掄臂／風擺柳碎步",
+  "gen": "h_new_78",
+  "file": "mc_hard/new_78.json",
+  "char": "rider",
+  "src": "新模型・特訓 78% 階段（it21300）・反應 0.20 秒・失誤 0%",
+  "counters": [
+   [
+    [
+     "shan",
+     "shanhong",
+     "laoying"
+    ],
+    "閃身步／山洪爆發式／老鷹展翅",
+    0.983
+   ],
+   [
+    [
+     "fengbai",
+     "baishi",
+     "yunbu"
+    ],
+    "風擺柳碎步／敗式／雲步",
+    0.833
+   ],
+   [
+    [
+     "shan",
+     "shuangchao",
+     "sandian"
+    ],
+    "閃身步／雙抄花／三點頭",
+    0.742
+   ]
+  ]
+ },
+ {
+  "id": "new_78_shanhong+shan+sandian_3",
+  "kind": "new",
+  "diff": 0.757,
+  "ai": [
+   "shanhong",
+   "shan",
+   "sandian"
+  ],
+  "delay": 3,
+  "eps": 0,
+  "sub": "山洪爆發式／閃身步／三點頭",
+  "gen": "h_new_78",
+  "file": "mc_hard/new_78.json",
+  "char": "auntie",
+  "src": "新模型・特訓 78% 階段（it21300）・反應 0.20 秒・失誤 0%",
+  "counters": [
+   [
+    [
+     "baishi",
+     "shuangchao",
+     "sandian"
+    ],
+    "敗式／雙抄花／三點頭",
+    1.0
+   ],
+   [
+    [
+     "fengbai",
+     "xiaolun",
+     "pinghu"
+    ],
+    "風擺柳碎步／小掄臂／平護",
+    0.883
+   ],
+   [
+    [
+     "ball",
+     "xiaolun",
+     "baishi"
+    ],
+    "浪子踢球／小掄臂／敗式",
+    0.817
+   ]
+  ]
+ },
+ {
+  "id": "new_74_fengbai+baishi+xiaolun_3",
+  "kind": "new",
+  "diff": 0.85,
+  "ai": [
+   "fengbai",
+   "baishi",
+   "xiaolun"
+  ],
+  "delay": 3,
+  "eps": 0,
+  "sub": "風擺柳碎步／敗式／小掄臂",
+  "gen": "h_new_74",
+  "file": "mc_hard/new_74.json",
+  "char": "trump",
+  "src": "新模型・特訓 74% 階段（it11200）・反應 0.20 秒・失誤 0%",
+  "counters": [
+   [
+    [
+     "shan",
+     "ball",
+     "xiachuan"
+    ],
+    "閃身步／浪子踢球／下穿掌",
+    0.917
+   ],
+   [
+    [
+     "shan",
+     "ball",
+     "baishi"
+    ],
+    "閃身步／浪子踢球／敗式",
+    0.867
+   ],
+   [
+    [
+     "shan",
+     "ball",
+     "sandian"
+    ],
+    "閃身步／浪子踢球／三點頭",
+    0.85
+   ]
+  ]
+ },
+ {
+  "id": "new_now_shanhong+xiaolun+baishi_3",
+  "kind": "new",
+  "diff": 0.867,
+  "ai": [
+   "shanhong",
+   "xiaolun",
+   "baishi"
+  ],
+  "delay": 3,
+  "eps": 0,
+  "sub": "山洪爆發式／小掄臂／敗式",
+  "gen": "h_new_now",
+  "file": "mc_hard/new_now.json",
+  "char": "bear",
+  "src": "新模型・現在最新的一代（it23010）・反應 0.20 秒・失誤 0%",
+  "counters": [
+   [
+    [
+     "shan",
+     "xiaolun",
+     "pinghu"
+    ],
+    "閃身步／小掄臂／平護",
+    0.733
+   ],
+   [
+    [
+     "shan",
+     "sandian",
+     "pinghu"
+    ],
+    "閃身步／三點頭／平護",
+    0.733
+   ],
+   [
+    [
+     "xiaolun",
+     "liaowang",
+     "sandian"
+    ],
+    "小掄臂／瞭望式／三點頭",
+    0.717
+   ]
+  ]
+ },
+ {
+  "id": "new_now_shanhong+fengbai+sandian_3",
+  "kind": "new",
+  "diff": 0.903,
+  "ai": [
+   "shanhong",
+   "fengbai",
+   "sandian"
+  ],
+  "delay": 3,
+  "eps": 0,
+  "sub": "山洪爆發式／風擺柳碎步／三點頭",
+  "gen": "h_new_now",
+  "file": "mc_hard/new_now.json",
+  "char": "master",
+  "src": "新模型・現在最新的一代（it23010）・反應 0.20 秒・失誤 0%",
+  "n": "最強電腦",
+  "counters": [
+   [
+    [
+     "fengbai",
+     "baishi",
+     "laoying"
+    ],
+    "風擺柳碎步／敗式／老鷹展翅",
+    0.967
+   ],
+   [
+    [
+     "xiaolun",
+     "baishi",
+     "shanhong"
+    ],
+    "小掄臂／敗式／山洪爆發式",
+    0.767
+   ],
+   [
+    [
+     "baishi",
+     "liaowang",
+     "feiji"
+    ],
+    "敗式／瞭望式／飛機輪",
+    0.6
+   ]
+  ]
+ }
+]

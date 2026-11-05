@@ -1,0 +1,504 @@
+  html,body{margin:0;height:100%;background:#0b1622;overflow:hidden;font-family:"Microsoft JhengHei","PingFang TC",sans-serif;
+    -webkit-user-select:none;user-select:none;-webkit-touch-callout:none;touch-action:none;overscroll-behavior:none}
+  #wrap{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+  /* 畫布永遠 16:9，盡量放大但不超出螢幕 */
+  canvas{display:block;aspect-ratio:16/9;width:min(100vw,calc(100vh*16/9));width:min(100vw,calc(100dvh*16/9));height:auto}
+  .tb{white-space:nowrap;background:rgba(0,0,0,.45);color:#fff;border:1px solid rgba(255,255,255,.3);border-radius:8px;padding:6px 10px;font-size:14px;cursor:pointer;font-family:inherit}
+  /* 左上角工具列：首頁、帳號、設定、音效、鼓幣；打鬥中只留首頁 */
+  #tools{position:fixed;top:max(6px,env(safe-area-inset-top));left:max(6px,env(safe-area-inset-left));z-index:11;display:flex;gap:6px;align-items:center}
+  .tl{width:44px;height:44px;border-radius:50%;border:2px solid rgba(255,255,255,.6);background:rgba(10,30,60,.65);color:#fff;font-size:21px;padding:0;cursor:pointer;touch-action:manipulation;display:flex;align-items:center;justify-content:center}
+  .tl:hover{background:rgba(232,96,28,.85)}
+  /* 鼓幣：右上角獨立顯示 */
+  #coinPill{position:fixed;top:max(10px,env(safe-area-inset-top));right:max(10px,env(safe-area-inset-right));z-index:11;height:36px;padding:0 14px 0 8px;border-radius:18px;border:2px solid #ffd34d;background:rgba(10,30,60,.75);color:#ffe36b;font:bold 18px "Microsoft JhengHei",sans-serif;display:flex;align-items:center;gap:6px}
+  #coinPill i{font-style:normal;font-size:20px}
+  body.fight #coinPill{display:none}
+  /* ☰ 選單：帳號、成就、練習場、音效、設定收在一格 */
+  #menuDrop{position:absolute;top:50px;left:50px;min-width:170px;padding:6px;border-radius:14px;background:#13304f;border:2px solid #e8601c;box-shadow:0 8px 28px rgba(0,0,0,.55);display:flex;flex-direction:column;gap:2px}
+  .mi{display:flex;align-items:center;gap:10px;width:100%;padding:10px 12px;border:0;border-radius:9px;background:transparent;color:#fff;font:bold 17px "Microsoft JhengHei",sans-serif;cursor:pointer;text-align:left;touch-action:manipulation}
+  .mi:hover{background:rgba(232,96,28,.35)} .mi i{font-style:normal;font-size:20px;width:24px;text-align:center}
+  /* 打鬥中：直排在最左邊，選單只留音效／音樂／設定，不擋到血條 */
+  body.fight #tools{flex-direction:column}
+  body.fight #tools .tl{width:40px;height:40px;font-size:19px}
+  body.fight #menuDrop{top:0;left:48px}
+  body.fight #acctBtn,body.fight #achBtn,body.fight #dailyBtn,body.fight #gMenuBtn{display:none}
+  #menuDrop{min-width:210px} .mi{white-space:nowrap}
+  #gArea.flash{animation:gFlash 1.4s ease 2} @keyframes gFlash{50%{background:rgba(255,211,77,.25)}}
+  #gArea{border-radius:10px;padding:4px}
+  #cpuLvs{display:flex;flex-direction:column;gap:10px;margin:6px 0 10px}
+  #cpuLvs button{border:0;border-radius:12px;padding:14px 10px;color:#fff;font:bold 24px "Microsoft JhengHei",sans-serif;cursor:pointer;box-shadow:0 5px 0 rgba(0,0,0,.35);touch-action:manipulation}
+  #cpuLvs button small{display:block;font-size:13px;font-weight:normal;opacity:.9;margin-top:2px}
+  #cpuLvs button:active{transform:translateY(4px);box-shadow:0 1px 0 rgba(0,0,0,.35)}
+  #cpuLvs [data-lv="1"]{background:linear-gradient(#2fbf74,#16824c)} #cpuLvs [data-lv="2"]{background:linear-gradient(#3f8fe0,#1d4f8f)} #cpuLvs [data-lv="3"]{background:linear-gradient(#ff6a4d,#b3261a)}
+  body:not(.dev) .devOnly{display:none!important} /* 後台測試工具：?dev=1 才看得到 */
+  #lbCreateX.locked{filter:grayscale(.85) brightness(.8);font-size:15px}
+  #dailyDot{margin-left:auto;font:bold 12px "Microsoft JhengHei",sans-serif;padding:1px 8px;border-radius:9px;background:#e8601c;color:#fff}
+  #menuBtn{position:relative} #menuBtn.dot::after{content:"";position:absolute;top:2px;right:2px;width:11px;height:11px;border-radius:50%;background:#ff3b3b;border:2px solid #fff}
+  /* 其他模式：三張大圖卡；挑戰馬師傅：橫向路線圖 */
+  /* 整個視窗的畫面：其他模式、挑戰馬師傅、闖關（開始／傳承樹／結算；過關三選一還是小視窗） */
+  #omPanel,#maPanel,#rgPanel:not(:has(#rgCardsWrap:not(.hide))){z-index:12;background:#0b1a2b}
+  #omPanel .card,#maPanel .card,#rgPanel:not(:has(#rgCardsWrap:not(.hide))) .card{width:100vw;height:100vh;height:100dvh;max-height:none;border:0;border-radius:0;box-shadow:none;box-sizing:border-box;overflow:auto;
+    background:radial-gradient(ellipse at 50% 25%,#24578a 0%,#13304f 45%,#0b1a2b 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:clamp(8px,2.2vh,20px);
+    padding:max(56px,env(safe-area-inset-top)) max(20px,env(safe-area-inset-right)) max(16px,env(safe-area-inset-bottom)) max(20px,env(safe-area-inset-left))}
+  #rgPanel:not(:has(#rgCardsWrap:not(.hide))) .card>*{width:min(100%,900px)}
+  #omPanel h2,#maPanel h2{font-size:clamp(28px,6vh,48px);margin:0;letter-spacing:.08em}
+  .fsBack{width:min(100%,420px)!important}
+  .omCards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(12px,2.5vw,32px);width:min(100%,1100px)}
+  .omC{position:relative;border:0;border-radius:22px;color:#fff;cursor:pointer;height:clamp(150px,52vh,420px);padding:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:clamp(6px,2vh,16px);font-family:inherit;box-shadow:0 10px 0 rgba(0,0,0,.35),0 16px 26px rgba(0,0,0,.45);transition:transform .08s;touch-action:manipulation}
+  .omC:nth-child(1){background:linear-gradient(160deg,#2fd07f,#0d7a49)} .omC:nth-child(2){background:linear-gradient(160deg,#ff9b3d,#c43c12)} .omC:nth-child(3){background:linear-gradient(160deg,#5aa8ff,#2349b8)} .omC:nth-child(4){background:linear-gradient(160deg,#c77dff,#5b2a9e)}
+  .omCards:has(.omC:nth-child(4)){grid-template-columns:repeat(4,minmax(0,1fr))}
+  .omC:nth-child(5){background:linear-gradient(160deg,#ff6b8b,#9e1f4a)} .omCards:has(.omC:nth-child(5):not(.hide)){grid-template-columns:repeat(5,minmax(0,1fr))}
+  /* 排位賽：段位、配對中、選招（ban/pick）、結算，全部整個視窗 */
+  /* 風格 A「榮耀金徽」（參考王者榮耀、英雄聯盟）：深藍黑底＋放射光、金屬金邊、六角段位徽章；配對中保留原本的小人閃身步畫面 */
+  #rkPanel{z-index:12;background:#06080f;--rkGold:#f2c14e;--rkGold2:#fff0b5;--rkInk:#f6e7c1;--rkDim:#c9b98e;--rkSerif:"Noto Serif TC","Songti TC","PMingLiU",serif}
+  #rkPanel .card{position:relative;width:100vw;height:100vh;height:100dvh;max-height:none;border:0;border-radius:0;box-shadow:none;box-sizing:border-box;overflow:auto;color:var(--rkInk);
+    background:radial-gradient(ellipse at 50% 30%,#1c2a4a 0%,#0b1120 60%,#06080f 100%);font-family:var(--rkSerif);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:clamp(8px,2vh,18px);padding:max(50px,env(safe-area-inset-top)) max(16px,env(safe-area-inset-right)) max(14px,env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left))}
+  #rkPanel .card>*{position:relative}
+  /* 標題：實心金字＋深色描邊（漸層透明字疊黑影會變細、變暗） */
+  #rkPanel h2{margin:0;font:900 clamp(34px,8vh,64px) "Microsoft JhengHei","PingFang TC",sans-serif;letter-spacing:.12em;color:#ffd86b;-webkit-text-stroke:2px #3a2400;paint-order:stroke fill;text-shadow:0 3px 0 #1a1000,0 0 18px rgba(242,193,78,.45)}
+  .rkV{display:flex;flex-direction:column;align-items:center;gap:clamp(8px,2vh,16px);width:min(100%,1100px)}
+  .rkCrest{width:clamp(110px,26vh,210px);filter:drop-shadow(0 0 18px rgba(242,193,78,.45))} .rkCrest svg{display:block;width:100%}
+  .rkTName{font:900 clamp(30px,7vh,56px) "Microsoft JhengHei","PingFang TC",sans-serif;letter-spacing:.2em;color:#ffe9a8;-webkit-text-stroke:1.5px #3a2400;paint-order:stroke fill;text-shadow:0 3px 0 #1a1000}
+  .rkPts{font:700 clamp(15px,2.9vh,21px) "Microsoft JhengHei",sans-serif;color:var(--rkDim);letter-spacing:.05em}
+  .rkBar{width:min(80vw,440px);height:10px;border:1.5px solid #a37a2a;border-radius:6px;background:#0b0f18;overflow:hidden} .rkBar i{display:block;height:100%;background:linear-gradient(90deg,#8a5a12,#f2c14e,#fff0b5)}
+  .rkTiers{display:flex;gap:clamp(6px,1.4vw,14px);flex-wrap:wrap;justify-content:center} .rkTiers svg{width:clamp(30px,6vh,46px);opacity:.4;display:block} .rkTiers svg.on{opacity:1;filter:drop-shadow(0 0 8px #f2c14e)}
+  #rkPicker{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;align-items:center;width:100%}
+  #rkPicker b{font:900 clamp(15px,2.8vh,20px) "Microsoft JhengHei",sans-serif;color:var(--rkGold2)}
+  #rkPicker button{font:700 clamp(13px,2.4vh,17px) "Microsoft JhengHei",sans-serif;padding:7px 12px;border:1.5px solid #6b5420;background:rgba(0,0,0,.3);color:var(--rkInk);cursor:pointer;touch-action:manipulation}
+  #rkPicker button.on{background:linear-gradient(#fff0b5,#e2a93a 55%,#a66a14);color:#2a1a00;border-color:#fff0b5}
+  .rkBtns{display:flex;gap:14px;width:min(100%,560px);justify-content:center}
+  .rkGo{flex:1;font:900 clamp(17px,3.4vh,24px) var(--rkSerif);letter-spacing:.35em;padding:12px 0 12px .35em;color:#2a1a00;border:0;cursor:pointer;clip-path:polygon(6% 0,94% 0,100% 50%,94% 100%,6% 100%,0 50%);background:linear-gradient(#fff0b5,#e2a93a 55%,#a66a14);touch-action:manipulation}
+  .rkGo:active{filter:brightness(.85)}
+  .rkGhost{flex:1;font:700 clamp(15px,2.8vh,19px) "Microsoft JhengHei",sans-serif;padding:11px 0;border:1.5px solid #a37a2a;background:rgba(0,0,0,.25);color:var(--rkInk);cursor:pointer;touch-action:manipulation}
+  /* 配對中：原本的畫面（藍色舞台、小人閃身步） */
+  #rkQueueCv{width:min(92vw,560px);aspect-ratio:2/1;border-radius:16px;background:linear-gradient(#4f97cf,#2f6aa0);display:block;border:2px solid rgba(242,193,78,.5)}
+  #rkQTime{font-size:clamp(24px,5.5vh,38px);font-weight:900;letter-spacing:.2em;font-variant-numeric:tabular-nums}
+  /* 選招：左右對稱、中間計時圈＋招式六角磚 */
+  .rkVs{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2.4fr) minmax(0,1fr);gap:clamp(8px,1.6vw,20px);width:100%;align-items:start}
+  .rkSide{display:flex;flex-direction:column;gap:8px} .rkSide h4{margin:0;font:900 clamp(15px,3vh,22px) "Microsoft JhengHei","PingFang TC",sans-serif;text-align:center;letter-spacing:.05em}
+  .rkSide.turn h4{color:var(--rkGold2);text-shadow:0 0 10px rgba(242,193,78,.8)}
+  .rkBanBox{align-self:center;min-width:60%;padding:6px 8px;border:1.5px solid #7a2a2a;background:rgba(120,20,20,.25);color:#ff9a8a;text-align:center;font-size:clamp(12px,2.1vh,15px)}
+  .rkSlot{min-height:clamp(40px,8.5vh,62px);border:1.5px solid #6b5420;background:linear-gradient(90deg,rgba(242,193,78,.08),transparent);display:flex;align-items:center;gap:10px;padding:0 10px;font-size:clamp(13px,2.4vh,17px)}
+  .rkSlot.filled{border-color:var(--rkGold);background:linear-gradient(90deg,rgba(242,193,78,.25),transparent)}
+  .rkSlot b{flex:none;width:clamp(24px,5vh,34px);aspect-ratio:1;display:grid;place-items:center;border:1.5px solid var(--rkGold);transform:rotate(45deg);font-size:clamp(12px,2.2vh,15px)} .rkSlot b span{transform:rotate(-45deg)}
+  .rkMid{display:flex;flex-direction:column;align-items:center;gap:8px;min-width:0}
+  .rkMid b{font:900 clamp(20px,4.2vh,32px) "Microsoft JhengHei","PingFang TC",sans-serif;letter-spacing:.1em;color:var(--rkGold2);text-shadow:0 2px 0 #1a1000}
+  .rkRing{position:relative;width:clamp(60px,13vh,96px);aspect-ratio:1;display:grid;place-items:center}
+  .rkRing i{position:absolute;inset:0;border-radius:50%;background:conic-gradient(var(--rkGold) var(--p,100%),#2a2a2a 0);-webkit-mask:radial-gradient(circle,transparent 58%,#000 59%);mask:radial-gradient(circle,transparent 58%,#000 59%)}
+  .rkRing .tm{font-size:clamp(22px,5vh,36px);font-weight:900;font-variant-numeric:tabular-nums}
+  #rkOrder{color:var(--rkDim);font-size:13px;font-family:"Microsoft JhengHei",sans-serif}
+  #rkPool{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;width:100%}
+  #rkPool button{border:1.5px solid #5a4a2a;background:linear-gradient(#18233b,#0e1526);color:var(--rkInk);padding:8px 4px;font:700 clamp(13px,2.5vh,17px) "Microsoft JhengHei",sans-serif;cursor:pointer;line-height:1.25;touch-action:manipulation;display:flex;flex-direction:column;align-items:center;gap:5px}
+  #rkPool button i{font:900 clamp(16px,3.4vh,24px) var(--rkSerif);font-style:normal;width:clamp(30px,6vh,44px);aspect-ratio:1;display:grid;place-items:center;clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%);background:linear-gradient(#f2c14e,#8a5a12);color:#2a1a00}
+  #rkPool button:disabled{cursor:default} #rkPool button:disabled:not(.me):not(.foe):not(.ban){opacity:.55}
+  #rkPool button.ban{opacity:.3;filter:grayscale(1)} #rkPool button.me{border-color:#5fe3a1;box-shadow:inset 0 0 0 1px #5fe3a1} #rkPool button.foe{border-color:#ff7a5c;box-shadow:inset 0 0 0 1px #ff7a5c}
+  #rkPool button.sel{outline:2px solid var(--rkGold2);outline-offset:2px}
+  #rkPool button.goBtn{grid-column:span 2;justify-content:center;font:900 clamp(16px,3.2vh,22px) var(--rkSerif);letter-spacing:.3em;color:#2a1a00;border:0;background:linear-gradient(#fff0b5,#e2a93a 55%,#a66a14)}
+  .rkDelta{font-size:clamp(34px,8vh,60px);font-weight:900;font-family:var(--rkSerif)} .rkDelta.up{color:#7ee2a8} .rkDelta.dn{color:#ff8a7a}
+  #rkResT{letter-spacing:.2em}
+  @media (max-width:640px){#rkPool{grid-template-columns:repeat(3,minmax(0,1fr))} .rkVs{grid-template-columns:1fr 1fr} .rkMid{grid-column:1/-1;grid-row:1}}
+  .omC .ic{font-size:clamp(44px,13vh,110px);line-height:1;filter:drop-shadow(0 4px 0 rgba(0,0,0,.3))}
+  .omC .t{font-size:clamp(20px,min(5.5vh,2.8vw),44px);white-space:nowrap;font-weight:bold;-webkit-text-stroke:1.5px rgba(0,0,0,.45);paint-order:stroke fill;text-shadow:0 3px 0 rgba(0,0,0,.35)}
+  .omC .d{font-size:clamp(13px,2.6vh,20px);opacity:.92}
+  .omC:active{transform:translateY(7px);box-shadow:0 3px 0 rgba(0,0,0,.35),0 6px 10px rgba(0,0,0,.4)}
+  .maPath{display:flex;align-items:flex-start;width:min(100%,1200px);padding:clamp(10px,3vh,28px) clamp(8px,1.5vw,20px);background:linear-gradient(#4f97cf,#2f6aa0);border-radius:18px;box-sizing:border-box}
+  .maN{flex:0 1 auto;display:flex;flex-direction:column;align-items:center;gap:8px;border:0;background:none;color:#fff;font-family:inherit;cursor:pointer;padding:0;width:12%;touch-action:manipulation}
+  .maN .c{position:relative;width:min(100%,clamp(56px,18vh,130px));aspect-ratio:1;border-radius:50%;overflow:hidden;background:radial-gradient(circle at 50% 40%,#5d8fc4,#20354f);border:4px solid #47698f;box-shadow:0 5px 0 #0c1626;box-sizing:border-box}
+  .maN .c img{width:100%;height:100%;display:block}
+  .maN{position:relative}
+  .maN em{position:absolute;top:0;right:8%;font-style:normal;font-size:clamp(14px,3.6vh,28px);line-height:1;text-shadow:0 2px 3px #000}
+  .maN.done .c{border-color:#ffd34d} .maN.done em{color:#ffd34d}
+  .maN.boss .c{border-color:#ff7a5c} .maN.boss.done .c{border-color:#ffd34d}
+  .maN.now .c{border-color:#ffe7a3;box-shadow:0 0 0 5px rgba(255,231,163,.25),0 0 24px rgba(255,214,90,.85);animation:maPulse 1.2s ease-in-out infinite}
+  .maN.lock .c img{filter:grayscale(1) brightness(.6)}
+  .maN.sel .c{outline:4px solid #fff;outline-offset:4px}
+  .maN small{font-size:clamp(11px,2.4vh,17px);font-weight:bold;color:#fff;line-height:1.25;text-align:center;text-shadow:0 1px 2px #000}
+  .maL{flex:1 1 0;min-width:4px;height:6px;margin-top:clamp(28px,9vh,65px);background:repeating-linear-gradient(90deg,#47698f 0 8px,transparent 8px 14px)} .maL.done{background:#e7b43a}
+  /* 新版挑戰馬師傅（測試版，30 關）：一排 10 關分行排，不畫連接線 */
+  .maPath.many{flex-wrap:wrap;row-gap:clamp(6px,2vh,16px);max-height:62vh;overflow-y:auto} .maPath.many .maL{display:none}
+  #maRoute{display:flex;gap:10px;margin-bottom:8px} #maRoute button{font:inherit;font-weight:bold;padding:6px 16px;border-radius:10px;border:2px solid #47698f;background:#20354f;color:#cfe0f2;cursor:pointer}
+  #maRoute button.on{background:#e7b43a;border-color:#ffd34d;color:#2a1a00} #maRoute button:disabled{opacity:.5;cursor:default}
+  .maDemo{margin-top:6px;font-size:clamp(11px,2vh,14px);line-height:1.5;color:#dfe9f5;text-align:left;display:inline-block} .maDemo b{color:#ffd34d;margin-right:8px}
+  .maPath.many .maN{width:10%;gap:4px} .maPath.many .maN .c{width:min(90%,clamp(38px,10vh,78px));border-width:3px} .maPath.many .maN small{font-size:clamp(10px,2vh,14px)}
+  @keyframes maPulse{50%{transform:scale(1.06)}}
+  #maInfo{font-size:clamp(15px,3vh,22px);color:#ffe36b;text-align:center}
+  #maPanel .sub2{color:#9fc4ea;font-size:clamp(12px,2.4vh,16px);max-width:900px}
+  .maBtns{display:flex;gap:12px;width:min(100%,640px)} .maBtns .big{flex:1}
+  @media (max-height:460px){#maPanel .sub2{display:none}}
+  @media (max-width:520px){.omCards{grid-template-columns:1fr}.omC{height:auto;flex-direction:row;padding:14px 18px}.omC .ic{font-size:36px}}
+  body.ingame:not(.touch) #bar{display:none}
+  #bar{position:fixed;bottom:max(8px,env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);z-index:5;display:flex;gap:8px}
+  /* 帳號／設定／取名 小視窗 */
+  .pnl{position:fixed;inset:0;z-index:12;display:flex;align-items:center;justify-content:center;background:rgba(0,8,20,.7);touch-action:auto}
+  .pnl .card{width:min(92vw,440px);max-height:92vh;overflow:auto;background:#13304f;border:2px solid #e8601c;border-radius:16px;padding:20px;color:#fff;text-align:center;box-sizing:border-box;box-shadow:0 10px 40px rgba(0,0,0,.5)}
+  .pnl h2{margin:0 0 12px;color:#ffe600;font-size:26px;text-shadow:0 2px 0 #000}
+  .pnl .big{width:100%;padding:11px;font:bold 19px "Microsoft JhengHei",sans-serif;border-radius:10px;border:0;background:#e8601c;color:#ffe600;margin:6px 0;cursor:pointer}
+  .pnl .big.alt{background:#2f5a85;color:#fff}
+  .pnl .row2{display:flex;justify-content:space-between;align-items:center;padding:9px 4px;border-bottom:1px solid rgba(255,255,255,.1);font-size:17px}
+  .pnl .row2 b{color:#ffe36b;font-size:20px}
+  #nameIn{width:100%;box-sizing:border-box;font-size:22px;padding:10px;border-radius:10px;border:2px solid #5ea6dc;background:#0b1622;color:#fff;text-align:center;-webkit-user-select:text;user-select:text}
+  #nameErr{color:#ff9c8a;min-height:20px;font-size:14px;margin-top:6px}
+  #acct #saveBox{text-align:center}
+  .pnl .sec{margin:12px 0 2px;text-align:left;color:#ffb37a;font-weight:bold;font-size:15px}
+  /* 成就 */
+  #achGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:8px;text-align:left;margin:8px 0}
+  .aItem{background:#1b3d61;border:2px solid #2f5a85;border-radius:12px;padding:8px 10px;display:flex;gap:10px;align-items:center}
+  .aItem .ic{font-size:30px;filter:grayscale(1);opacity:.45}
+  .aItem .n{font-weight:bold;color:#9fc4ea;font-size:16px} .aItem .d{font-size:12px;color:#cfe0f2;margin-top:2px}
+  .aItem .pg{height:6px;border-radius:3px;background:#0b1622;margin-top:5px;overflow:hidden} .aItem .pg i{display:block;height:100%;background:#ffb020}
+  .aItem.on{border-color:#ffd34d;background:linear-gradient(#2b5c8a,#1b3d61)} .aItem.on .ic{filter:none;opacity:1} .aItem.on .n{color:#ffe36b}
+  #achToast{position:fixed;top:12px;left:50%;transform:translateX(-50%);z-index:26;display:flex;gap:10px;align-items:center;padding:10px 18px;border-radius:14px;background:linear-gradient(90deg,#3a2a00,#6b4a00);border:2px solid #ffd34d;color:#fff;font:bold 18px "Microsoft JhengHei",sans-serif;box-shadow:0 6px 24px rgba(0,0,0,.5);animation:atIn 3.2s ease forwards;pointer-events:none}
+  #achToast .ic{font-size:30px} #achToast small{display:block;color:#ffe36b;font-size:13px}
+  @keyframes atIn{0%{opacity:0;transform:translate(-50%,-30px) scale(.9)}10%{opacity:1;transform:translate(-50%,0) scale(1.05)}15%{transform:translate(-50%,0) scale(1)}85%{opacity:1}100%{opacity:0;transform:translate(-50%,-20px)}}
+  /* 招式練習場：右邊一條控制欄 */
+  #prPanel{position:fixed;top:0;right:0;bottom:0;width:min(300px,42vw);z-index:7;background:rgba(14,29,46,.94);border-left:2px solid #e8601c;color:#fff;font-size:13px;display:flex;flex-direction:column;touch-action:auto}
+  #prPanel .hd{padding:8px 10px;border-bottom:1px solid rgba(255,255,255,.12)}
+  body.practice #wrap{right:min(300px,42vw)}
+  body.practice canvas{width:min(calc(100vw - min(300px,42vw)),calc(100vh*16/9))}
+  body.practice #cr{margin-right:min(300px,42vw)}
+  body.fight #prBtn,body.fight #maBtn{display:none}
+  #prPanel .hd b{color:#ffe600;font-size:17px}
+  #prSlots{display:flex;gap:4px;margin:6px 0}
+  #prSlots button{flex:1;padding:6px 2px;border-radius:8px;border:2px dashed #5ea6dc;background:#13304f;color:#fff;font:bold 13px "Microsoft JhengHei",sans-serif;cursor:pointer;line-height:1.2}
+  #prSlots button.on{border-style:solid;border-color:#ffe36b;background:#7a3a12}
+  #prSlots small{display:block;color:#9fc4ea;font-weight:normal}
+  .prRow{display:flex;gap:4px;flex-wrap:wrap;margin-top:4px}
+  .prRow button{flex:1;padding:5px 4px;border-radius:7px;border:1px solid rgba(255,255,255,.25);background:#2f5a85;color:#fff;font:bold 12px "Microsoft JhengHei",sans-serif;cursor:pointer;white-space:nowrap}
+  .prRow button.on{background:#1fbf7f}
+  #prList{flex:1;overflow-y:auto;padding:6px 8px;display:grid;grid-template-columns:1fr 1fr;gap:4px;align-content:start}
+  #prList button{text-align:left;padding:5px 6px;border-radius:7px;border:2px solid #2f5a85;background:#1b3d61;color:#fff;font:12px "Microsoft JhengHei",sans-serif;cursor:pointer;line-height:1.3}
+  #prList button b{display:block;color:#ffe36b;font-size:13px} #prList button.in{border-color:#ffd34d;background:#5a3a12}
+  #prLog{height:120px;overflow-y:auto;border-top:1px solid rgba(255,255,255,.12);padding:6px 10px;font-variant-numeric:tabular-nums;color:#cfe6ff}
+  #prLog .sum{color:#ffe36b;font-weight:bold;margin-bottom:3px}
+  /* 觸控按鈕：只有觸控裝置才顯示 */
+  #pads{display:none}
+  body.touch #pads{display:flex;justify-content:space-between;align-items:flex-end;pointer-events:none;
+    position:fixed;left:0;right:0;bottom:0;padding:0 max(14px,env(safe-area-inset-right)) max(14px,env(safe-area-inset-bottom)) max(14px,env(safe-area-inset-left));z-index:4}
+  body.touch:not(.fight) #pads{display:none} /* 首頁、選單畫面不需要打鬥按鈕 */
+  /* 螢幕比 16:9 還寬（手機橫放）：兩邊不要黑邊，照舞台的牆板＋地板顏色延伸出去（比例跟 paintStage 一樣：牆到 76%、地板在下面） */
+  @media (min-aspect-ratio:16/9){
+    #wrap{background:
+      repeating-linear-gradient(90deg,rgba(20,60,110,.35) 0 3px,transparent 3px 31.9vh) top/100% 75.8% no-repeat,
+      linear-gradient(#5ea6dc 0%,#3d86c4 75.8%,#244f7e 75.8%,#244f7e 76.9%,#4e8ec4 76.9%,#3a74a9 86%,#22496f 100%)}
+  }
+  .cluster{display:flex;flex-direction:column;gap:10px;align-items:center;pointer-events:none}
+  .row{display:flex;gap:10px;pointer-events:none}
+  .pb{--s:min(15vmin,78px);width:var(--s);height:var(--s);border-radius:50%;border:2px solid rgba(255,255,255,.55);
+    background:rgba(10,30,60,.38);color:#fff;font:bold calc(var(--s)*.36) "Microsoft JhengHei",sans-serif;pointer-events:auto;
+    display:flex;align-items:center;justify-content:center;touch-action:none;-webkit-tap-highlight-color:transparent;padding:0}
+  .pb.sk{background:rgba(232,96,28,.55);border-color:#ffd34d;color:#ffe600;text-shadow:0 0 3px #000}
+  .pb.on{background:rgba(255,255,255,.45)}
+  .pb.sk.on{background:rgba(255,200,40,.85)}
+  .hide{display:none!important}
+  #staticBadge{position:fixed;right:max(10px,env(safe-area-inset-right));bottom:max(10px,env(safe-area-inset-bottom));z-index:30;border:1px solid #ffd34d;border-radius:18px;padding:7px 12px;background:rgba(11,22,34,.88);color:#ffe36b;font:bold 13px "Microsoft JhengHei",sans-serif;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.35)}
+  #staticToast{position:fixed;left:50%;bottom:max(58px,calc(env(safe-area-inset-bottom) + 58px));z-index:40;max-width:min(88vw,620px);transform:translate(-50%,18px);opacity:0;pointer-events:none;padding:11px 16px;border:2px solid #ffd34d;border-radius:12px;background:#102b46;color:#fff;font:bold 15px/1.5 "Microsoft JhengHei",sans-serif;text-align:center;box-shadow:0 8px 26px rgba(0,0,0,.5);transition:.18s ease}
+  #staticToast.show{transform:translate(-50%,0);opacity:1}
+  .exrow{display:grid;grid-template-columns:repeat(5,auto);gap:10px;justify-content:center}
+  /* 搖桿操作（試玩）：左邊浮動搖桿只管左右；右邊像傳說對決，大拳頭鈕＝跳，招式繞著它排一圈 */
+  #stickZone,#arc{display:none}
+  body.stick #stickZone{display:block;position:fixed;left:0;bottom:0;width:46vw;height:72vh;pointer-events:auto;touch-action:none}
+  body.stick #arc{display:block;position:fixed;--F:min(26vmin,124px);right:calc(max(16px,env(safe-area-inset-right)) + var(--F)/2);bottom:calc(max(14px,env(safe-area-inset-bottom)) + var(--F)/2);width:0;height:0}
+  body.stick #cl,body.stick #cr .skrow,body.stick #cr .mvrow{display:none!important}
+  body.stick #cr{position:fixed;right:max(16px,env(safe-area-inset-right));bottom:calc(max(14px,env(safe-area-inset-bottom)) + min(26vmin,124px)*2.45)}
+  body.stick #cr .pb{--s:min(10vmin,50px)}
+  #stickBase{position:absolute;left:calc(max(16px,env(safe-area-inset-left)) + min(12vmin,60px) + 4vw);top:calc(100% - min(12vmin,60px) - max(18px,env(safe-area-inset-bottom)));width:var(--R2);height:var(--R2);margin:calc(var(--R2)/-2) 0 0 calc(var(--R2)/-2);border-radius:50%;background:rgba(10,30,60,.32);border:2px solid rgba(255,255,255,.45);--R2:min(24vmin,120px);pointer-events:none}
+  #stickKnob{position:absolute;left:50%;top:50%;width:44%;height:44%;margin:-22% 0 0 -22%;border-radius:50%;background:rgba(255,255,255,.55);border:2px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.4)}
+  #stickZone.on #stickBase{background:rgba(10,30,60,.5)}
+  #arc .pb{position:absolute;transform:translate(-50%,-50%)}
+  /* 招式練習場：右邊有設定面板，招式圈搬到面板左邊、縮小一點 */
+  body.practice.stick #arc{--F:min(19vmin,92px);right:calc(min(300px,42vw) + 14px + var(--F)/2)}
+  body.practice.stick #cr{margin-right:0;right:calc(min(300px,42vw) + 14px);bottom:calc(max(14px,env(safe-area-inset-bottom)) + min(19vmin,92px)*2.45)}
+  #arc .fist{--s:var(--F);font-size:calc(var(--F)*.3);background:radial-gradient(circle at 40% 35%,#8fd0ff,#2f76c0 70%);border:3px solid #d8f0ff;box-shadow:0 0 0 5px rgba(80,170,255,.25),0 4px 10px rgba(0,0,0,.45)}
+  #arc .fist.on{background:radial-gradient(circle at 40% 35%,#c9ecff,#4b97e0 70%)}
+  #arc .sk{--s:calc(var(--F)*.56)}
+  .pb.xb{background:rgba(40,110,190,.6);border-color:#9fdcff;color:#e8f6ff}
+  /* 直向手機：畫面置頂，按鈕放下方空白處 */
+  @media (orientation:portrait){
+    /* 直向：上面留一排給工具列和鼓幣，畫面接在下面 */
+    body.touch #wrap{justify-content:flex-start;padding-top:calc(58px + env(safe-area-inset-top))}
+    body.touch #wrap canvas{width:100vw}
+    body.touch .pb{--s:min(21vw,96px)}
+    body.touch .row{gap:min(5vw,24px)}
+    body.touch #pads{flex-direction:column-reverse;align-items:center;justify-content:flex-start;gap:min(5vw,22px);padding-bottom:max(28px,env(safe-area-inset-bottom))}
+    body.touch #bar{bottom:auto;top:calc(100vw*9/16 + 72px + env(safe-area-inset-top))}
+    body.touch #rot{display:block;top:calc(100vw*9/16 + 110px)}
+    body.touch.fight #tools{flex-direction:row}
+    body.touch.fight #menuDrop{top:48px;left:0}
+  }
+  /* 每日簽到／造型衣櫃 */
+  #meta{position:fixed;inset:0;z-index:8;display:flex;align-items:center;justify-content:center;background:rgba(0,8,20,.66);touch-action:auto}
+  #meta .card{width:min(96vw,760px);max-height:94vh;overflow:auto;background:#13304f;border:2px solid #1fbf7f;border-radius:16px;padding:16px 18px;color:#fff;text-align:center;box-sizing:border-box}
+  #metaTitle{font-size:24px;font-weight:bold;color:#ffe600;margin-bottom:4px}
+  #dailyDays{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin:6px 0 12px}
+  .dDay{background:#1b3d61;border:2px solid #2f5a85;border-radius:10px;padding:8px 2px;font-size:13px;color:#9fc4ea}
+  .dDay b{display:block;font-size:20px;color:#ffd34d;margin-top:3px} .dDay.got{opacity:.45} .dDay.now{border-color:#ffe36b;background:#2a5a3f;color:#fff}
+  #dailyGo{font-family:inherit;font-size:20px;font-weight:bold;padding:10px 28px;border:0;border-radius:12px;background:#1fbf7f;color:#fff8c4;cursor:pointer}
+  #dailyGo:disabled{background:#3b4656;color:#9aa6b4;cursor:default}
+  #ward{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;margin-bottom:8px}
+  .wItem{background:#1b3d61;border:2px solid #2f5a85;border-radius:12px;padding:6px;display:flex;flex-direction:column;gap:4px;align-items:center}
+  .wItem.on{border-color:#ffe36b} .wItem canvas{width:120px;height:150px} .wItem .n{font-weight:bold;color:#ffe36b}
+  .wItem button{width:100%;font-family:inherit;cursor:pointer;border:0;border-radius:8px;padding:5px;font-weight:bold;background:#e8601c;color:#ffe600;font-size:14px}
+  .wItem button.w2{background:#2f5a85;color:#dbe9f7} .wItem button:disabled{background:#3b4656;color:#9aa6b4;cursor:default}
+  #saveBox{margin:10px 0 4px;padding:9px;border-radius:10px;background:#0f2640;font-size:14px;color:#cfe6ff}
+  #saveBox b{color:#ffe36b;font-size:18px;letter-spacing:1px} .sub3{color:#9fc4ea;font-size:12px}
+  .saveRow{display:flex;gap:6px;justify-content:center;margin-top:6px}
+  .saveRow input{font-family:inherit;font-size:16px;padding:6px 8px;border-radius:8px;border:0;width:170px;text-transform:uppercase}
+  .saveRow button{font-family:inherit;font-weight:bold;border:0;border-radius:8px;padding:6px 14px;background:#2f5a85;color:#fff;cursor:pointer}
+  #saveMsg{min-height:18px;color:#ffb37a;margin-top:4px}
+  /* 線上對戰大廳 */
+  #lobby{position:fixed;inset:0;z-index:8;display:flex;align-items:center;justify-content:center;background:rgba(0,8,20,.62);touch-action:auto}
+  #lobby .card{width:min(92vw,420px);background:#13304f;border:2px solid #e8601c;border-radius:16px;padding:22px 22px 18px;color:#fff;text-align:center;box-shadow:0 10px 40px rgba(0,0,0,.5)}
+  #lobby h2{margin:0 0 16px;color:#ffe600;font-size:28px;text-shadow:0 2px 0 #000}
+  #lobby button{font-family:inherit;cursor:pointer}
+  #lobby .big{width:100%;padding:13px;font-size:20px;font-weight:bold;border-radius:10px;border:0;background:#e8601c;color:#ffe600;margin-bottom:14px}
+  #lobby .join{display:flex;gap:8px}
+  #lobby .qrBtn{margin-top:10px;width:100%;padding:11px;font-size:17px;font-weight:bold;border-radius:10px;border:2px solid #ffe600;background:#0b1622;color:#ffe600}
+  #qrBig,#bwQr{position:fixed;inset:0;z-index:20;display:flex;align-items:center;justify-content:center;background:rgba(0,8,20,.92);cursor:pointer}
+  #qrBig.hide,#bwQr.hide{display:none}
+  #qrBig .qrBox,#bwQr .qrBox{background:#fff;border-radius:18px;padding:clamp(14px,3vh,26px);text-align:center;color:#13304f;max-width:94vw}
+  #qrImg svg,#bwQrImg svg{width:min(62vh,80vw);height:auto;display:block;margin:0 auto}
+  #qrBig .qrT,#bwQr .qrT{font-size:clamp(20px,4vh,32px);font-weight:900;margin-top:8px}
+  #qrBig .qrR,#bwQr .qrR{font-size:clamp(16px,3vh,24px);margin-top:4px}
+  #qrBig .qrR b,#bwQr .qrR b{letter-spacing:4px;color:#e8601c}
+  #qrBig .qrS,#bwQr .qrS{font-size:clamp(12px,2vh,15px);color:#6b7c90;margin-top:6px}
+  #bwNetBtn{position:fixed;z-index:6;top:max(10px,env(safe-area-inset-top));right:max(12px,env(safe-area-inset-right));padding:10px 16px;font-size:17px;font-weight:bold;border-radius:12px;border:2px solid #ffe600;background:rgba(11,22,34,.85);color:#ffe600;cursor:pointer}
+  #bwNetBtn.hide,#bwJoinBtn.hide,#bwBackBtn.hide,#bwWait.hide,#bwKickBtn.hide,#bwKickBox.hide{display:none}
+  #bwKickBtn{position:fixed;z-index:6;top:max(10px,env(safe-area-inset-top));left:calc(max(10px,env(safe-area-inset-left)) + 104px);padding:7px 12px;font-size:15px;font-weight:bold;border-radius:12px;border:2px solid #ff9c9c;background:rgba(11,22,34,.85);color:#ff9c9c;cursor:pointer;touch-action:manipulation}
+  #bwPickBtn{position:fixed;z-index:6;top:calc(max(10px,env(safe-area-inset-top)) + 46px);left:calc(max(10px,env(safe-area-inset-left)) + 104px);padding:7px 12px;font-size:15px;font-weight:bold;border-radius:12px;border:2px solid #ffd34d;background:rgba(11,22,34,.85);color:#ffd34d;cursor:pointer;touch-action:manipulation}
+  #bwPickBtn.hide,#bwPick.hide{display:none}
+  #bwPick{z-index:21}
+  #bpWho button{font:bold 15px "Microsoft JhengHei",sans-serif;padding:6px 12px;border-radius:9px;border:2px solid #5ea6dc;background:#1b3d61;color:#fff;cursor:pointer}
+  #bpWho button.on{border-color:#ffd34d;color:#ffe600}
+  #bwKickBox{position:fixed;inset:0;z-index:21;display:flex;align-items:center;justify-content:center;background:rgba(0,8,20,.88);touch-action:auto}
+  #bwKickBox .jb{background:#13304f;border:3px solid #ff9c9c;border-radius:16px;padding:18px 20px;text-align:center;color:#fff;width:min(380px,90vw)}
+  #bwKickBox .jt{font-size:22px;font-weight:900;color:#ffe600;margin-bottom:10px}
+  #bwKickBox .kr{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 4px;border-top:1px solid rgba(255,255,255,.15);font-size:19px;font-weight:bold}
+  #bwKickBox button{font-size:17px;font-weight:bold;padding:8px 16px;border-radius:10px;border:0;cursor:pointer;touch-action:manipulation}
+  #bwBackBtn{position:fixed;z-index:6;top:calc(max(10px,env(safe-area-inset-top)) + 104px);right:max(12px,env(safe-area-inset-right));padding:10px 16px;font-size:17px;font-weight:bold;border-radius:12px;border:2px solid #7dff9a;background:rgba(11,22,34,.85);color:#7dff9a;cursor:pointer}
+  #bwWait{position:fixed;z-index:6;top:max(10px,env(safe-area-inset-top));left:50%;transform:translateX(-50%);padding:8px 16px;font-size:17px;font-weight:bold;border-radius:12px;background:rgba(11,22,34,.88);color:#ffe600;pointer-events:none;white-space:nowrap}
+  #bwJoinBtn{position:fixed;z-index:6;top:calc(max(10px,env(safe-area-inset-top)) + 52px);right:max(12px,env(safe-area-inset-right));padding:10px 16px;font-size:17px;font-weight:bold;border-radius:12px;border:2px solid #9fe0ff;background:rgba(11,22,34,.85);color:#9fe0ff;cursor:pointer}
+  #bwJoinBox{position:fixed;inset:0;z-index:21;display:flex;align-items:center;justify-content:center;background:rgba(0,8,20,.88);touch-action:auto}
+  #bwJoinBox.hide{display:none}
+  #bwJoinBox .jb{background:#13304f;border:3px solid #9fe0ff;border-radius:16px;padding:20px 22px;text-align:center;color:#fff;width:min(360px,90vw)}
+  #bwJoinBox .jt{font-size:22px;font-weight:900;color:#ffe600;margin-bottom:12px}
+  #bwJoinBox input{width:100%;box-sizing:border-box;font-size:34px;letter-spacing:8px;text-align:center;padding:8px;border-radius:10px;border:0;font-weight:bold;background:#fff;color:#000;-webkit-user-select:text;user-select:text;touch-action:auto}
+  #bwJoinBox .jm{min-height:20px;font-size:15px;color:#ff9c9c;margin-top:8px}
+  #bwJoinBox button{font-size:19px;font-weight:bold;padding:10px 22px;border-radius:10px;border:0;margin:10px 6px 0;cursor:pointer}
+  #arc .sk.bw2{font-size:calc(var(--F)*.17)}
+  #lobby .join .big{width:auto;flex:0 0 auto;padding:13px 18px}
+  #lobby input{flex:1;min-width:0;font-size:22px;padding:10px;border-radius:10px;border:2px solid #5ea6dc;background:#0b1622;color:#fff;text-align:center;letter-spacing:6px;-webkit-user-select:text;user-select:text}
+  #lobby .code{font-size:56px;font-weight:bold;letter-spacing:10px;color:#ffe600;text-shadow:0 3px 0 #000;margin:4px 0 8px}
+  #lobby .sub{color:#9fc4ea;font-size:14px;margin:6px 0 12px;word-break:break-all}
+  #lbErr{color:#ff9c8a;min-height:20px;margin:10px 0 4px;font-size:15px}
+  #lbBack,#lbCopy{background:transparent;color:#cfe6ff;border:1px solid rgba(255,255,255,.35);border-radius:8px;padding:8px 18px;font-size:15px}
+  #lbCopy{background:#2b5c8a;color:#fff;margin-bottom:6px}
+  /* 天梯模式 */
+  #ladder{position:fixed;inset:0;z-index:8;display:flex;align-items:center;justify-content:center;background:rgba(0,8,20,.66);touch-action:auto}
+  #ladder .card{width:min(94vw,460px);max-height:94vh;overflow:auto;background:#13304f;border:2px solid #e8601c;border-radius:16px;padding:20px 20px 16px;color:#fff;text-align:center;box-shadow:0 10px 40px rgba(0,0,0,.5)}
+  #ladder h2{margin:0 0 10px;color:#ffe600;font-size:28px;text-shadow:0 2px 0 #000}
+  #ladder button{font-family:inherit;cursor:pointer}
+  #ladder .big{width:100%;padding:12px;font-size:20px;font-weight:bold;border-radius:10px;border:0;background:#e8601c;color:#ffe600;margin:10px 0 4px}
+  #ladder input{width:100%;box-sizing:border-box;font-size:20px;padding:10px;border-radius:10px;border:2px solid #5ea6dc;background:#0b1622;color:#fff;text-align:center;-webkit-user-select:text;user-select:text}
+  #ladder .sub{color:#9fc4ea;font-size:14px;margin:0 0 12px}
+  #ladder .card{width:min(96vw,620px)}
+  #ladder .big.alt{background:#2f5a85;color:#fff;font-size:17px;padding:9px}
+  #ldStairs{display:flex;align-items:flex-end;gap:3px;height:120px;margin:4px 0 8px}
+  .ldStep{flex:1;border-radius:6px 6px 0 0;background:#2f5a85;color:#9fc4ea;font-size:12px;display:flex;align-items:flex-start;justify-content:center;padding-top:3px;box-sizing:border-box;border:0;font-family:inherit;cursor:pointer}
+  .ldStep.ok{background:#e8601c;color:#ffe600} .ldStep.lock{background:#1b2c40;color:#4b5d72;cursor:default} .ldStep.sel{outline:3px solid #ffe36b}
+  #ldPick{color:#ffe36b;font-weight:bold;margin-bottom:8px}
+  #ldMvGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:6px;text-align:left;max-height:52vh;overflow:auto;margin-bottom:6px}
+  .ldMv{background:#1b3d61;border:2px solid #2f5a85;border-radius:10px;padding:6px 8px;font-size:12px;color:#dbe9f7}
+  .ldMv.on{border-color:#8fffb0} .ldMv .n{font-size:15px;font-weight:bold;color:#ffe36b}
+  .ldMv button{width:100%;margin-top:4px;border:0;border-radius:7px;padding:5px;font-weight:bold;background:#e8601c;color:#ffe600}
+  .ldMv button.w{background:#1fbf7f;color:#fff} .ldMv button:disabled{background:#3b4656;color:#9aa6b4}
+  #ldCoinMsg{color:#ffd34d;font-weight:bold;margin:6px 0}
+  #ldScore{font-size:54px;font-weight:bold;color:#ffe600;text-shadow:0 3px 0 #000;line-height:1.1}
+  #ldMsg{color:#cfe6ff;margin:4px 0 2px}
+  #ldErr{color:#ff9c8a;min-height:18px;font-size:14px;margin:6px 0}
+  #ldBoard{margin:6px 0 12px;text-align:left;background:rgba(0,0,0,.25);border-radius:10px;padding:8px 10px;max-height:34vh;overflow:auto}
+  #ldBoard .bh{color:#ffb37a;font-weight:bold;margin-bottom:4px}
+  #ldList{margin:0;padding:0;list-style:none;font-variant-numeric:tabular-nums}
+  #ldList li{display:flex;gap:8px;padding:3px 2px;border-bottom:1px solid rgba(255,255,255,.08)}
+  #ldList li b{width:2.6em;color:#9fc4ea;font-weight:normal}
+  #ldList li span{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  #ldList li.me{background:rgba(255,230,0,.18);border-radius:6px}
+  #ldBack{background:transparent;color:#cfe6ff;border:1px solid rgba(255,255,255,.35);border-radius:8px;padding:8px 18px;font-size:15px}
+  #fsHelp{position:fixed;inset:0;z-index:12;display:flex;align-items:center;justify-content:center;background:rgba(0,8,20,.72);touch-action:auto}
+  #fsHelp .card{width:min(92vw,420px);max-height:92vh;overflow:auto;background:#13304f;border:2px solid #e8601c;border-radius:16px;padding:18px 20px;color:#fff;font-size:16px;line-height:1.6}
+  #fsHelp h3{margin:0 0 8px;color:#ffe600;font-size:20px}
+  #fsHelp ol{margin:6px 0 12px;padding-left:1.4em}
+  #fsHelp button{width:100%;padding:10px;font-size:17px;font-weight:bold;border:0;border-radius:10px;background:#e8601c;color:#ffe600;font-family:inherit}
+  /* 闖關模式：3 選 1 卡片、結算 */
+  #rgPanel{position:fixed;inset:0;z-index:8;display:flex;align-items:center;justify-content:center;background:rgba(0,8,20,.66);touch-action:auto}
+  #rgPanel .card{width:min(96vw,760px);max-height:94vh;overflow:auto;background:#13304f;border:2px solid #e8601c;border-radius:16px;padding:18px;color:#fff;text-align:center}
+  #rgTitle{color:#ffe600;font-size:26px;font-weight:bold;margin-bottom:12px;text-shadow:0 2px 0 #000}
+  #rgCards{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+  .rgCard{flex:1 1 200px;max-width:230px;min-height:170px;display:flex;flex-direction:column;align-items:center;gap:8px;padding:14px 12px;border-radius:14px;border:2px solid #ffd34d;background:linear-gradient(#26507c,#173656);color:#fff;font-family:inherit;cursor:pointer}
+  .rgCard:hover{transform:translateY(-3px);border-color:#fff}
+  .rgCard b{font-size:14px;color:#9fc4ea}
+  .rgCard .t{font-size:20px;font-weight:bold;color:#ffe600}
+  .rgCard .d{font-size:15px;line-height:1.45;color:#dbe9f7}
+  .rgCard.mv{border-color:#9fdcff;background:linear-gradient(#21547e,#123552)}
+  .rgCard.cc{border-color:#8fffb0;background:linear-gradient(#1f5b4a,#123a30)}
+  .rgCard.small{min-height:0;flex:1 1 130px;max-width:170px;padding:9px 8px;gap:4px} .rgCard.small .t{font-size:16px} .rgCard.small .d{font-size:13px}
+  #rgResult{font-size:20px;margin:6px 0 16px}
+  #rgOverWrap button{font-family:inherit;cursor:pointer;font-size:19px;font-weight:bold;padding:11px 22px;border-radius:10px;border:0;margin:4px}
+  #rgAgain{background:#e8601c;color:#ffe600} #rgHome{background:#2b5c8a;color:#fff}
+  #rgDiffs{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+  #rgCont{display:block;width:100%;margin:0 0 10px;padding:12px;font:bold 18px "Microsoft JhengHei",sans-serif;cursor:pointer;border-radius:12px;border:2px solid #fff3b0;background:linear-gradient(#ffb02e,#e8601c);color:#fff;line-height:1.45}
+  #rgCont small{display:block;font-weight:normal;font-size:13px;opacity:.9}
+  #rgDiffs button{flex:1 1 150px;font-family:inherit;cursor:pointer;border-radius:12px;border:2px solid #ffd34d;padding:10px 8px;color:#fff;line-height:1.45}
+  #rgDiffs button b{display:block;font-size:26px;color:#ffe600;padding:8px 0}
+  #rgDiffs button span{font-size:13px;color:#e6f0fa}
+  #rgDiffs [data-d=easy]{background:#2b7a3d} #rgDiffs [data-d=normal]{background:#2b5c8a} #rgDiffs [data-d=hard]{background:#8a2b2b}
+  #rgTabs{display:flex;gap:6px;justify-content:center;margin-bottom:6px}
+  #rgTabs button{font-family:inherit;cursor:pointer;border-radius:8px;border:1px solid #5ea6dc;background:transparent;color:#cfe6ff;padding:5px 12px}
+  #rgTabs button.on{background:#5ea6dc;color:#0b1622;font-weight:bold}
+  .rgList{margin:0 0 12px;padding:6px 10px;list-style:none;text-align:left;background:rgba(0,0,0,.25);border-radius:10px;max-height:30vh;overflow:auto;font-variant-numeric:tabular-nums}
+  .rgList li{display:flex;gap:8px;padding:3px 2px;border-bottom:1px solid rgba(255,255,255,.08)}
+  .rgList li b{width:2.6em;color:#9fc4ea;font-weight:normal} .rgList li span{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap} .rgList li i{font-style:normal;color:#ffe36b}
+  .rgList li.me{background:rgba(255,230,0,.18);border-radius:6px}
+  #rgErr{color:#ff9c8a;min-height:18px;font-size:14px}
+  .rgRow{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:6px}
+  .rgRow button,#rgReroll{font-family:inherit;cursor:pointer;font-size:17px;font-weight:bold;padding:9px 18px;border-radius:10px;border:0}
+  #rgTreeBtn,#rgTreeBtn2{background:#2b7a3d;color:#fff} #rgTreeBack{background:#2b5c8a;color:#fff}
+  #rgReroll{margin-top:10px;background:#5a3a8a;color:#fff}
+  .rgCoinsBig{font-size:22px;color:#cfe6ff;margin-bottom:2px} .rgCoinsBig b{color:#ffd34d;font-size:30px}
+  .sub2{color:#9fc4ea;font-size:14px;margin-bottom:10px}
+  #rgTree{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:8px;text-align:left;margin-bottom:8px}
+  .tNode{background:#1b3d61;border:2px solid #2f5a85;border-radius:12px;padding:9px 10px}
+  .tNode.max{border-color:#ffd34d}
+  .tNode .n{font-weight:bold;color:#ffe36b;font-size:17px} .tNode .lv{float:right;color:#9fc4ea;font-size:13px}
+  .tNode .d{font-size:13px;color:#dbe9f7;margin:3px 0 7px;min-height:34px}
+  .tNode button{width:100%;font-family:inherit;cursor:pointer;border:0;border-radius:8px;padding:6px;font-weight:bold;background:#e8601c;color:#ffe600}
+  .tNode button:disabled{background:#3b4656;color:#9aa6b4;cursor:default}
+  #rgNear{font-size:22px;font-weight:bold;color:#ffe600;min-height:28px;margin-bottom:4px;text-shadow:0 2px 0 #000}
+  #rgStats{font-size:17px;margin-bottom:8px}
+  #rgBack{font-family:inherit;cursor:pointer;background:transparent;color:#cfe6ff;border:1px solid rgba(255,255,255,.35);border-radius:8px;padding:8px 18px;font-size:15px}
+  /* 連線擴充模式：祕密選三招 */
+  #mvPick,#aiPick,#bwPick{position:fixed;inset:0;z-index:9;display:flex;align-items:center;justify-content:center;background:rgba(0,8,20,.72);touch-action:auto}
+  #mvPick .card,#aiPick .card,#bwPick .card{width:min(96vw,900px);max-height:95vh;display:flex;flex-direction:column;background:#13304f;border:2px solid #e8601c;border-radius:16px;padding:16px;color:#fff;box-sizing:border-box}
+  #mvPick h2,#aiPick h2,#bwPick h2{margin:0 0 4px;color:#ffe600;font-size:24px;text-align:center;text-shadow:0 2px 0 #000}
+  #mvPick .sub,#aiPick .sub,#bwPick .sub{color:#9fc4ea;font-size:14px;text-align:center;margin-bottom:10px}
+  #mpSlots,.apSlots,#bpSlots{display:flex;gap:8px;justify-content:center;margin-bottom:10px}
+  #mpSlots div,.apSlots div,#bpSlots div{flex:1;max-width:200px;border:2px dashed #5ea6dc;border-radius:10px;padding:6px;text-align:center;font-weight:bold;min-height:24px}
+  #mpSlots div.on,.apSlots div.on,#bpSlots div.on{border-style:solid;border-color:#ffd34d;background:#25507c;color:#ffe600}
+  #mpSlots small,.apSlots small,#bpSlots small{display:block;color:#9fc4ea;font-weight:normal}
+  #mpGrid,#apGrid,#bpGrid{flex:1;overflow-y:auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:6px;padding:2px}
+  #mpGrid button,#apGrid button,#bpGrid button{text-align:left;font-family:inherit;cursor:pointer;border-radius:10px;border:2px solid #2f5a85;background:#1b3d61;color:#fff;padding:7px 9px;line-height:1.35}
+  #mpGrid button b,#apGrid button b,#bpGrid button b{color:#ffe36b;font-size:16px}
+  #mpGrid button i,#apGrid button i,#bpGrid button i{font-style:normal;color:#9fc4ea;font-size:12px;margin-left:4px}
+  #mpGrid button span,#apGrid button span,#bpGrid button span{display:block;font-size:12px;color:#cfe0f2}
+  #mpGrid button.on,#apGrid button.on,#bpGrid button.on{border-color:#ffd34d;background:#7a3a12}
+  #mpGrid button.on b::before,#apGrid button.on b::before,#bpGrid button.on b::before{content:attr(data-n) ' ';color:#fff}
+  #mpGrid button:disabled,#apGrid button:disabled{opacity:.45;cursor:default}
+  #mpMsg,#apMsg,#bpMsg{text-align:center;color:#ffb37a;min-height:20px;margin:8px 0 6px}
+  #mpBtns,#apBtns,#bpBtns{display:flex;gap:8px;justify-content:center}
+  #mpBtns button,#apBtns button,#bpBtns button{font-family:inherit;cursor:pointer;font-size:18px;font-weight:bold;padding:10px 22px;border-radius:10px;border:0}
+  #mpRandom{background:#2b5c8a;color:#fff} #mpOk{background:#e8601c;color:#ffe600} #mpOk:disabled{opacity:.45}
+  #lobby .big.ext{background:#2b7a3d}
+  /* 滿貫結算的分享鈕：畫面下方中間 */
+  #perfShare{position:fixed;left:50%;bottom:max(14px,6vh);transform:translateX(-50%);z-index:7;font:bold 20px "Microsoft JhengHei",sans-serif;padding:12px 26px;border-radius:999px;border:3px solid #fff3b0;background:linear-gradient(#ffd34d,#e8601c);color:#3a1600;box-shadow:0 6px 24px rgba(0,0,0,.5);cursor:pointer;animation:perfPop .35s ease-out}
+  #perfShare.hide{display:none}
+  #perfPanel{position:fixed;inset:0;z-index:8;display:flex;align-items:flex-end;justify-content:center;background:rgba(0,0,0,.35)}
+  #perfPanel.hide{display:none}
+  #perfPanel .pp{margin-bottom:max(12px,4vh);max-width:min(560px,calc(100vw - 24px));background:#1c1f2e;border:2px solid #ffd34d;border-radius:18px;padding:14px 14px 10px;text-align:center;animation:perfPop .25s ease-out;font-family:"Microsoft JhengHei",sans-serif}
+  #ppTip{color:#ffe9a8;font-size:16px;margin-bottom:10px;word-break:break-all}
+  .ppRow{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+  .ppRow button{color:#fff;border:0;border-radius:12px;padding:10px 14px;font:bold 16px "Microsoft JhengHei",sans-serif;cursor:pointer}
+  .ppX{margin-top:10px;background:none;border:0;color:#aab;font-size:14px;cursor:pointer}
+  @keyframes perfPop{from{transform:translateX(-50%) scale(.4);opacity:0}to{transform:translateX(-50%) scale(1);opacity:1}}
+  /* 觀戰區 */
+  #spList{display:flex;flex-direction:column;gap:8px;max-height:min(46vh,360px);overflow:auto;margin-bottom:6px}
+  #lobby .spRow{display:flex;align-items:center;gap:8px;width:100%;padding:10px;border-radius:10px;border:2px solid #2f5a85;background:#1b3d61;color:#fff;text-align:left}
+  #lobby .spRow:hover{border-color:#ffd34d}
+  .spTag{flex:0 0 auto;font-size:13px;font-weight:bold;padding:2px 7px;border-radius:6px;background:#2b7a3d}
+  .spTag.rk{background:#e8601c;color:#ffe600}
+  .spVs{flex:1;min-width:0;display:flex;flex-direction:column;overflow:hidden}
+  .spVs b{font-size:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .spVs small{color:#9fc4ea;font-size:12px}
+  .spSc{flex:0 0 auto;font-weight:bold;color:#ffe600}
+  .spN{flex:0 0 auto;font-size:13px;color:#cfe6ff}
+  body.spec #cl,body.spec #cr{display:none!important} /* 觀戰只看不打：收起虛擬按鈕 */
+  /* AI 關卡 */
+  #lvPick{position:fixed;inset:0;z-index:9;display:flex;align-items:center;justify-content:center;background:rgba(0,8,20,.72);touch-action:auto}
+  #lvPick .card{width:min(96vw,980px);max-height:95vh;display:flex;flex-direction:column;background:#13304f;border:2px solid #e8601c;border-radius:16px;padding:14px;color:#fff;box-sizing:border-box}
+  #lvPick h2{margin:0 0 4px;color:#ffe600;font-size:22px;text-align:center;text-shadow:0 2px 0 #000}
+  #lvPick .sub{color:#9fc4ea;font-size:13px;text-align:center;margin-bottom:8px}
+  #lvVers{display:flex;flex-wrap:wrap;gap:5px;justify-content:center}
+  #lvVers button{font:bold 14px inherit;padding:5px 9px;border-radius:8px;border:2px solid #2f5a85;background:#1b3d61;color:#fff;cursor:pointer}
+  #lvVers button.on{border-color:#ffd34d;background:#7a3a12;color:#ffe600}
+  #lvDesc{text-align:center;color:#ffd9a8;font-size:14px;margin:6px 0 2px;min-height:20px}
+  #lvShowWrap{text-align:center;font-size:13px;color:#9fc4ea;margin-bottom:6px;cursor:pointer}
+  #lvStages{flex:1;overflow-y:auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:6px;padding:2px}
+  #lvStages button{text-align:left;font-family:inherit;cursor:pointer;border-radius:10px;border:2px solid #2f5a85;background:#1b3d61;color:#fff;padding:7px 9px;line-height:1.35}
+  #lvStages button:hover{border-color:#ffd34d}
+  #lvStages b{color:#ffe36b;font-size:15px} #lvStages .clr{color:#8fffb0} #lvStages small{display:block;color:#cfe0f2;font-size:12px}
+  #lvStages .bar{display:block;height:6px;border-radius:3px;background:#0b1e33;margin:4px 0}#lvStages .bar i{display:block;height:100%;border-radius:3px;background:linear-gradient(90deg,#5fd38a,#ffd34d,#ff6a4d)}
+  #lvStages .ctr{color:#ffd9a8}
+  #lvBtns{display:flex;justify-content:center;margin-top:8px}#lvBtns button{font:bold 17px inherit;padding:9px 22px;border-radius:10px;border:0;background:#2b5c8a;color:#fff;cursor:pointer}
+  #apLock{display:none;text-align:center;color:#ffd9a8;font-size:14px;margin:-4px 0 6px}
+  /* AI 組合對練 */
+  #apSides{display:flex;gap:10px;margin-bottom:8px;flex-wrap:wrap}
+  .apSide{flex:1;min-width:260px;border:2px solid #2f5a85;border-radius:12px;padding:6px 8px;cursor:pointer}
+  .apSide.on{border-color:#ffd34d;background:#1c4670}
+  .apSide>b{color:#ffe600;font-size:16px}
+  .apSlots{display:flex;gap:6px;margin:4px 0 0} .apSlots div{flex:1;border:2px dashed #5ea6dc;border-radius:8px;padding:4px;text-align:center;font-weight:bold;font-size:14px;min-height:20px}
+  .apSlots div.on{border-style:solid;border-color:#ffd34d;color:#ffe600}
+  #apPreset{width:100%;margin-top:6px;font:14px inherit;padding:5px;border-radius:8px;background:#0e2740;color:#fff;border:1px solid #5ea6dc}
+  #apBack{background:#2b5c8a;color:#fff} #apGo{background:#e8601c;color:#ffe600} #apGo:disabled{opacity:.45}
+  #rot{display:none;position:fixed;left:0;right:0;top:calc(100vw*9/16 + 60px);text-align:center;color:#9fc4ea;font-size:14px;pointer-events:none}
+  /* 寶箱：左下角進度＋開箱動畫 */
+  /* 寶箱：沒有外框，直接放在地板上 */
+  #chestBtn{position:fixed;left:max(10px,env(safe-area-inset-left));bottom:max(10px,env(safe-area-inset-bottom));z-index:6;width:118px;padding:0;border:0;background:transparent;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;font-family:inherit;color:#fff;touch-action:manipulation}
+  #chestBtn svg{width:78px;height:66px;filter:drop-shadow(0 4px 4px rgba(0,0,0,.5))}
+  #chestBtn::before{content:'';position:absolute;left:50%;top:46px;width:72px;height:12px;margin-left:-36px;border-radius:50%;background:rgba(0,20,50,.35);z-index:-1} /* 跟人物一樣的地上影子，看起來是放在地板上 */
+  #chestBtn.ready svg{animation:cbHop 1.2s ease-in-out infinite,cbGlow 1.2s ease-in-out infinite}
+  #chestBtn.nope svg{animation:cfShake .12s linear 3}
+  @keyframes cbGlow{50%{filter:drop-shadow(0 0 14px rgba(255,214,77,.95))}}
+  @keyframes cbHop{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-8px) rotate(-4deg)}45%{transform:translateY(0) rotate(3deg)}}
+  #cbBar{width:86%;height:10px;border-radius:5px;background:rgba(11,22,34,.55);overflow:hidden}
+  #cbTxt{text-shadow:0 1px 2px #000}
+  #cbFill{height:100%;width:0;background:linear-gradient(90deg,#ffb020,#ffe36b);transition:width .6s}
+  #cbTxt{font-size:13px;font-weight:bold;color:#ffe36b;line-height:1}
+  #cbBadge{position:absolute;top:-8px;right:-8px;min-width:24px;height:24px;border-radius:12px;background:#ff3b3b;color:#fff;font:bold 15px sans-serif;display:flex;align-items:center;justify-content:center;border:2px solid #fff}
+  body.ingame #chestBtn{display:none}
+  @media (max-height:500px){ #chestBtn{width:84px;padding:4px 4px 6px} #chestBtn svg{width:54px;height:46px} #cbTxt{font-size:11px} }
+  #chestToast{position:fixed;top:18%;left:50%;transform:translateX(-50%);z-index:13;padding:8px 18px;border-radius:20px;background:rgba(10,30,60,.9);border:2px solid #ffd34d;color:#ffe36b;font:bold 20px "Microsoft JhengHei",sans-serif;pointer-events:none;animation:ctUp 2.4s ease forwards}
+  @keyframes ctUp{0%{opacity:0;transform:translate(-50%,20px)}12%{opacity:1;transform:translate(-50%,0)}80%{opacity:1}100%{opacity:0;transform:translate(-50%,-20px)}}
+  #chestFx{position:fixed;inset:0;z-index:20;overflow:hidden;background:radial-gradient(circle at 50% 55%,#1d3f6b 0%,#07111d 75%);display:flex;align-items:center;justify-content:center;touch-action:auto;cursor:pointer}
+  #cfRays{position:absolute;left:50%;top:52%;width:260vmax;height:260vmax;margin:-130vmax 0 0 -130vmax;opacity:0;transition:opacity .4s;
+    background:repeating-conic-gradient(from 0deg,var(--ray,rgba(255,227,107,.28)) 0deg 9deg,transparent 9deg 22.5deg);animation:cfSpin 14s linear infinite;-webkit-mask:radial-gradient(circle,#000 0,transparent 30%);mask:radial-gradient(circle,#000 0,transparent 30%)}
+  #chestFx.open #cfRays,#chestFx.charge #cfRays{opacity:1}
+  @keyframes cfSpin{to{transform:rotate(360deg)}}
+  #cfChest{position:relative;width:min(56vmin,320px);animation:cfDrop .7s cubic-bezier(.3,1.4,.5,1) both}
+  #cfChest svg{width:100%;height:auto;display:block;overflow:visible;filter:drop-shadow(0 18px 18px rgba(0,0,0,.55))}
+  #chestFx.idle #cfChest svg{animation:cfBob 1.6s ease-in-out infinite}
+  #chestFx.charge #cfChest svg{animation:cfShake .1s linear infinite}
+  #chestFx.charge.c2 #cfChest svg{animation:cfShake2 .06s linear infinite}
+  #cfLid{transform-box:fill-box;transform-origin:10% 100%;transition:transform .5s cubic-bezier(.2,1.6,.4,1),opacity .5s}
+  #chestFx.open #cfLid{transform:translate(-30px,-120px) rotate(-38deg);opacity:0}
+  #chestFx.open #cfChest{animation:cfSink .6s ease forwards}
+  @keyframes cfDrop{0%{transform:translateY(-110vh) scale(.7)}70%{transform:translateY(0) scale(1.08,.9)}85%{transform:translateY(-18px) scale(.97,1.04)}100%{transform:none}}
+  @keyframes cfBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+  @keyframes cfShake{0%,100%{transform:rotate(0)}25%{transform:rotate(-5deg) translateX(-4px)}75%{transform:rotate(5deg) translateX(4px)}}
+  @keyframes cfShake2{0%,100%{transform:rotate(0) scale(1.06)}25%{transform:rotate(-8deg) translateX(-7px) scale(1.1)}75%{transform:rotate(8deg) translateX(7px) scale(1.1)}}
+  @keyframes cfSink{to{transform:translateY(38vh) scale(.6);opacity:.25}}
+  #cfFlash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none}
+  #chestFx.open #cfFlash{animation:cfFl .55s ease-out}
+  @keyframes cfFl{0%{opacity:0}15%{opacity:1}100%{opacity:0}}
+  #cfTap{position:absolute;bottom:12%;left:0;right:0;text-align:center;color:#fff;font:bold 24px "Microsoft JhengHei",sans-serif;text-shadow:0 2px 0 #000;animation:cfBlink 1.1s ease-in-out infinite}
+  @keyframes cfBlink{50%{opacity:.35}}
+  .cfP{position:absolute;left:50%;top:52%;font-size:30px;pointer-events:none;animation:cfBurst var(--t,1s) cubic-bezier(.15,.7,.4,1) forwards}
+  @keyframes cfBurst{0%{transform:translate(-50%,-50%) scale(.3);opacity:1}100%{transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) scale(1) rotate(var(--r));opacity:0}}
+  #cfReward{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) scale(0);width:min(84vw,340px);text-align:center;color:#fff;transition:transform .55s cubic-bezier(.2,1.5,.4,1)}
+  #chestFx.show #cfReward{transform:translate(-50%,-50%) scale(1)}
+  #cfTag{display:inline-block;padding:4px 16px;border-radius:14px;font:bold 17px "Microsoft JhengHei",sans-serif;margin-bottom:8px;background:#2f5a85}
+  #cfTag.rare{background:linear-gradient(90deg,#7b3fe4,#e84393)} #cfTag.gold{background:linear-gradient(90deg,#d98a00,#ffcf3d);color:#3a2000}
+  #cfCard{background:linear-gradient(#26507c,#173656);border:3px solid #ffd34d;border-radius:18px;padding:14px;box-shadow:0 0 40px rgba(255,211,77,.45)}
+  #cfCard.rare{border-color:#d58bff;box-shadow:0 0 60px rgba(200,110,255,.7)}
+  #cfCv{width:200px;height:226px;display:block;margin:0 auto}
+  #cfBig{font:bold 64px "Microsoft JhengHei",sans-serif;color:#ffe36b;text-shadow:0 4px 0 #000;line-height:1.1}
+  #cfName{font:bold 26px "Microsoft JhengHei",sans-serif;color:#ffe600;margin-top:4px;text-shadow:0 2px 0 #000}
+  #cfDesc{font-size:15px;color:#dbe9f7;margin-top:4px;min-height:20px}
+  #cfOk{margin-top:14px;font:bold 20px "Microsoft JhengHei",sans-serif;padding:10px 40px;border:0;border-radius:12px;background:#1fbf7f;color:#fff8c4;cursor:pointer}

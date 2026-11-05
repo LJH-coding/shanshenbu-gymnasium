@@ -1,0 +1,5240 @@
+{
+ "versions": [
+  {
+   "version": 1,
+   "name": "入門版",
+   "desc": "電腦反應慢、會失誤，適合第一次玩",
+   "stages": [
+    {
+     "stage": 1,
+     "ai": [
+      "guabian",
+      "biandan",
+      "zhuafen"
+     ],
+     "ai_names": "掛鞭式／扁擔式／抓分手",
+     "arch": "遠程＋抓技＋增益",
+     "delay": 8,
+     "eps": 0.3,
+     "difficulty": 0.107,
+     "counters": [
+      [
+       [
+        "shanhong",
+        "sandian",
+        "daqi"
+       ],
+       "山洪爆發式／三點頭／大起步",
+       0.946
+      ],
+      [
+       [
+        "shan",
+        "fengbai",
+        "xiaolun"
+       ],
+       "閃身步／風擺柳碎步／小掄臂",
+       0.946
+      ],
+      [
+       [
+        "shan",
+        "bear",
+        "pinghu"
+       ],
+       "閃身步／狗熊哆嗦毛／平護",
+       0.946
+      ]
+     ],
+     "meta": false,
+     "measured": {
+      "counters": [
+       1.0,
+       1.0,
+       0.787
+      ],
+      "difficulty": 0.06
+     }
+    },
+    {
+     "stage": 2,
+     "ai": [
+      "guabian",
+      "shuangchao",
+      "biandan"
+     ],
+     "ai_names": "掛鞭式／雙抄花／扁擔式",
+     "arch": "遠程＋遠程＋增益",
+     "delay": 8,
+     "eps": 0.3,
+     "difficulty": 0.158,
+     "counters": [
+      [
+       [
+        "shan",
+        "ball",
+        "bear"
+       ],
+       "閃身步／浪子踢球／狗熊哆嗦毛",
+       0.946
+      ],
+      [
+       [
+        "baishi",
+        "xiachuan",
+        "daqi"
+       ],
+       "敗式／下穿拳傾護／大起步",
+       0.946
+      ],
+      [
+       [
+        "baishi",
+        "shanhong",
+        "sandian"
+       ],
+       "敗式／山洪爆發式／三點頭",
+       0.946
+      ]
+     ],
+     "meta": false,
+     "measured": {
+      "counters": [
+       1.0,
+       1.0,
+       1.0
+      ],
+      "difficulty": 0.202
+     }
+    },
+    {
+     "stage": 3,
+     "ai": [
+      "ball",
+      "guabian",
+      "pinghu"
+     ],
+     "ai_names": "浪子踢球／掛鞭式／平護",
+     "arch": "遠程＋遠程＋防守",
+     "delay": 8,
+     "eps": 0.3,
+     "difficulty": 0.202,
+     "counters": [
+      [
+       [
+        "laoying",
+        "yunbu",
+        "daqi"
+       ],
+       "老鷹展翅／雲步／大起步",
+       0.946
+      ],
+      [
+       [
+        "sandian",
+        "daqi",
+        "pinghu"
+       ],
+       "三點頭／大起步／平護",
+       0.946
+      ],
+      [
+       [
+        "sandian",
+        "yunbu",
+        "daqi"
+       ],
+       "三點頭／雲步／大起步",
+       0.946
+      ]
+     ],
+     "meta": false,
+     "measured": {
+      "counters": [
+       1.0,
+       1.0,
+       1.0
+      ],
+      "difficulty": 0.08
+     }
+    },
+    {
+     "stage": 4,
+     "ai": [
+      "shan",
+      "biandan",
+      "zhuafen"
+     ],
+     "ai_names": "閃身步／扁擔式／抓分手",
+     "arch": "位移＋抓技＋增益",
+     "delay": 7,
+     "eps": 0.22,
+     "difficulty": 0.236,
+     "counters": [
+      [
+       [
+        "shan",
+        "ball",
+        "laoying"
+       ],
+       "閃身步／浪子踢球／老鷹展翅",
+       0.941
+      ],
+      [
+       [
+        "shuangchao",
+        "biandan",
+        "shanhong"
+       ],
+       "雙抄花／扁擔式／山洪爆發式",
+       0.941
+      ],
+      [
+       [
+        "shuangchao",
+        "biandan",
+        "zhuafen"
+       ],
+       "雙抄花／扁擔式／抓分手",
+       0.941
+      ]
+     ],
+     "meta": false,
+     "measured": {
+      "counters": [
+       1.0,
+       1.0,
+       1.0
+      ],
+      "difficulty": 0.073
+     }
+    },
+    {
+     "stage": 5,
+     "ai": [
+      "shan",
+      "ball",
+      "guabian"
+     ],
+     "ai_names": "閃身步／浪子踢球／掛鞭式",
+     "arch": "位移＋遠程＋遠程",
+     "delay": 7,
+     "eps": 0.22,
+     "difficulty": 0.256,
+     "counters": [
+      [
+       [
+        "sandian",
+        "yunbu",
+        "daqi"
+       ],
+       "三點頭／雲步／大起步",
+       0.941
+      ],
+      [
+       [
+        "yunbu",
+        "daqi",
+        "pinghu"
+       ],
+       "雲步／大起步／平護",
+       0.941
+      ],
+      [
+       [
+        "xiachuan",
+        "laoying",
+        "feiji"
+       ],
+       "下穿拳傾護／老鷹展翅／飛機輪",
+       0.941
+      ]
+     ],
+     "meta": false,
+     "measured": {
+      "counters": [
+       1.0,
+       1.0,
+       1.0
+      ],
+      "difficulty": 0.06
+     }
+    },
+    {
+     "stage": 6,
+     "ai": [
+      "fengbai",
+      "baishi",
+      "pinghu"
+     ],
+     "ai_names": "風擺柳碎步／敗式／平護",
+     "arch": "防守＋防守＋防守",
+     "delay": 7,
+     "eps": 0.22,
+     "difficulty": 0.351,
+     "counters": [
+      [
+       [
+        "shan",
+        "fengbai",
+        "shuangchao"
+       ],
+       "閃身步／風擺柳碎步／雙抄花",
+       0.941
+      ],
+      [
+       [
+        "fengbai",
+        "liaowang",
+        "zhuafen"
+       ],
+       "風擺柳碎步／瞭望式／抓分手",
+       0.941
+      ],
+      [
+       [
+        "fengbai",
+        "liaowang",
+        "laoying"
+       ],
+       "風擺柳碎步／瞭望式／老鷹展翅",
+       0.941
+      ]
+     ],
+     "meta": false,
+     "measured": {
+      "counters": [
+       1.0,
+       0.762,
+       0.875
+      ],
+      "difficulty": 0.271
+     }
+    },
+    {
+     "stage": 7,
+     "ai": [
+      "ball",
+      "shuangchao",
+      "zhuafen"
+     ],
+     "ai_names": "浪子踢球／雙抄花／抓分手",
+     "arch": "遠程＋遠程＋抓技",
+     "delay": 6,
+     "eps": 0.15,
+     "difficulty": 0.502,
+     "counters": [
+      [
+       [
+        "sandian",
+        "daqi",
+        "pinghu"
+       ],
+       "三點頭／大起步／平護",
+       0.935
+      ],
+      [
+       [
+        "xiaolun",
+        "sandian",
+        "daqi"
+       ],
+       "小掄臂／三點頭／大起步",
+       0.935
+      ],
+      [
+       [
+        "xiaolun",
+        "sandian",
+        "pinghu"
+       ],
+       "小掄臂／三點頭／平護",
+       0.935
+      ]
+     ],
+     "meta": true,
+     "measured": {
+      "counters": [
+       1.0,
+       0.975,
+       1.0
+      ],
+      "difficulty": 0.551
+     }
+    },
+    {
+     "stage": 8,
+     "ai": [
+      "fengbai",
+      "xiaolun",
+      "feiji"
+     ],
+     "ai_names": "風擺柳碎步／小掄臂／飛機輪",
+     "arch": "近戰＋近戰＋防守",
+     "delay": 6,
+     "eps": 0.15,
+     "difficulty": 0.754,
+     "counters": [
+      [
+       [
+        "fengbai",
+        "shuangchao",
+        "laoying"
+       ],
+       "風擺柳碎步／雙抄花／老鷹展翅",
+       0.935
+      ],
+      [
+       [
+        "fengbai",
+        "laoying",
+        "pinghu"
+       ],
+       "風擺柳碎步／老鷹展翅／平護",
+       0.866
+      ],
+      [
+       [
+        "fengbai",
+        "shanhong",
+        "laoying"
+       ],
+       "風擺柳碎步／山洪爆發式／老鷹展翅",
+       0.866
+      ]
+     ],
+     "meta": true,
+     "measured": {
+      "counters": [
+       0.825,
+       0.825,
+       0.75
+      ],
+      "difficulty": 0.795
+     }
+    },
+    {
+     "stage": 9,
+     "ai": [
+      "shan",
+      "shuangchao",
+      "laoying"
+     ],
+     "ai_names": "閃身步／雙抄花／老鷹展翅",
+     "arch": "位移＋遠程＋近戰",
+     "delay": 5,
+     "eps": 0.1,
+     "difficulty": 0.78,
+     "counters": [
+      [
+       [
+        "bear",
+        "zhuafen",
+        "laoying"
+       ],
+       "狗熊哆嗦毛／抓分手／老鷹展翅",
+       0.931
+      ],
+      [
+       [
+        "fengbai",
+        "shuangchao",
+        "shanhong"
+       ],
+       "風擺柳碎步／雙抄花／山洪爆發式",
+       0.861
+      ],
+      [
+       [
+        "xiachuan",
+        "shanhong",
+        "laoying"
+       ],
+       "下穿拳傾護／山洪爆發式／老鷹展翅",
+       0.787
+      ]
+     ],
+     "meta": true,
+     "measured": {
+      "counters": [
+       0.55,
+       0.8,
+       0.6
+      ],
+      "difficulty": 0.772
+     }
+    },
+    {
+     "stage": 10,
+     "ai": [
+      "fengbai",
+      "shuangchao",
+      "shanhong"
+     ],
+     "ai_names": "風擺柳碎步／雙抄花／山洪爆發式",
+     "arch": "遠程＋近戰＋防守",
+     "delay": 5,
+     "eps": 0.1,
+     "difficulty": 0.804,
+     "counters": [
+      [
+       [
+        "fengbai",
+        "zhuafen",
+        "shanhong"
+       ],
+       "風擺柳碎步／抓分手／山洪爆發式",
+       0.931
+      ],
+      [
+       [
+        "fengbai",
+        "shanhong",
+        "sandian"
+       ],
+       "風擺柳碎步／山洪爆發式／三點頭",
+       0.931
+      ],
+      [
+       [
+        "fengbai",
+        "xiaolun",
+        "zhuafen"
+       ],
+       "風擺柳碎步／小掄臂／抓分手",
+       0.861
+      ]
+     ],
+     "meta": true,
+     "measured": {
+      "counters": [
+       0.8,
+       0.625,
+       0.8
+      ],
+      "difficulty": 0.895
+     }
+    }
+   ],
+   "max_cleared_by_one_combo": 9,
+   "combos_clear_all": 0,
+   "combos_with_no_hard_stage": 1,
+   "measured_curve_ok": 8
+  },
+  {
+   "version": 2,
+   "name": "標準版",
+   "desc": "難度平均往上爬，各種流派都有",
+   "stages": [
+    {
+     "stage": 1,
+     "ai": [
+      "baishi",
+      "guabian",
+      "zhuafen"
+     ],
+     "ai_names": "敗式／掛鞭式／抓分手",
+     "arch": "遠程＋防守＋抓技",
+     "delay": 7,
+     "eps": 0.22,
+     "difficulty": 0.254,
+     "counters": [
+      [
+       [
+        "laoying",
+        "daqi",
+        "pinghu"
+       ],
+       "老鷹展翅／大起步／平護",
+       0.941
+      ],
+      [
+       [
+        "feiji",
+        "daqi",
+        "pinghu"
+       ],
+       "飛機輪／大起步／平護",
+       0.941
+      ],
+      [
+       [
+        "zhuafen",
+        "laoying",
+        "feiji"
+       ],
+       "抓分手／老鷹展翅／飛機輪",
+       0.941
+      ]
+     ],
+     "meta": false,
+     "measured": {
+      "counters": [
+       0.85,
+       0.95,
+       0.825
+      ],
+      "difficulty": 0.241
+     }
+    },
+    {
+     "stage": 2,
+     "ai": [
+      "xiaolun",
+      "liaowang",
+      "biandan"
+     ],
+     "ai_names": "小掄臂／瞭望式／扁擔式",
+     "arch": "近戰＋增益＋增益",
+     "delay": 7,
+     "eps": 0.22,
+     "difficulty": 0.307,
+     "counters": [
+      [
+       [
+        "laoying",
+        "yunbu",
+        "pinghu"
+       ],
+       "老鷹展翅／雲步／平護",
+       0.941
+      ],
+      [
+       [
+        "shan",
+        "ball",
+        "fengbai"
+       ],
+       "閃身步／浪子踢球／風擺柳碎步",
+       0.941
+      ],
+      [
+       [
+        "shan",
+        "ball",
+        "xiaolun"
+       ],
+       "閃身步／浪子踢球／小掄臂",
+       0.941
+      ]
+     ],
+     "meta": false,
+     "measured": {
+      "counters": [
+       1.0,
+       1.0,
+       1.0
+      ],
+      "difficulty": 0.18
+     }
+    },
+    {
+     "stage": 3,
+     "ai": [
+      "fengbai",
+      "baishi",
+      "pinghu"
+     ],
+     "ai_names": "風擺柳碎步／敗式／平護",
+     "arch": "防守＋防守＋防守",
+     "delay": 6,
+     "eps": 0.15,
+     "difficulty": 0.372,
+     "counters": [
+      [
+       [
+        "shan",
+        "fengbai",
+        "shuangchao"
+       ],
+       "閃身步／風擺柳碎步／雙抄花",
+       0.935
+      ],
+      [
+       [
+        "fengbai",
+        "liaowang",
+        "zhuafen"
+       ],
+       "風擺柳碎步／瞭望式／抓分手",
+       0.935
+      ],
+      [
+       [
+        "fengbai",
+        "liaowang",
+        "laoying"
+       ],
+       "風擺柳碎步／瞭望式／老鷹展翅",
+       0.935
+      ]
+     ],
+     "meta": false,
+     "measured": {
+      "counters": [
+       1.0,
+       0.9,
+       0.875
+      ],
+      "difficulty": 0.253
+     }
+    },
+    {
+     "stage": 4,
+     "ai": [
+      "dalun",
+      "zhuafen",
+      "xiachuan"
+     ],
+     "ai_names": "大掄臂／抓分手／下穿拳傾護",
+     "arch": "近戰＋近戰＋抓技",
+     "delay": 6,
+     "eps": 0.15,
+     "difficulty": 0.415,
+     "counters": [
+      [
+       [
+        "sandian",
+        "laoying",
+        "pinghu"
+       ],
+       "三點頭／老鷹展翅／平護",
+       0.935
+      ],
+      [
+       [
+        "shanhong",
+        "feiji",
+        "pinghu"
+       ],
+       "山洪爆發式／飛機輪／平護",
+       0.935
+      ],
+      [
+       [
+        "shanhong",
+        "daqi",
+        "pinghu"
+       ],
+       "山洪爆發式／大起步／平護",
+       0.935
+      ]
+     ],
+     "meta": false,
+     "measured": {
+      "counters": [
+       0.875,
+       0.95,
+       0.95
+      ],
+      "difficulty": 0.309
+     }
+    },
+    {
+     "stage": 5,
+     "ai": [
+      "bear",
+      "shuangchao",
+      "daqi"
+     ],
+     "ai_names": "狗熊哆嗦毛／雙抄花／大起步",
+     "arch": "遠程＋近戰＋近戰",
+     "delay": 5,
+     "eps": 0.1,
+     "difficulty": 0.473,
+     "counters": [
+      [
+       [
+        "sandian",
+        "feiji",
+        "pinghu"
+       ],
+       "三點頭／飛機輪／平護",
+       0.931
+      ],
+      [
+       [
+        "shanhong",
+        "sandian",
+        "pinghu"
+       ],
+       "山洪爆發式／三點頭／平護",
+       0.931
+      ],
+      [
+       [
+        "shanhong",
+        "laoying",
+        "feiji"
+       ],
+       "山洪爆發式／老鷹展翅／飛機輪",
+       0.931
+      ]
+     ],
+     "meta": false,
+     "measured": {
+      "counters": [
+       0.975,
+       0.975,
+       1.0
+      ],
+      "difficulty": 0.478
+     }
+    },
+    {
+     "stage": 6,
+     "ai": [
+      "ball",
+      "shuangchao",
+      "zhuafen"
+     ],
+     "ai_names": "浪子踢球／雙抄花／抓分手",
+     "arch": "遠程＋遠程＋抓技",
+     "delay": 5,
+     "eps": 0.1,
+     "difficulty": 0.51,
+     "counters": [
+      [
+       [
+        "sandian",
+        "daqi",
+        "pinghu"
+       ],
+       "三點頭／大起步／平護",
+       0.931
+      ],
+      [
+       [
+        "xiaolun",
+        "sandian",
+        "daqi"
+       ],
+       "小掄臂／三點頭／大起步",
+       0.931
+      ],
+      [
+       [
+        "xiaolun",
+        "sandian",
+        "pinghu"
+       ],
+       "小掄臂／三點頭／平護",
+       0.931
+      ]
+     ],
+     "meta": true,
+     "measured": {
+      "counters": [
+       1.0,
+       1.0,
+       1.0
+      ],
+      "difficulty": 0.532
+     }
+    },
+    {
+     "stage": 7,
+     "ai": [
+      "bear",
+      "xiaolun",
+      "liaowang"
+     ],
+     "ai_names": "狗熊哆嗦毛／小掄臂／瞭望式",
+     "arch": "近戰＋近戰＋增益",
+     "delay": 4,
+     "eps": 0.05,
+     "difficulty": 0.539,
+     "counters": [
+      [
+       [
+        "shan",
+        "ball",
+        "yunbu"
+       ],
+       "閃身步／浪子踢球／雲步",
+       0.922
+      ],
+      [
+       [
+        "dalun",
+        "biandan",
+        "laoying"
+       ],
+       "大掄臂／扁擔式／老鷹展翅",
+       0.922
+      ],
+      [
+       [
+        "shan",
+        "ball",
+        "shuangchao"
+       ],
+       "閃身步／浪子踢球／雙抄花",
+       0.922
+      ]
+     ],
+     "meta": false,
+     "measured": {
+      "counters": [
+       0.875,
+       0.9,
+       0.95
+      ],
+      "difficulty": 0.65
+     }
+    },
+    {
+     "stage": 8,
+     "ai": [
+      "sandian",
+      "laoying",
+      "feiji"
+     ],
+     "ai_names": "三點頭／老鷹展翅／飛機輪",
+     "arch": "近戰＋近戰＋近戰",
+     "delay": 4,
+     "eps": 0.05,
+     "difficulty": 0.64,
+     "counters": [
+      [
+       [
+        "bear",
+        "xiaolun",
+        "shanhong"
+       ],
+       "狗熊哆嗦毛／小掄臂／山洪爆發式",
+       0.922
+      ],
+      [
+       [
+        "xiachuan",
+        "shanhong",
+        "laoying"
+       ],
+       "下穿拳傾護／山洪爆發式／老鷹展翅",
+       0.922
+      ],
+      [
+       [
+        "shan",
+        "zhuafen",
+        "sandian"
+       ],
+       "閃身步／抓分手／三點頭",
+       0.922
+      ]
+     ],
+     "meta": false,
+     "measured": {
+      "counters": [
+       0.85,
+       0.5,
+       0.825
+      ],
+      "difficulty": 0.681
+     }
+    },
+    {
+     "stage": 9,
+     "ai": [
+      "shan",
+      "shuangchao",
+      "laoying"
+     ],
+     "ai_names": "閃身步／雙抄花／老鷹展翅",
+     "arch": "位移＋遠程＋近戰",
+     "delay": 3,
+     "eps": 0,
+     "difficulty": 0.81,
+     "counters": [
+      [
+       [
+        "bear",
+        "zhuafen",
+        "laoying"
+       ],
+       "狗熊哆嗦毛／抓分手／老鷹展翅",
+       0.917
+      ],
+      [
+       [
+        "fengbai",
+        "shuangchao",
+        "shanhong"
+       ],
+       "風擺柳碎步／雙抄花／山洪爆發式",
+       0.833
+      ],
+      [
+       [
+        "xiachuan",
+        "shanhong",
+        "laoying"
+       ],
+       "下穿拳傾護／山洪爆發式／老鷹展翅",
+       0.75
+      ]
+     ],
+     "meta": true,
+     "measured": {
+      "counters": [
+       0.6,
+       0.75,
+       0.625
+      ],
+      "difficulty": 0.91
+     }
+    },
+    {
+     "stage": 10,
+     "ai": [
+      "fengbai",
+      "shuangchao",
+      "shanhong"
+     ],
+     "ai_names": "風擺柳碎步／雙抄花／山洪爆發式",
+     "arch": "遠程＋近戰＋防守",
+     "delay": 3,
+     "eps": 0,
+     "difficulty": 0.832,
+     "counters": [
+      [
+       [
+        "fengbai",
+        "zhuafen",
+        "shanhong"
+       ],
+       "風擺柳碎步／抓分手／山洪爆發式",
+       0.917
+      ],
+      [
+       [
+        "fengbai",
+        "shanhong",
+        "sandian"
+       ],
+       "風擺柳碎步／山洪爆發式／三點頭",
+       0.917
+      ],
+      [
+       [
+        "fengbai",
+        "xiaolun",
+        "zhuafen"
+       ],
+       "風擺柳碎步／小掄臂／抓分手",
+       0.833
+      ]
+     ],
+     "meta": true,
+     "measured": {
+      "counters": [
+       0.825,
+       0.525,
+       0.6
+      ],
+      "difficulty": 0.907
+     }
+    }
+   ],
+   "max_cleared_by_one_combo": 9,
+   "combos_clear_all": 0,
+   "combos_with_no_hard_stage": 1,
+   "measured_curve_ok": 8
+  },
+  {
+   "version": 3,
+   "name": "強電腦版",
+   "desc": "電腦全程用最強的反應，後半段是主流強組合",
+   "stages": [
+    {
+     "stage": 1,
+     "ai": [
+      "shan",
+      "zhuafen",
+      "daqi"
+     ],
+     "ai_names": "閃身步／抓分手／大起步",
+     "arch": "位移＋近戰＋抓技",
+     "delay": 3,
+     "eps": 0,
+     "difficulty": 0.451,
+     "counters": [
+      [
+       [
+        "sandian",
+        "laoying",
+        "feiji"
+       ],
+       "三點頭／老鷹展翅／飛機輪",
+       0.917
+      ],
+      [
+       [
+        "shan",
+        "ball",
+        "shuangchao"
+       ],
+       "閃身步／浪子踢球／雙抄花",
+       0.917
+      ],
+      [
+       [
+        "fengbai",
+        "shanhong",
+        "sandian"
+       ],
+       "風擺柳碎步／山洪爆發式／三點頭",
+       0.917
+      ]
+     ],
+     "meta": false,
+     "measured": {
+      "counters": [
+       0.775,
+       0.925,
+       0.925
+      ],
+      "difficulty": 0.425
+     }
+    },
+    {
+     "stage": 2,
+     "ai": [
+      "bear",
+      "shuangchao",
+      "daqi"
+     ],
+     "ai_names": "狗熊哆嗦毛／雙抄花／大起步",
+     "arch": "遠程＋近戰＋近戰",
+     "delay": 3,
+     "eps": 0,
+     "difficulty": 0.508,
+     "counters": [
+      [
+       [
+        "sandian",
+        "feiji",
+        "pinghu"
+       ],
+       "三點頭／飛機輪／平護",
+       0.917
+      ],
+      [
+       [
+        "shanhong",
+        "sandian",
+        "pinghu"
+       ],
+       "山洪爆發式／三點頭／平護",
+       0.917
+      ],
+      [
+       [
+        "shanhong",
+        "laoying",
+        "feiji"
+       ],
+       "山洪爆發式／老鷹展翅／飛機輪",
+       0.917
+      ]
+     ],
+     "meta": false,
+     "measured": {
+      "counters": [
+       0.925,
+       0.925,
+       0.9
+      ],
+      "difficulty": 0.505
+     }
+    },
+    {
+     "stage": 3,
+     "ai": [
+      "ball",
+      "shuangchao",
+      "zhuafen"
+     ],
+     "ai_names": "浪子踢球／雙抄花／抓分手",
+     "arch": "遠程＋遠程＋抓技",
+     "delay": 3,
+     "eps": 0,
+     "difficulty": 0.544,
+     "counters": [
+      [
+       [
+        "sandian",
+        "daqi",
+        "pinghu"
+       ],
+       "三點頭／大起步／平護",
+       0.917
+      ],
+      [
+       [
+        "xiaolun",
+        "sandian",
+        "daqi"
+       ],
+       "小掄臂／三點頭／大起步",
+       0.917
+      ],
+      [
+       [
+        "xiaolun",
+        "sandian",
+        "pinghu"
+       ],
+       "小掄臂／三點頭／平護",
+       0.917
+      ]
+     ],
+     "meta": true,
+     "measured": {
+      "counters": [
+       1.0,
+       1.0,
+       1.0
+      ],
+      "difficulty": 0.503
+     }
+    },
+    {
+     "stage": 4,
+     "ai": [
+      "bear",
+      "baishi",
+      "liaowang"
+     ],
+     "ai_names": "狗熊哆嗦毛／敗式／瞭望式",
+     "arch": "近戰＋防守＋增益",
+     "delay": 3,
+     "eps": 0,
+     "difficulty": 0.604,
+     "counters": [
+      [
+       [
+        "shan",
+        "ball",
+        "laoying"
+       ],
+       "閃身步／浪子踢球／老鷹展翅",
+       0.917
+      ],
+      [
+       [
+        "xiaolun",
+        "xiachuan",
+        "shanhong"
+       ],
+       "小掄臂／下穿拳傾護／山洪爆發式",
+       0.917
+      ],
+      [
+       [
+        "baishi",
+        "liaowang",
+        "shuangchao"
+       ],
+       "敗式／瞭望式／雙抄花",
+       0.917
+      ]
+     ],
+     "meta": false,
+     "measured": {
+      "counters": [
+       0.9,
+       0.65,
+       0.75
+      ],
+      "difficulty": 0.617
+     }
+    },
+    {
+     "stage": 5,
+     "ai": [
+      "sandian",
+      "laoying",
+      "feiji"
+     ],
+     "ai_names": "三點頭／老鷹展翅／飛機輪",
+     "arch": "近戰＋近戰＋近戰",
+     "delay": 3,
+     "eps": 0,
+     "difficulty": 0.653,
+     "counters": [
+      [
+       [
+        "bear",
+        "xiaolun",
+        "shanhong"
+       ],
+       "狗熊哆嗦毛／小掄臂／山洪爆發式",
+       0.917
+      ],
+      [
+       [
+        "xiachuan",
+        "shanhong",
+        "laoying"
+       ],
+       "下穿拳傾護／山洪爆發式／老鷹展翅",
+       0.917
+      ],
+      [
+       [
+        "shan",
+        "zhuafen",
+        "sandian"
+       ],
+       "閃身步／抓分手／三點頭",
+       0.917
+      ]
+     ],
+     "meta": false,
+     "measured": {
+      "counters": [
+       0.625,
+       0.625,
+       0.775
+      ],
+      "difficulty": 0.704
+     }
+    },
+    {
+     "stage": 6,
+     "ai": [
+      "bear",
+      "fengbai",
+      "laoying"
+     ],
+     "ai_names": "狗熊哆嗦毛／風擺柳碎步／老鷹展翅",
+     "arch": "近戰＋近戰＋防守",
+     "delay": 3,
+     "eps": 0,
+     "difficulty": 0.676,
+     "counters": [
+      [
+       [
+        "fengbai",
+        "shanhong",
+        "daqi"
+       ],
+       "風擺柳碎步／山洪爆發式／大起步",
+       0.917
+      ],
+      [
+       [
+        "fengbai",
+        "shuangchao",
+        "daqi"
+       ],
+       "風擺柳碎步／雙抄花／大起步",
+       0.917
+      ],
+      [
+       [
+        "fengbai",
+        "shanhong",
+        "feiji"
+       ],
+       "風擺柳碎步／山洪爆發式／飛機輪",
+       0.917
+      ]
+     ],
+     "meta": true,
+     "measured": {
+      "counters": [
+       0.9,
+       0.425,
+       0.825
+      ],
+      "difficulty": 0.721
+     }
+    },
+    {
+     "stage": 7,
+     "ai": [
+      "xiaolun",
+      "zhuafen",
+      "sandian"
+     ],
+     "ai_names": "小掄臂／抓分手／三點頭",
+     "arch": "近戰＋近戰＋抓技",
+     "delay": 3,
+     "eps": 0,
+     "difficulty": 0.737,
+     "counters": [
+      [
+       [
+        "bear",
+        "dalun",
+        "pinghu"
+       ],
+       "狗熊哆嗦毛／大掄臂／平護",
+       0.917
+      ],
+      [
+       [
+        "shan",
+        "baishi",
+        "shanhong"
+       ],
+       "閃身步／敗式／山洪爆發式",
+       0.917
+      ],
+      [
+       [
+        "xiaolun",
+        "liaowang",
+        "shuangchao"
+       ],
+       "小掄臂／瞭望式／雙抄花",
+       0.917
+      ]
+     ],
+     "meta": true,
+     "measured": {
+      "counters": [
+       0.9,
+       0.85,
+       0.825
+      ],
+      "difficulty": 0.815
+     }
+    },
+    {
+     "stage": 8,
+     "ai": [
+      "fengbai",
+      "xiaolun",
+      "feiji"
+     ],
+     "ai_names": "風擺柳碎步／小掄臂／飛機輪",
+     "arch": "近戰＋近戰＋防守",
+     "delay": 3,
+     "eps": 0,
+     "difficulty": 0.792,
+     "counters": [
+      [
+       [
+        "fengbai",
+        "shuangchao",
+        "laoying"
+       ],
+       "風擺柳碎步／雙抄花／老鷹展翅",
+       0.917
+      ],
+      [
+       [
+        "fengbai",
+        "laoying",
+        "pinghu"
+       ],
+       "風擺柳碎步／老鷹展翅／平護",
+       0.833
+      ],
+      [
+       [
+        "fengbai",
+        "shanhong",
+        "laoying"
+       ],
+       "風擺柳碎步／山洪爆發式／老鷹展翅",
+       0.833
+      ]
+     ],
+     "meta": true,
+     "measured": {
+      "counters": [
+       0.725,
+       0.8,
+       0.65
+      ],
+      "difficulty": 0.835
+     }
+    },
+    {
+     "stage": 9,
+     "ai": [
+      "shan",
+      "shuangchao",
+      "laoying"
+     ],
+     "ai_names": "閃身步／雙抄花／老鷹展翅",
+     "arch": "位移＋遠程＋近戰",
+     "delay": 3,
+     "eps": 0,
+     "difficulty": 0.81,
+     "counters": [
+      [
+       [
+        "bear",
+        "zhuafen",
+        "laoying"
+       ],
+       "狗熊哆嗦毛／抓分手／老鷹展翅",
+       0.917
+      ],
+      [
+       [
+        "fengbai",
+        "shuangchao",
+        "shanhong"
+       ],
+       "風擺柳碎步／雙抄花／山洪爆發式",
+       0.833
+      ],
+      [
+       [
+        "xiachuan",
+        "shanhong",
+        "laoying"
+       ],
+       "下穿拳傾護／山洪爆發式／老鷹展翅",
+       0.75
+      ]
+     ],
+     "meta": true,
+     "measured": {
+      "counters": [
+       0.725,
+       0.55,
+       0.625
+      ],
+      "difficulty": 0.902
+     }
+    },
+    {
+     "stage": 10,
+     "ai": [
+      "fengbai",
+      "shuangchao",
+      "shanhong"
+     ],
+     "ai_names": "風擺柳碎步／雙抄花／山洪爆發式",
+     "arch": "遠程＋近戰＋防守",
+     "delay": 3,
+     "eps": 0,
+     "difficulty": 0.832,
+     "counters": [
+      [
+       [
+        "fengbai",
+        "zhuafen",
+        "shanhong"
+       ],
+       "風擺柳碎步／抓分手／山洪爆發式",
+       0.917
+      ],
+      [
+       [
+        "fengbai",
+        "shanhong",
+        "sandian"
+       ],
+       "風擺柳碎步／山洪爆發式／三點頭",
+       0.917
+      ],
+      [
+       [
+        "fengbai",
+        "xiaolun",
+        "zhuafen"
+       ],
+       "風擺柳碎步／小掄臂／抓分手",
+       0.833
+      ]
+     ],
+     "meta": true,
+     "measured": {
+      "counters": [
+       0.625,
+       0.675,
+       0.6
+      ],
+      "difficulty": 0.935
+     }
+    }
+   ],
+   "max_cleared_by_one_combo": 9,
+   "combos_clear_all": 0,
+   "combos_with_no_hard_stage": 0,
+   "measured_curve_ok": 9
+  },
+  {
+   "version": 4,
+   "name": "經典三招版",
+   "desc": "電腦一定帶閃身步、浪子踢球或狗熊哆嗦毛",
+   "stages": [
+    {
+     "stage": 1,
+     "ai": [
+      "shan",
+      "bear",
+      "guabian"
+     ],
+     "ai_names": "閃身步／狗熊哆嗦毛／掛鞭式",
+     "arch": "位移＋遠程＋近戰",
+     "delay": 7,
+     "eps": 0.22,
+     "difficulty": 0.198,
+     "counters": [
+      [
+       [
+        "shanhong",
+        "feiji",
+        "pinghu"
+       ],
+       "山洪爆發式／飛機輪／平護",
+       0.941
+      ],
+      [
+       [
+        "fengbai",
+        "shuangchao",
+        "feiji"
+       ],
+       "風擺柳碎步／雙抄花／飛機輪",
+       0.941
+      ],
+      [
+       [
+        "fengbai",
+        "shuangchao",
+        "yunbu"
+       ],
+       "風擺柳碎步／雙抄花／雲步",
+       0.941
+      ]
+     ],
+     "meta": false,
+     "measured": {
+      "counters": [
+       1.0,
+       1.0,
+       1.0
+      ],
+      "difficulty": 0.133
+     }
+    },
+    {
+     "stage": 2,
+     "ai": [
+      "shan",
+      "ball",
+      "guabian"
+     ],
+     "ai_names": "閃身步／浪子踢球／掛鞭式",
+     "arch": "位移＋遠程＋遠程",
+     "delay": 7,
+     "eps": 0.22,
+     "difficulty": 0.256,
+     "counters": [
+      [
+       [
+        "sandian",
+        "yunbu",
+        "daqi"
+       ],
+       "三點頭／雲步／大起步",
+       0.941
+      ],
+      [
+       [
+        "yunbu",
+        "daqi",
+        "pinghu"
+       ],
+       "雲步／大起步／平護",
+       0.941
+      ],
+      [
+       [
+        "xiachuan",
+        "laoying",
+        "feiji"
+       ],
+       "下穿拳傾護／老鷹展翅／飛機輪",
+       0.941
+      ]
+     ],
+     "meta": false,
+     "measured": {
+      "counters": [
+       1.0,
+       1.0,
+       1.0
+      ],
+      "difficulty": 0.113
+     }
+    },
+    {
+     "stage": 3,
+     "ai": [
+      "shan",
+      "baishi",
+      "daqi"
+     ],
+     "ai_names": "閃身步／敗式／大起步",
+     "arch": "位移＋近戰＋防守",
+     "delay": 6,
+     "eps": 0.15,
+     "difficulty": 0.357,
+     "counters": [
+      [
+       [
+        "shanhong",
+        "sandian",
+        "feiji"
+       ],
+       "山洪爆發式／三點頭／飛機輪",
+       0.935
+      ],
+      [
+       [
+        "shanhong",
+        "sandian",
+        "yunbu"
+       ],
+       "山洪爆發式／三點頭／雲步",
+       0.935
+      ],
+      [
+       [
+        "shanhong",
+        "sandian",
+        "pinghu"
+       ],
+       "山洪爆發式／三點頭／平護",
+       0.935
+      ]
+     ],
+     "meta": false,
+     "measured": {
+      "counters": [
+       1.0,
+       0.95,
+       1.0
+      ],
+      "difficulty": 0.29
+     }
+    },
+    {
+     "stage": 4,
+     "ai": [
+      "shan",
+      "guabian",
+      "zhuafen"
+     ],
+     "ai_names": "閃身步／掛鞭式／抓分手",
+     "arch": "位移＋遠程＋抓技",
+     "delay": 6,
+     "eps": 0.15,
+     "difficulty": 0.39,
+     "counters": [
+      [
+       [
+        "sandian",
+        "yunbu",
+        "daqi"
+       ],
+       "三點頭／雲步／大起步",
+       0.935
+      ],
+      [
+       [
+        "shan",
+        "ball",
+        "pinghu"
+       ],
+       "閃身步／浪子踢球／平護",
+       0.935
+      ],
+      [
+       [
+        "bear",
+        "baishi",
+        "liaowang"
+       ],
+       "狗熊哆嗦毛／敗式／瞭望式",
+       0.935
+      ]
+     ],
+     "meta": false,
+     "measured": {
+      "counters": [
+       0.975,
+       1.0,
+       0.975
+      ],
+      "difficulty": 0.301
+     }
+    },
+    {
+     "stage": 5,
+     "ai": [
+      "shan",
+      "zhuafen",
+      "daqi"
+     ],
+     "ai_names": "閃身步／抓分手／大起步",
+     "arch": "位移＋近戰＋抓技",
+     "delay": 5,
+     "eps": 0.1,
+     "difficulty": 0.416,
+     "counters": [
+      [
+       [
+        "sandian",
+        "laoying",
+        "feiji"
+       ],
+       "三點頭／老鷹展翅／飛機輪",
+       0.931
+      ],
+      [
+       [
+        "shan",
+        "ball",
+        "shuangchao"
+       ],
+       "閃身步／浪子踢球／雙抄花",
+       0.931
+      ],
+      [
+       [
+        "fengbai",
+        "shanhong",
+        "sandian"
+       ],
+       "風擺柳碎步／山洪爆發式／三點頭",
+       0.931
+      ]
+     ],
+     "meta": false,
+     "measured": {
+      "counters": [
+       0.925,
+       1.0,
+       1.0
+      ],
+      "difficulty": 0.363
+     }
+    },
+    {
+     "stage": 6,
+     "ai": [
+      "ball",
+      "shuangchao",
+      "zhuafen"
+     ],
+     "ai_names": "浪子踢球／雙抄花／抓分手",
+     "arch": "遠程＋遠程＋抓技",
+     "delay": 5,
+     "eps": 0.1,
+     "difficulty": 0.51,
+     "counters": [
+      [
+       [
+        "sandian",
+        "daqi",
+        "pinghu"
+       ],
+       "三點頭／大起步／平護",
+       0.931
+      ],
+      [
+       [
+        "xiaolun",
+        "sandian",
+        "daqi"
+       ],
+       "小掄臂／三點頭／大起步",
+       0.931
+      ],
+      [
+       [
+        "xiaolun",
+        "sandian",
+        "pinghu"
+       ],
+       "小掄臂／三點頭／平護",
+       0.931
+      ]
+     ],
+     "meta": true,
+     "measured": {
+      "counters": [
+       1.0,
+       1.0,
+       1.0
+      ],
+      "difficulty": 0.488
+     }
+    },
+    {
+     "stage": 7,
+     "ai": [
+      "bear",
+      "baishi",
+      "liaowang"
+     ],
+     "ai_names": "狗熊哆嗦毛／敗式／瞭望式",
+     "arch": "近戰＋防守＋增益",
+     "delay": 4,
+     "eps": 0.05,
+     "difficulty": 0.592,
+     "counters": [
+      [
+       [
+        "shan",
+        "ball",
+        "laoying"
+       ],
+       "閃身步／浪子踢球／老鷹展翅",
+       0.922
+      ],
+      [
+       [
+        "xiaolun",
+        "xiachuan",
+        "shanhong"
+       ],
+       "小掄臂／下穿拳傾護／山洪爆發式",
+       0.922
+      ],
+      [
+       [
+        "baishi",
+        "liaowang",
+        "shuangchao"
+       ],
+       "敗式／瞭望式／雙抄花",
+       0.922
+      ]
+     ],
+     "meta": false,
+     "measured": {
+      "counters": [
+       0.925,
+       0.65,
+       0.75
+      ],
+      "difficulty": 0.64
+     }
+    },
+    {
+     "stage": 8,
+     "ai": [
+      "shan",
+      "liaowang",
+      "laoying"
+     ],
+     "ai_names": "閃身步／瞭望式／老鷹展翅",
+     "arch": "位移＋近戰＋增益",
+     "delay": 4,
+     "eps": 0.05,
+     "difficulty": 0.611,
+     "counters": [
+      [
+       [
+        "liaowang",
+        "xiachuan",
+        "daqi"
+       ],
+       "瞭望式／下穿拳傾護／大起步",
+       0.922
+      ],
+      [
+       [
+        "liaowang",
+        "yunbu",
+        "daqi"
+       ],
+       "瞭望式／雲步／大起步",
+       0.922
+      ],
+      [
+       [
+        "ball",
+        "shuangchao",
+        "daqi"
+       ],
+       "浪子踢球／雙抄花／大起步",
+       0.922
+      ]
+     ],
+     "meta": true,
+     "measured": {
+      "counters": [
+       0.6,
+       0.825,
+       0.85
+      ],
+      "difficulty": 0.603
+     }
+    },
+    {
+     "stage": 9,
+     "ai": [
+      "bear",
+      "fengbai",
+      "laoying"
+     ],
+     "ai_names": "狗熊哆嗦毛／風擺柳碎步／老鷹展翅",
+     "arch": "近戰＋近戰＋防守",
+     "delay": 3,
+     "eps": 0,
+     "difficulty": 0.676,
+     "counters": [
+      [
+       [
+        "fengbai",
+        "shanhong",
+        "daqi"
+       ],
+       "風擺柳碎步／山洪爆發式／大起步",
+       0.917
+      ],
+      [
+       [
+        "fengbai",
+        "shuangchao",
+        "daqi"
+       ],
+       "風擺柳碎步／雙抄花／大起步",
+       0.917
+      ],
+      [
+       [
+        "fengbai",
+        "shanhong",
+        "feiji"
+       ],
+       "風擺柳碎步／山洪爆發式／飛機輪",
+       0.917
+      ]
+     ],
+     "meta": true,
+     "measured": {
+      "counters": [
+       0.8,
+       0.525,
+       0.85
+      ],
+      "difficulty": 0.65
+     }
+    },
+    {
+     "stage": 10,
+     "ai": [
+      "shan",
+      "shuangchao",
+      "laoying"
+     ],
+     "ai_names": "閃身步／雙抄花／老鷹展翅",
+     "arch": "位移＋遠程＋近戰",
+     "delay": 3,
+     "eps": 0,
+     "difficulty": 0.81,
+     "counters": [
+      [
+       [
+        "bear",
+        "zhuafen",
+        "laoying"
+       ],
+       "狗熊哆嗦毛／抓分手／老鷹展翅",
+       0.917
+      ],
+      [
+       [
+        "fengbai",
+        "shuangchao",
+        "shanhong"
+       ],
+       "風擺柳碎步／雙抄花／山洪爆發式",
+       0.833
+      ],
+      [
+       [
+        "xiachuan",
+        "shanhong",
+        "laoying"
+       ],
+       "下穿拳傾護／山洪爆發式／老鷹展翅",
+       0.75
+      ]
+     ],
+     "meta": true,
+     "measured": {
+      "counters": [
+       0.675,
+       0.725,
+       0.625
+      ],
+      "difficulty": 0.878
+     }
+    }
+   ],
+   "max_cleared_by_one_combo": 10,
+   "combos_clear_all": 2,
+   "combos_with_no_hard_stage": 19,
+   "measured_curve_ok": 9
+  },
+  {
+   "version": 5,
+   "name": "遠程流派版",
+   "desc": "電腦愛拉開距離：踢球、丟花、掛鞭",
+   "stages": [
+    {
+     "stage": 1,
+     "ai": [
+      "shan",
+      "bear",
+      "guabian"
+     ],
+     "ai_names": "閃身步／狗熊哆嗦毛／掛鞭式",
+     "arch": "位移＋遠程＋近戰",
+     "delay": 7,
+     "eps": 0.22,
+     "difficulty": 0.198,
+     "counters": [
+      [
+       [
+        "shanhong",
+        "feiji",
+        "pinghu"
+       ],
+       "山洪爆發式／飛機輪／平護",
+       0.941
+      ],
+      [
+       [
+        "fengbai",
+        "shuangchao",
+        "feiji"
+       ],
+       "風擺柳碎步／雙抄花／飛機輪",
+       0.941
+      ],
+      [
+       [
+        "fengbai",
+        "shuangchao",
+        "yunbu"
+       ],
+       "風擺柳碎步／雙抄花／雲步",
+       0.941
+      ]
+     ],
+     "meta": false,
+     "measured": {
+      "counters": [
+       1.0,
+       1.0,
+       0.975
+      ],
+      "difficulty": 0.135
+     }
+    },
+    {
+     "stage": 2,
+     "ai": [
+      "baishi",
+      "guabian",
+      "zhuafen"
+     ],
+     "ai_names": "敗式／掛鞭式／抓分手",
+     "arch": "遠程＋防守＋抓技",
+     "delay": 7,
+     "eps": 0.22,
+     "difficulty": 0.254,
+     "counters": [
+      [
+       [
+        "laoying",
+        "daqi",
+        "pinghu"
+       ],
+       "老鷹展翅／大起步／平護",
+       0.941
+      ],
+      [
+       [
+        "feiji",
+        "daqi",
+        "pinghu"
+       ],
+       "飛機輪／大起步／平護",
+       0.941
+      ],
+      [
+       [
+        "zhuafen",
+        "laoying",
+        "feiji"
+       ],
+       "抓分手／老鷹展翅／飛機輪",
+       0.941
+      ]
+     ],
+     "meta": false,
+     "measured": {
+      "counters": [
+       0.9,
+       0.85,
+       0.875
+      ],
+      "difficulty": 0.314
+     }
+    },
+    {
+     "stage": 3,
+     "ai": [
+      "shan",
+      "ball",
+      "guabian"
+     ],
+     "ai_names": "閃身步／浪子踢球／掛鞭式",
+     "arch": "位移＋遠程＋遠程",
+     "delay": 6,
+     "eps": 0.15,
+     "difficulty": 0.27,
+     "counters": [
+      [
+       [
+        "sandian",
+        "yunbu",
+        "daqi"
+       ],
+       "三點頭／雲步／大起步",
+       0.935
+      ],
+      [
+       [
+        "yunbu",
+        "daqi",
+        "pinghu"
+       ],
+       "雲步／大起步／平護",
+       0.935
+      ],
+      [
+       [
+        "xiachuan",
+        "laoying",
+        "feiji"
+       ],
+       "下穿拳傾護／老鷹展翅／飛機輪",
+       0.935
+      ]
+     ],
+     "meta": false,
+     "measured": {
+      "counters": [
+       1.0,
+       1.0,
+       1.0
+      ],
+      "difficulty": 0.066
+     }
+    },
+    {
+     "stage": 4,
+     "ai": [
+      "ball",
+      "xiaolun",
+      "biandan"
+     ],
+     "ai_names": "浪子踢球／小掄臂／扁擔式",
+     "arch": "遠程＋近戰＋增益",
+     "delay": 6,
+     "eps": 0.15,
+     "difficulty": 0.349,
+     "counters": [
+      [
+       [
+        "shan",
+        "ball",
+        "daqi"
+       ],
+       "閃身步／浪子踢球／大起步",
+       0.935
+      ],
+      [
+       [
+        "yunbu",
+        "daqi",
+        "pinghu"
+       ],
+       "雲步／大起步／平護",
+       0.935
+      ],
+      [
+       [
+        "laoying",
+        "yunbu",
+        "pinghu"
+       ],
+       "老鷹展翅／雲步／平護",
+       0.935
+      ]
+     ],
+     "meta": false,
+     "measured": {
+      "counters": [
+       1.0,
+       1.0,
+       1.0
+      ],
+      "difficulty": 0.351
+     }
+    },
+    {
+     "stage": 5,
+     "ai": [
+      "shan",
+      "guabian",
+      "zhuafen"
+     ],
+     "ai_names": "閃身步／掛鞭式／抓分手",
+     "arch": "位移＋遠程＋抓技",
+     "delay": 5,
+     "eps": 0.1,
+     "difficulty": 0.399,
+     "counters": [
+      [
+       [
+        "sandian",
+        "yunbu",
+        "daqi"
+       ],
+       "三點頭／雲步／大起步",
+       0.931
+      ],
+      [
+       [
+        "shan",
+        "ball",
+        "pinghu"
+       ],
+       "閃身步／浪子踢球／平護",
+       0.931
+      ],
+      [
+       [
+        "bear",
+        "baishi",
+        "liaowang"
+       ],
+       "狗熊哆嗦毛／敗式／瞭望式",
+       0.931
+      ]
+     ],
+     "meta": false,
+     "measured": {
+      "counters": [
+       0.975,
+       0.925,
+       0.9
+      ],
+      "difficulty": 0.334
+     }
+    },
+    {
+     "stage": 6,
+     "ai": [
+      "ball",
+      "liaowang",
+      "daqi"
+     ],
+     "ai_names": "浪子踢球／瞭望式／大起步",
+     "arch": "遠程＋近戰＋增益",
+     "delay": 5,
+     "eps": 0.1,
+     "difficulty": 0.488,
+     "counters": [
+      [
+       [
+        "shanhong",
+        "yunbu",
+        "pinghu"
+       ],
+       "山洪爆發式／雲步／平護",
+       0.931
+      ],
+      [
+       [
+        "fengbai",
+        "zhuafen",
+        "shanhong"
+       ],
+       "風擺柳碎步／抓分手／山洪爆發式",
+       0.931
+      ],
+      [
+       [
+        "sandian",
+        "feiji",
+        "pinghu"
+       ],
+       "三點頭／飛機輪／平護",
+       0.931
+      ]
+     ],
+     "meta": false,
+     "measured": {
+      "counters": [
+       0.8,
+       0.875,
+       1.0
+      ],
+      "difficulty": 0.387
+     }
+    },
+    {
+     "stage": 7,
+     "ai": [
+      "ball",
+      "shuangchao",
+      "zhuafen"
+     ],
+     "ai_names": "浪子踢球／雙抄花／抓分手",
+     "arch": "遠程＋遠程＋抓技",
+     "delay": 4,
+     "eps": 0.05,
+     "difficulty": 0.532,
+     "counters": [
+      [
+       [
+        "sandian",
+        "daqi",
+        "pinghu"
+       ],
+       "三點頭／大起步／平護",
+       0.922
+      ],
+      [
+       [
+        "xiaolun",
+        "sandian",
+        "daqi"
+       ],
+       "小掄臂／三點頭／大起步",
+       0.922
+      ],
+      [
+       [
+        "xiaolun",
+        "sandian",
+        "pinghu"
+       ],
+       "小掄臂／三點頭／平護",
+       0.922
+      ]
+     ],
+     "meta": true,
+     "measured": {
+      "counters": [
+       1.0,
+       0.975,
+       1.0
+      ],
+      "difficulty": 0.512
+     }
+    },
+    {
+     "stage": 8,
+     "ai": [
+      "dalun",
+      "shuangchao",
+      "feiji"
+     ],
+     "ai_names": "大掄臂／雙抄花／飛機輪",
+     "arch": "遠程＋近戰＋近戰",
+     "delay": 4,
+     "eps": 0.05,
+     "difficulty": 0.606,
+     "counters": [
+      [
+       [
+        "fengbai",
+        "zhuafen",
+        "sandian"
+       ],
+       "風擺柳碎步／抓分手／三點頭",
+       0.922
+      ],
+      [
+       [
+        "fengbai",
+        "zhuafen",
+        "feiji"
+       ],
+       "風擺柳碎步／抓分手／飛機輪",
+       0.922
+      ],
+      [
+       [
+        "zhuafen",
+        "xiachuan",
+        "sandian"
+       ],
+       "抓分手／下穿拳傾護／三點頭",
+       0.922
+      ]
+     ],
+     "meta": false,
+     "measured": {
+      "counters": [
+       0.925,
+       0.95,
+       0.975
+      ],
+      "difficulty": 0.598
+     }
+    },
+    {
+     "stage": 9,
+     "ai": [
+      "shan",
+      "shuangchao",
+      "laoying"
+     ],
+     "ai_names": "閃身步／雙抄花／老鷹展翅",
+     "arch": "位移＋遠程＋近戰",
+     "delay": 3,
+     "eps": 0,
+     "difficulty": 0.81,
+     "counters": [
+      [
+       [
+        "bear",
+        "zhuafen",
+        "laoying"
+       ],
+       "狗熊哆嗦毛／抓分手／老鷹展翅",
+       0.917
+      ],
+      [
+       [
+        "fengbai",
+        "shuangchao",
+        "shanhong"
+       ],
+       "風擺柳碎步／雙抄花／山洪爆發式",
+       0.833
+      ],
+      [
+       [
+        "xiachuan",
+        "shanhong",
+        "laoying"
+       ],
+       "下穿拳傾護／山洪爆發式／老鷹展翅",
+       0.75
+      ]
+     ],
+     "meta": true,
+     "measured": {
+      "counters": [
+       0.525,
+       0.725,
+       0.5
+      ],
+      "difficulty": 0.875
+     }
+    },
+    {
+     "stage": 10,
+     "ai": [
+      "fengbai",
+      "shuangchao",
+      "shanhong"
+     ],
+     "ai_names": "風擺柳碎步／雙抄花／山洪爆發式",
+     "arch": "遠程＋近戰＋防守",
+     "delay": 3,
+     "eps": 0,
+     "difficulty": 0.832,
+     "counters": [
+      [
+       [
+        "fengbai",
+        "zhuafen",
+        "shanhong"
+       ],
+       "風擺柳碎步／抓分手／山洪爆發式",
+       0.917
+      ],
+      [
+       [
+        "fengbai",
+        "shanhong",
+        "sandian"
+       ],
+       "風擺柳碎步／山洪爆發式／三點頭",
+       0.917
+      ],
+      [
+       [
+        "fengbai",
+        "xiaolun",
+        "zhuafen"
+       ],
+       "風擺柳碎步／小掄臂／抓分手",
+       0.833
+      ]
+     ],
+     "meta": true,
+     "measured": {
+      "counters": [
+       0.75,
+       0.425,
+       0.7
+      ],
+      "difficulty": 0.932
+     }
+    }
+   ],
+   "max_cleared_by_one_combo": 9,
+   "combos_clear_all": 0,
+   "combos_with_no_hard_stage": 6,
+   "measured_curve_ok": 8
+  },
+  {
+   "version": 6,
+   "name": "近身爆發版",
+   "desc": "電腦全是近戰／抓技，衝上來就打",
+   "stages": [
+    {
+     "stage": 1,
+     "ai": [
+      "shan",
+      "bear",
+      "guabian"
+     ],
+     "ai_names": "閃身步／狗熊哆嗦毛／掛鞭式",
+     "arch": "位移＋遠程＋近戰",
+     "delay": 7,
+     "eps": 0.22,
+     "difficulty": 0.198,
+     "counters": [
+      [
+       [
+        "shanhong",
+        "feiji",
+        "pinghu"
+       ],
+       "山洪爆發式／飛機輪／平護",
+       0.941
+      ],
+      [
+       [
+        "fengbai",
+        "shuangchao",
+        "feiji"
+       ],
+       "風擺柳碎步／雙抄花／飛機輪",
+       0.941
+      ],
+      [
+       [
+        "fengbai",
+        "shuangchao",
+        "yunbu"
+       ],
+       "風擺柳碎步／雙抄花／雲步",
+       0.941
+      ]
+     ],
+     "meta": false,
+     "measured": {
+      "counters": [
+       1.0,
+       1.0,
+       1.0
+      ],
+      "difficulty": 0.188
+     }
+    },
+    {
+     "stage": 2,
+     "ai": [
+      "shan",
+      "ball",
+      "guabian"
+     ],
+     "ai_names": "閃身步／浪子踢球／掛鞭式",
+     "arch": "位移＋遠程＋遠程",
+     "delay": 7,
+     "eps": 0.22,
+     "difficulty": 0.256,
+     "counters": [
+      [
+       [
+        "sandian",
+        "yunbu",
+        "daqi"
+       ],
+       "三點頭／雲步／大起步",
+       0.941
+      ],
+      [
+       [
+        "yunbu",
+        "daqi",
+        "pinghu"
+       ],
+       "雲步／大起步／平護",
+       0.941
+      ],
+      [
+       [
+        "xiachuan",
+        "laoying",
+        "feiji"
+       ],
+       "下穿拳傾護／老鷹展翅／飛機輪",
+       0.941
+      ]
+     ],
+     "meta": false,
+     "measured": {
+      "counters": [
+       1.0,
+       1.0,
+       1.0
+      ],
+      "difficulty": 0.055
+     }
+    },
+    {
+     "stage": 3,
+     "ai": [
+      "fengbai",
+      "guabian",
+      "feiji"
+     ],
+     "ai_names": "風擺柳碎步／掛鞭式／飛機輪",
+     "arch": "遠程＋近戰＋防守",
+     "delay": 6,
+     "eps": 0.15,
+     "difficulty": 0.324,
+     "counters": [
+      [
+       [
+        "sandian",
+        "laoying",
+        "daqi"
+       ],
+       "三點頭／老鷹展翅／大起步",
+       0.935
+      ],
+      [
+       [
+        "shanhong",
+        "feiji",
+        "pinghu"
+       ],
+       "山洪爆發式／飛機輪／平護",
+       0.935
+      ],
+      [
+       [
+        "shanhong",
+        "yunbu",
+        "pinghu"
+       ],
+       "山洪爆發式／雲步／平護",
+       0.935
+      ]
+     ],
+     "meta": false,
+     "measured": {
+      "counters": [
+       0.825,
+       0.85,
+       0.975
+      ],
+      "difficulty": 0.27
+     }
+    },
+    {
+     "stage": 4,
+     "ai": [
+      "fengbai",
+      "baishi",
+      "pinghu"
+     ],
+     "ai_names": "風擺柳碎步／敗式／平護",
+     "arch": "防守＋防守＋防守",
+     "delay": 6,
+     "eps": 0.15,
+     "difficulty": 0.372,
+     "counters": [
+      [
+       [
+        "shan",
+        "fengbai",
+        "shuangchao"
+       ],
+       "閃身步／風擺柳碎步／雙抄花",
+       0.935
+      ],
+      [
+       [
+        "fengbai",
+        "liaowang",
+        "zhuafen"
+       ],
+       "風擺柳碎步／瞭望式／抓分手",
+       0.935
+      ],
+      [
+       [
+        "fengbai",
+        "liaowang",
+        "laoying"
+       ],
+       "風擺柳碎步／瞭望式／老鷹展翅",
+       0.935
+      ]
+     ],
+     "meta": false,
+     "measured": {
+      "counters": [
+       1.0,
+       0.787,
+       0.875
+      ],
+      "difficulty": 0.318
+     }
+    },
+    {
+     "stage": 5,
+     "ai": [
+      "dalun",
+      "zhuafen",
+      "xiachuan"
+     ],
+     "ai_names": "大掄臂／抓分手／下穿拳傾護",
+     "arch": "近戰＋近戰＋抓技",
+     "delay": 5,
+     "eps": 0.1,
+     "difficulty": 0.424,
+     "counters": [
+      [
+       [
+        "sandian",
+        "laoying",
+        "pinghu"
+       ],
+       "三點頭／老鷹展翅／平護",
+       0.931
+      ],
+      [
+       [
+        "shanhong",
+        "feiji",
+        "pinghu"
+       ],
+       "山洪爆發式／飛機輪／平護",
+       0.931
+      ],
+      [
+       [
+        "shanhong",
+        "daqi",
+        "pinghu"
+       ],
+       "山洪爆發式／大起步／平護",
+       0.931
+      ]
+     ],
+     "meta": false,
+     "measured": {
+      "counters": [
+       0.8,
+       1.0,
+       0.925
+      ],
+      "difficulty": 0.355
+     }
+    },
+    {
+     "stage": 6,
+     "ai": [
+      "ball",
+      "shuangchao",
+      "zhuafen"
+     ],
+     "ai_names": "浪子踢球／雙抄花／抓分手",
+     "arch": "遠程＋遠程＋抓技",
+     "delay": 5,
+     "eps": 0.1,
+     "difficulty": 0.51,
+     "counters": [
+      [
+       [
+        "sandian",
+        "daqi",
+        "pinghu"
+       ],
+       "三點頭／大起步／平護",
+       0.931
+      ],
+      [
+       [
+        "xiaolun",
+        "sandian",
+        "daqi"
+       ],
+       "小掄臂／三點頭／大起步",
+       0.931
+      ],
+      [
+       [
+        "xiaolun",
+        "sandian",
+        "pinghu"
+       ],
+       "小掄臂／三點頭／平護",
+       0.931
+      ]
+     ],
+     "meta": true,
+     "measured": {
+      "counters": [
+       1.0,
+       1.0,
+       0.975
+      ],
+      "difficulty": 0.578
+     }
+    },
+    {
+     "stage": 7,
+     "ai": [
+      "bear",
+      "xiaolun",
+      "liaowang"
+     ],
+     "ai_names": "狗熊哆嗦毛／小掄臂／瞭望式",
+     "arch": "近戰＋近戰＋增益",
+     "delay": 4,
+     "eps": 0.05,
+     "difficulty": 0.539,
+     "counters": [
+      [
+       [
+        "shan",
+        "ball",
+        "yunbu"
+       ],
+       "閃身步／浪子踢球／雲步",
+       0.922
+      ],
+      [
+       [
+        "dalun",
+        "biandan",
+        "laoying"
+       ],
+       "大掄臂／扁擔式／老鷹展翅",
+       0.922
+      ],
+      [
+       [
+        "shan",
+        "ball",
+        "shuangchao"
+       ],
+       "閃身步／浪子踢球／雙抄花",
+       0.922
+      ]
+     ],
+     "meta": false,
+     "measured": {
+      "counters": [
+       0.875,
+       0.95,
+       0.925
+      ],
+      "difficulty": 0.618
+     }
+    },
+    {
+     "stage": 8,
+     "ai": [
+      "zhuafen",
+      "laoying",
+      "feiji"
+     ],
+     "ai_names": "抓分手／老鷹展翅／飛機輪",
+     "arch": "近戰＋近戰＋抓技",
+     "delay": 4,
+     "eps": 0.05,
+     "difficulty": 0.632,
+     "counters": [
+      [
+       [
+        "zhuafen",
+        "shanhong",
+        "feiji"
+       ],
+       "抓分手／山洪爆發式／飛機輪",
+       0.922
+      ],
+      [
+       [
+        "shan",
+        "shuangchao",
+        "zhuafen"
+       ],
+       "閃身步／雙抄花／抓分手",
+       0.922
+      ],
+      [
+       [
+        "shuangchao",
+        "shanhong",
+        "pinghu"
+       ],
+       "雙抄花／山洪爆發式／平護",
+       0.922
+      ]
+     ],
+     "meta": true,
+     "measured": {
+      "counters": [
+       0.825,
+       0.825,
+       0.85
+      ],
+      "difficulty": 0.69
+     }
+    },
+    {
+     "stage": 9,
+     "ai": [
+      "shan",
+      "shuangchao",
+      "laoying"
+     ],
+     "ai_names": "閃身步／雙抄花／老鷹展翅",
+     "arch": "位移＋遠程＋近戰",
+     "delay": 3,
+     "eps": 0,
+     "difficulty": 0.81,
+     "counters": [
+      [
+       [
+        "bear",
+        "zhuafen",
+        "laoying"
+       ],
+       "狗熊哆嗦毛／抓分手／老鷹展翅",
+       0.917
+      ],
+      [
+       [
+        "fengbai",
+        "shuangchao",
+        "shanhong"
+       ],
+       "風擺柳碎步／雙抄花／山洪爆發式",
+       0.833
+      ],
+      [
+       [
+        "xiachuan",
+        "shanhong",
+        "laoying"
+       ],
+       "下穿拳傾護／山洪爆發式／老鷹展翅",
+       0.75
+      ]
+     ],
+     "meta": true,
+     "measured": {
+      "counters": [
+       0.675,
+       0.75,
+       0.675
+      ],
+      "difficulty": 0.907
+     }
+    },
+    {
+     "stage": 10,
+     "ai": [
+      "fengbai",
+      "shuangchao",
+      "shanhong"
+     ],
+     "ai_names": "風擺柳碎步／雙抄花／山洪爆發式",
+     "arch": "遠程＋近戰＋防守",
+     "delay": 3,
+     "eps": 0,
+     "difficulty": 0.832,
+     "counters": [
+      [
+       [
+        "fengbai",
+        "zhuafen",
+        "shanhong"
+       ],
+       "風擺柳碎步／抓分手／山洪爆發式",
+       0.917
+      ],
+      [
+       [
+        "fengbai",
+        "shanhong",
+        "sandian"
+       ],
+       "風擺柳碎步／山洪爆發式／三點頭",
+       0.917
+      ],
+      [
+       [
+        "fengbai",
+        "xiaolun",
+        "zhuafen"
+       ],
+       "風擺柳碎步／小掄臂／抓分手",
+       0.833
+      ]
+     ],
+     "meta": true,
+     "measured": {
+      "counters": [
+       0.625,
+       0.675,
+       0.625
+      ],
+      "difficulty": 0.93
+     }
+    }
+   ],
+   "max_cleared_by_one_combo": 9,
+   "combos_clear_all": 0,
+   "combos_with_no_hard_stage": 2,
+   "measured_curve_ok": 8
+  },
+  {
+   "version": 7,
+   "name": "防守反擊版",
+   "desc": "電腦愛擋、愛閃、愛反擊",
+   "stages": [
+    {
+     "stage": 1,
+     "ai": [
+      "ball",
+      "guabian",
+      "pinghu"
+     ],
+     "ai_names": "浪子踢球／掛鞭式／平護",
+     "arch": "遠程＋遠程＋防守",
+     "delay": 7,
+     "eps": 0.22,
+     "difficulty": 0.212,
+     "counters": [
+      [
+       [
+        "laoying",
+        "yunbu",
+        "daqi"
+       ],
+       "老鷹展翅／雲步／大起步",
+       0.941
+      ],
+      [
+       [
+        "sandian",
+        "daqi",
+        "pinghu"
+       ],
+       "三點頭／大起步／平護",
+       0.941
+      ],
+      [
+       [
+        "sandian",
+        "yunbu",
+        "daqi"
+       ],
+       "三點頭／雲步／大起步",
+       0.941
+      ]
+     ],
+     "meta": false,
+     "measured": {
+      "counters": [
+       1.0,
+       1.0,
+       1.0
+      ],
+      "difficulty": 0.106
+     }
+    },
+    {
+     "stage": 2,
+     "ai": [
+      "baishi",
+      "guabian",
+      "zhuafen"
+     ],
+     "ai_names": "敗式／掛鞭式／抓分手",
+     "arch": "遠程＋防守＋抓技",
+     "delay": 7,
+     "eps": 0.22,
+     "difficulty": 0.254,
+     "counters": [
+      [
+       [
+        "laoying",
+        "daqi",
+        "pinghu"
+       ],
+       "老鷹展翅／大起步／平護",
+       0.941
+      ],
+      [
+       [
+        "feiji",
+        "daqi",
+        "pinghu"
+       ],
+       "飛機輪／大起步／平護",
+       0.941
+      ],
+      [
+       [
+        "zhuafen",
+        "laoying",
+        "feiji"
+       ],
+       "抓分手／老鷹展翅／飛機輪",
+       0.941
+      ]
+     ],
+     "meta": false,
+     "measured": {
+      "counters": [
+       0.925,
+       0.975,
+       0.95
+      ],
+      "difficulty": 0.173
+     }
+    },
+    {
+     "stage": 3,
+     "ai": [
+      "fengbai",
+      "guabian",
+      "feiji"
+     ],
+     "ai_names": "風擺柳碎步／掛鞭式／飛機輪",
+     "arch": "遠程＋近戰＋防守",
+     "delay": 6,
+     "eps": 0.15,
+     "difficulty": 0.324,
+     "counters": [
+      [
+       [
+        "sandian",
+        "laoying",
+        "daqi"
+       ],
+       "三點頭／老鷹展翅／大起步",
+       0.935
+      ],
+      [
+       [
+        "shanhong",
+        "feiji",
+        "pinghu"
+       ],
+       "山洪爆發式／飛機輪／平護",
+       0.935
+      ],
+      [
+       [
+        "shanhong",
+        "yunbu",
+        "pinghu"
+       ],
+       "山洪爆發式／雲步／平護",
+       0.935
+      ]
+     ],
+     "meta": false,
+     "measured": {
+      "counters": [
+       0.7,
+       0.925,
+       0.975
+      ],
+      "difficulty": 0.236
+     }
+    },
+    {
+     "stage": 4,
+     "ai": [
+      "fengbai",
+      "baishi",
+      "pinghu"
+     ],
+     "ai_names": "風擺柳碎步／敗式／平護",
+     "arch": "防守＋防守＋防守",
+     "delay": 6,
+     "eps": 0.15,
+     "difficulty": 0.372,
+     "counters": [
+      [
+       [
+        "shan",
+        "fengbai",
+        "shuangchao"
+       ],
+       "閃身步／風擺柳碎步／雙抄花",
+       0.935
+      ],
+      [
+       [
+        "fengbai",
+        "liaowang",
+        "zhuafen"
+       ],
+       "風擺柳碎步／瞭望式／抓分手",
+       0.935
+      ],
+      [
+       [
+        "fengbai",
+        "liaowang",
+        "laoying"
+       ],
+       "風擺柳碎步／瞭望式／老鷹展翅",
+       0.935
+      ]
+     ],
+     "meta": false,
+     "measured": {
+      "counters": [
+       1.0,
+       0.8,
+       0.9
+      ],
+      "difficulty": 0.281
+     }
+    },
+    {
+     "stage": 5,
+     "ai": [
+      "xiaolun",
+      "liaowang",
+      "pinghu"
+     ],
+     "ai_names": "小掄臂／瞭望式／平護",
+     "arch": "近戰＋防守＋增益",
+     "delay": 5,
+     "eps": 0.1,
+     "difficulty": 0.434,
+     "counters": [
+      [
+       [
+        "laoying",
+        "yunbu",
+        "daqi"
+       ],
+       "老鷹展翅／雲步／大起步",
+       0.931
+      ],
+      [
+       [
+        "shan",
+        "ball",
+        "fengbai"
+       ],
+       "閃身步／浪子踢球／風擺柳碎步",
+       0.931
+      ],
+      [
+       [
+        "shanhong",
+        "laoying",
+        "daqi"
+       ],
+       "山洪爆發式／老鷹展翅／大起步",
+       0.931
+      ]
+     ],
+     "meta": false,
+     "measured": {
+      "counters": [
+       0.925,
+       1.0,
+       0.925
+      ],
+      "difficulty": 0.435
+     }
+    },
+    {
+     "stage": 6,
+     "ai": [
+      "baishi",
+      "daqi",
+      "pinghu"
+     ],
+     "ai_names": "敗式／大起步／平護",
+     "arch": "近戰＋防守＋防守",
+     "delay": 5,
+     "eps": 0.1,
+     "difficulty": 0.514,
+     "counters": [
+      [
+       [
+        "baishi",
+        "liaowang",
+        "shuangchao"
+       ],
+       "敗式／瞭望式／雙抄花",
+       0.931
+      ],
+      [
+       [
+        "liaowang",
+        "shuangchao",
+        "feiji"
+       ],
+       "瞭望式／雙抄花／飛機輪",
+       0.931
+      ],
+      [
+       [
+        "baishi",
+        "shuangchao",
+        "sandian"
+       ],
+       "敗式／雙抄花／三點頭",
+       0.931
+      ]
+     ],
+     "meta": false,
+     "measured": {
+      "counters": [
+       0.725,
+       0.95,
+       0.95
+      ],
+      "difficulty": 0.498
+     }
+    },
+    {
+     "stage": 7,
+     "ai": [
+      "bear",
+      "baishi",
+      "liaowang"
+     ],
+     "ai_names": "狗熊哆嗦毛／敗式／瞭望式",
+     "arch": "近戰＋防守＋增益",
+     "delay": 4,
+     "eps": 0.05,
+     "difficulty": 0.592,
+     "counters": [
+      [
+       [
+        "shan",
+        "ball",
+        "laoying"
+       ],
+       "閃身步／浪子踢球／老鷹展翅",
+       0.922
+      ],
+      [
+       [
+        "xiaolun",
+        "xiachuan",
+        "shanhong"
+       ],
+       "小掄臂／下穿拳傾護／山洪爆發式",
+       0.922
+      ],
+      [
+       [
+        "baishi",
+        "liaowang",
+        "shuangchao"
+       ],
+       "敗式／瞭望式／雙抄花",
+       0.922
+      ]
+     ],
+     "meta": false,
+     "measured": {
+      "counters": [
+       0.95,
+       0.5,
+       0.825
+      ],
+      "difficulty": 0.599
+     }
+    },
+    {
+     "stage": 8,
+     "ai": [
+      "baishi",
+      "liaowang",
+      "laoying"
+     ],
+     "ai_names": "敗式／瞭望式／老鷹展翅",
+     "arch": "近戰＋防守＋增益",
+     "delay": 4,
+     "eps": 0.05,
+     "difficulty": 0.707,
+     "counters": [
+      [
+       [
+        "laoying",
+        "yunbu",
+        "daqi"
+       ],
+       "老鷹展翅／雲步／大起步",
+       0.922
+      ],
+      [
+       [
+        "sandian",
+        "laoying",
+        "feiji"
+       ],
+       "三點頭／老鷹展翅／飛機輪",
+       0.922
+      ],
+      [
+       [
+        "shan",
+        "laoying",
+        "daqi"
+       ],
+       "閃身步／老鷹展翅／大起步",
+       0.922
+      ]
+     ],
+     "meta": true,
+     "measured": {
+      "counters": [
+       0.675,
+       0.675,
+       0.675
+      ],
+      "difficulty": 0.76
+     }
+    },
+    {
+     "stage": 9,
+     "ai": [
+      "fengbai",
+      "xiaolun",
+      "feiji"
+     ],
+     "ai_names": "風擺柳碎步／小掄臂／飛機輪",
+     "arch": "近戰＋近戰＋防守",
+     "delay": 3,
+     "eps": 0,
+     "difficulty": 0.792,
+     "counters": [
+      [
+       [
+        "fengbai",
+        "shuangchao",
+        "laoying"
+       ],
+       "風擺柳碎步／雙抄花／老鷹展翅",
+       0.917
+      ],
+      [
+       [
+        "fengbai",
+        "laoying",
+        "pinghu"
+       ],
+       "風擺柳碎步／老鷹展翅／平護",
+       0.833
+      ],
+      [
+       [
+        "fengbai",
+        "shanhong",
+        "laoying"
+       ],
+       "風擺柳碎步／山洪爆發式／老鷹展翅",
+       0.833
+      ]
+     ],
+     "meta": true,
+     "measured": {
+      "counters": [
+       0.85,
+       0.675,
+       0.8
+      ],
+      "difficulty": 0.87
+     }
+    },
+    {
+     "stage": 10,
+     "ai": [
+      "fengbai",
+      "shuangchao",
+      "shanhong"
+     ],
+     "ai_names": "風擺柳碎步／雙抄花／山洪爆發式",
+     "arch": "遠程＋近戰＋防守",
+     "delay": 3,
+     "eps": 0,
+     "difficulty": 0.832,
+     "counters": [
+      [
+       [
+        "fengbai",
+        "zhuafen",
+        "shanhong"
+       ],
+       "風擺柳碎步／抓分手／山洪爆發式",
+       0.917
+      ],
+      [
+       [
+        "fengbai",
+        "shanhong",
+        "sandian"
+       ],
+       "風擺柳碎步／山洪爆發式／三點頭",
+       0.917
+      ],
+      [
+       [
+        "fengbai",
+        "xiaolun",
+        "zhuafen"
+       ],
+       "風擺柳碎步／小掄臂／抓分手",
+       0.833
+      ]
+     ],
+     "meta": true,
+     "measured": {
+      "counters": [
+       0.65,
+       0.475,
+       0.8
+      ],
+      "difficulty": 0.919
+     }
+    }
+   ],
+   "max_cleared_by_one_combo": 9,
+   "combos_clear_all": 0,
+   "combos_with_no_hard_stage": 5,
+   "measured_curve_ok": 9
+  },
+  {
+   "version": 8,
+   "name": "增益免控版",
+   "desc": "電腦會開瞭望式、扁擔式，打不斷",
+   "stages": [
+    {
+     "stage": 1,
+     "ai": [
+      "guabian",
+      "biandan",
+      "pinghu"
+     ],
+     "ai_names": "掛鞭式／扁擔式／平護",
+     "arch": "遠程＋防守＋增益",
+     "delay": 7,
+     "eps": 0.22,
+     "difficulty": 0.077,
+     "counters": [
+      [
+       [
+        "shan",
+        "ball",
+        "bear"
+       ],
+       "閃身步／浪子踢球／狗熊哆嗦毛",
+       0.941
+      ],
+      [
+       [
+        "shan",
+        "ball",
+        "pinghu"
+       ],
+       "閃身步／浪子踢球／平護",
+       0.941
+      ],
+      [
+       [
+        "xiachuan",
+        "shanhong",
+        "sandian"
+       ],
+       "下穿拳傾護／山洪爆發式／三點頭",
+       0.941
+      ]
+     ],
+     "meta": false,
+     "measured": {
+      "counters": [
+       1.0,
+       1.0,
+       1.0
+      ],
+      "difficulty": 0.034
+     }
+    },
+    {
+     "stage": 2,
+     "ai": [
+      "fengbai",
+      "liaowang",
+      "pinghu"
+     ],
+     "ai_names": "風擺柳碎步／瞭望式／平護",
+     "arch": "防守＋防守＋增益",
+     "delay": 7,
+     "eps": 0.22,
+     "difficulty": 0.095,
+     "counters": [
+      [
+       [
+        "shan",
+        "ball",
+        "bear"
+       ],
+       "閃身步／浪子踢球／狗熊哆嗦毛",
+       0.941
+      ],
+      [
+       [
+        "laoying",
+        "yunbu",
+        "pinghu"
+       ],
+       "老鷹展翅／雲步／平護",
+       0.941
+      ],
+      [
+       [
+        "laoying",
+        "yunbu",
+        "daqi"
+       ],
+       "老鷹展翅／雲步／大起步",
+       0.941
+      ]
+     ],
+     "meta": false,
+     "measured": {
+      "counters": [
+       1.0,
+       1.0,
+       1.0
+      ],
+      "difficulty": 0.038
+     }
+    },
+    {
+     "stage": 3,
+     "ai": [
+      "guabian",
+      "liaowang",
+      "biandan"
+     ],
+     "ai_names": "掛鞭式／瞭望式／扁擔式",
+     "arch": "遠程＋增益＋增益",
+     "delay": 6,
+     "eps": 0.15,
+     "difficulty": 0.108,
+     "counters": [
+      [
+       [
+        "shan",
+        "ball",
+        "bear"
+       ],
+       "閃身步／浪子踢球／狗熊哆嗦毛",
+       0.935
+      ],
+      [
+       [
+        "shan",
+        "ball",
+        "pinghu"
+       ],
+       "閃身步／浪子踢球／平護",
+       0.935
+      ],
+      [
+       [
+        "shan",
+        "bear",
+        "fengbai"
+       ],
+       "閃身步／狗熊哆嗦毛／風擺柳碎步",
+       0.935
+      ]
+     ],
+     "meta": false,
+     "measured": {
+      "counters": [
+       1.0,
+       1.0,
+       1.0
+      ],
+      "difficulty": 0.096
+     }
+    },
+    {
+     "stage": 4,
+     "ai": [
+      "bear",
+      "biandan",
+      "zhuafen"
+     ],
+     "ai_names": "狗熊哆嗦毛／扁擔式／抓分手",
+     "arch": "近戰＋抓技＋增益",
+     "delay": 6,
+     "eps": 0.15,
+     "difficulty": 0.377,
+     "counters": [
+      [
+       [
+        "shan",
+        "ball",
+        "laoying"
+       ],
+       "閃身步／浪子踢球／老鷹展翅",
+       0.935
+      ],
+      [
+       [
+        "shan",
+        "ball",
+        "shanhong"
+       ],
+       "閃身步／浪子踢球／山洪爆發式",
+       0.935
+      ],
+      [
+       [
+        "shanhong",
+        "yunbu",
+        "pinghu"
+       ],
+       "山洪爆發式／雲步／平護",
+       0.935
+      ]
+     ],
+     "meta": false,
+     "measured": {
+      "counters": [
+       1.0,
+       1.0,
+       0.975
+      ],
+      "difficulty": 0.328
+     }
+    },
+    {
+     "stage": 5,
+     "ai": [
+      "ball",
+      "liaowang",
+      "daqi"
+     ],
+     "ai_names": "浪子踢球／瞭望式／大起步",
+     "arch": "遠程＋近戰＋增益",
+     "delay": 5,
+     "eps": 0.1,
+     "difficulty": 0.488,
+     "counters": [
+      [
+       [
+        "shanhong",
+        "yunbu",
+        "pinghu"
+       ],
+       "山洪爆發式／雲步／平護",
+       0.931
+      ],
+      [
+       [
+        "fengbai",
+        "zhuafen",
+        "shanhong"
+       ],
+       "風擺柳碎步／抓分手／山洪爆發式",
+       0.931
+      ],
+      [
+       [
+        "sandian",
+        "feiji",
+        "pinghu"
+       ],
+       "三點頭／飛機輪／平護",
+       0.931
+      ]
+     ],
+     "meta": false,
+     "measured": {
+      "counters": [
+       0.925,
+       0.8,
+       0.975
+      ],
+      "difficulty": 0.456
+     }
+    },
+    {
+     "stage": 6,
+     "ai": [
+      "bear",
+      "xiaolun",
+      "liaowang"
+     ],
+     "ai_names": "狗熊哆嗦毛／小掄臂／瞭望式",
+     "arch": "近戰＋近戰＋增益",
+     "delay": 5,
+     "eps": 0.1,
+     "difficulty": 0.515,
+     "counters": [
+      [
+       [
+        "shan",
+        "ball",
+        "yunbu"
+       ],
+       "閃身步／浪子踢球／雲步",
+       0.931
+      ],
+      [
+       [
+        "dalun",
+        "biandan",
+        "laoying"
+       ],
+       "大掄臂／扁擔式／老鷹展翅",
+       0.931
+      ],
+      [
+       [
+        "shan",
+        "ball",
+        "shuangchao"
+       ],
+       "閃身步／浪子踢球／雙抄花",
+       0.931
+      ]
+     ],
+     "meta": false,
+     "measured": {
+      "counters": [
+       0.875,
+       0.975,
+       0.975
+      ],
+      "difficulty": 0.492
+     }
+    },
+    {
+     "stage": 7,
+     "ai": [
+      "bear",
+      "baishi",
+      "liaowang"
+     ],
+     "ai_names": "狗熊哆嗦毛／敗式／瞭望式",
+     "arch": "近戰＋防守＋增益",
+     "delay": 4,
+     "eps": 0.05,
+     "difficulty": 0.592,
+     "counters": [
+      [
+       [
+        "shan",
+        "ball",
+        "laoying"
+       ],
+       "閃身步／浪子踢球／老鷹展翅",
+       0.922
+      ],
+      [
+       [
+        "xiaolun",
+        "xiachuan",
+        "shanhong"
+       ],
+       "小掄臂／下穿拳傾護／山洪爆發式",
+       0.922
+      ],
+      [
+       [
+        "baishi",
+        "liaowang",
+        "shuangchao"
+       ],
+       "敗式／瞭望式／雙抄花",
+       0.922
+      ]
+     ],
+     "meta": false,
+     "measured": {
+      "counters": [
+       0.95,
+       0.625,
+       0.875
+      ],
+      "difficulty": 0.677
+     }
+    },
+    {
+     "stage": 8,
+     "ai": [
+      "shan",
+      "liaowang",
+      "laoying"
+     ],
+     "ai_names": "閃身步／瞭望式／老鷹展翅",
+     "arch": "位移＋近戰＋增益",
+     "delay": 4,
+     "eps": 0.05,
+     "difficulty": 0.611,
+     "counters": [
+      [
+       [
+        "liaowang",
+        "xiachuan",
+        "daqi"
+       ],
+       "瞭望式／下穿拳傾護／大起步",
+       0.922
+      ],
+      [
+       [
+        "liaowang",
+        "yunbu",
+        "daqi"
+       ],
+       "瞭望式／雲步／大起步",
+       0.922
+      ],
+      [
+       [
+        "ball",
+        "shuangchao",
+        "daqi"
+       ],
+       "浪子踢球／雙抄花／大起步",
+       0.922
+      ]
+     ],
+     "meta": true,
+     "measured": {
+      "counters": [
+       0.65,
+       0.9,
+       0.95
+      ],
+      "difficulty": 0.628
+     }
+    },
+    {
+     "stage": 9,
+     "ai": [
+      "liaowang",
+      "laoying",
+      "feiji"
+     ],
+     "ai_names": "瞭望式／老鷹展翅／飛機輪",
+     "arch": "近戰＋近戰＋增益",
+     "delay": 3,
+     "eps": 0,
+     "difficulty": 0.661,
+     "counters": [
+      [
+       [
+        "shanhong",
+        "feiji",
+        "pinghu"
+       ],
+       "山洪爆發式／飛機輪／平護",
+       0.917
+      ],
+      [
+       [
+        "sandian",
+        "feiji",
+        "pinghu"
+       ],
+       "三點頭／飛機輪／平護",
+       0.917
+      ],
+      [
+       [
+        "shuangchao",
+        "zhuafen",
+        "shanhong"
+       ],
+       "雙抄花／抓分手／山洪爆發式",
+       0.917
+      ]
+     ],
+     "meta": false,
+     "measured": {
+      "counters": [
+       0.675,
+       0.675,
+       0.875
+      ],
+      "difficulty": 0.663
+     }
+    },
+    {
+     "stage": 10,
+     "ai": [
+      "baishi",
+      "liaowang",
+      "laoying"
+     ],
+     "ai_names": "敗式／瞭望式／老鷹展翅",
+     "arch": "近戰＋防守＋增益",
+     "delay": 3,
+     "eps": 0,
+     "difficulty": 0.719,
+     "counters": [
+      [
+       [
+        "laoying",
+        "yunbu",
+        "daqi"
+       ],
+       "老鷹展翅／雲步／大起步",
+       0.917
+      ],
+      [
+       [
+        "sandian",
+        "laoying",
+        "feiji"
+       ],
+       "三點頭／老鷹展翅／飛機輪",
+       0.917
+      ],
+      [
+       [
+        "shan",
+        "laoying",
+        "daqi"
+       ],
+       "閃身步／老鷹展翅／大起步",
+       0.917
+      ]
+     ],
+     "meta": true,
+     "measured": {
+      "counters": [
+       0.7,
+       0.825,
+       0.725
+      ],
+      "difficulty": 0.748
+     }
+    }
+   ],
+   "max_cleared_by_one_combo": 10,
+   "combos_clear_all": 23,
+   "combos_with_no_hard_stage": 71,
+   "measured_curve_ok": 9
+  },
+  {
+   "version": 9,
+   "name": "主流大師版",
+   "desc": "AI 分析出來的主流組合與它們的剋星，最難",
+   "stages": [
+    {
+     "stage": 1,
+     "ai": [
+      "ball",
+      "shuangchao",
+      "zhuafen"
+     ],
+     "ai_names": "浪子踢球／雙抄花／抓分手",
+     "arch": "遠程＋遠程＋抓技",
+     "delay": 5,
+     "eps": 0.1,
+     "difficulty": 0.51,
+     "counters": [
+      [
+       [
+        "sandian",
+        "daqi",
+        "pinghu"
+       ],
+       "三點頭／大起步／平護",
+       0.931
+      ],
+      [
+       [
+        "xiaolun",
+        "sandian",
+        "daqi"
+       ],
+       "小掄臂／三點頭／大起步",
+       0.931
+      ],
+      [
+       [
+        "xiaolun",
+        "sandian",
+        "pinghu"
+       ],
+       "小掄臂／三點頭／平護",
+       0.931
+      ]
+     ],
+     "meta": true,
+     "measured": {
+      "counters": [
+       1.0,
+       1.0,
+       1.0
+      ],
+      "difficulty": 0.565
+     }
+    },
+    {
+     "stage": 2,
+     "ai": [
+      "shan",
+      "liaowang",
+      "laoying"
+     ],
+     "ai_names": "閃身步／瞭望式／老鷹展翅",
+     "arch": "位移＋近戰＋增益",
+     "delay": 5,
+     "eps": 0.1,
+     "difficulty": 0.584,
+     "counters": [
+      [
+       [
+        "liaowang",
+        "xiachuan",
+        "daqi"
+       ],
+       "瞭望式／下穿拳傾護／大起步",
+       0.931
+      ],
+      [
+       [
+        "liaowang",
+        "yunbu",
+        "daqi"
+       ],
+       "瞭望式／雲步／大起步",
+       0.931
+      ],
+      [
+       [
+        "ball",
+        "shuangchao",
+        "daqi"
+       ],
+       "浪子踢球／雙抄花／大起步",
+       0.931
+      ]
+     ],
+     "meta": true,
+     "measured": {
+      "counters": [
+       0.8,
+       0.8,
+       0.9
+      ],
+      "difficulty": 0.45
+     }
+    },
+    {
+     "stage": 3,
+     "ai": [
+      "bear",
+      "zhuafen",
+      "laoying"
+     ],
+     "ai_names": "狗熊哆嗦毛／抓分手／老鷹展翅",
+     "arch": "近戰＋近戰＋抓技",
+     "delay": 4,
+     "eps": 0.05,
+     "difficulty": 0.602,
+     "counters": [
+      [
+       [
+        "sandian",
+        "feiji",
+        "pinghu"
+       ],
+       "三點頭／飛機輪／平護",
+       0.922
+      ],
+      [
+       [
+        "xiaolun",
+        "feiji",
+        "pinghu"
+       ],
+       "小掄臂／飛機輪／平護",
+       0.922
+      ],
+      [
+       [
+        "xiaolun",
+        "sandian",
+        "feiji"
+       ],
+       "小掄臂／三點頭／飛機輪",
+       0.922
+      ]
+     ],
+     "meta": true,
+     "measured": {
+      "counters": [
+       1.0,
+       0.675,
+       1.0
+      ],
+      "difficulty": 0.615
+     }
+    },
+    {
+     "stage": 4,
+     "ai": [
+      "zhuafen",
+      "laoying",
+      "feiji"
+     ],
+     "ai_names": "抓分手／老鷹展翅／飛機輪",
+     "arch": "近戰＋近戰＋抓技",
+     "delay": 4,
+     "eps": 0.05,
+     "difficulty": 0.632,
+     "counters": [
+      [
+       [
+        "zhuafen",
+        "shanhong",
+        "feiji"
+       ],
+       "抓分手／山洪爆發式／飛機輪",
+       0.922
+      ],
+      [
+       [
+        "shan",
+        "shuangchao",
+        "zhuafen"
+       ],
+       "閃身步／雙抄花／抓分手",
+       0.922
+      ],
+      [
+       [
+        "shuangchao",
+        "shanhong",
+        "pinghu"
+       ],
+       "雙抄花／山洪爆發式／平護",
+       0.922
+      ]
+     ],
+     "meta": true,
+     "measured": {
+      "counters": [
+       0.8,
+       0.85,
+       0.9
+      ],
+      "difficulty": 0.658
+     }
+    },
+    {
+     "stage": 5,
+     "ai": [
+      "bear",
+      "laoying",
+      "yunbu"
+     ],
+     "ai_names": "狗熊哆嗦毛／老鷹展翅／雲步",
+     "arch": "近戰＋近戰＋近戰",
+     "delay": 4,
+     "eps": 0.05,
+     "difficulty": 0.645,
+     "counters": [
+      [
+       [
+        "fengbai",
+        "sandian",
+        "daqi"
+       ],
+       "風擺柳碎步／三點頭／大起步",
+       0.922
+      ],
+      [
+       [
+        "fengbai",
+        "sandian",
+        "feiji"
+       ],
+       "風擺柳碎步／三點頭／飛機輪",
+       0.922
+      ],
+      [
+       [
+        "fengbai",
+        "zhuafen",
+        "feiji"
+       ],
+       "風擺柳碎步／抓分手／飛機輪",
+       0.922
+      ]
+     ],
+     "meta": true,
+     "measured": {
+      "counters": [
+       0.875,
+       0.925,
+       0.925
+      ],
+      "difficulty": 0.713
+     }
+    },
+    {
+     "stage": 6,
+     "ai": [
+      "bear",
+      "fengbai",
+      "laoying"
+     ],
+     "ai_names": "狗熊哆嗦毛／風擺柳碎步／老鷹展翅",
+     "arch": "近戰＋近戰＋防守",
+     "delay": 3,
+     "eps": 0,
+     "difficulty": 0.676,
+     "counters": [
+      [
+       [
+        "fengbai",
+        "shanhong",
+        "daqi"
+       ],
+       "風擺柳碎步／山洪爆發式／大起步",
+       0.917
+      ],
+      [
+       [
+        "fengbai",
+        "shuangchao",
+        "daqi"
+       ],
+       "風擺柳碎步／雙抄花／大起步",
+       0.917
+      ],
+      [
+       [
+        "fengbai",
+        "shanhong",
+        "feiji"
+       ],
+       "風擺柳碎步／山洪爆發式／飛機輪",
+       0.917
+      ]
+     ],
+     "meta": true,
+     "measured": {
+      "counters": [
+       0.775,
+       0.375,
+       0.8
+      ],
+      "difficulty": 0.75
+     }
+    },
+    {
+     "stage": 7,
+     "ai": [
+      "baishi",
+      "shuangchao",
+      "laoying"
+     ],
+     "ai_names": "敗式／雙抄花／老鷹展翅",
+     "arch": "遠程＋近戰＋防守",
+     "delay": 3,
+     "eps": 0,
+     "difficulty": 0.74,
+     "counters": [
+      [
+       [
+        "xiaolun",
+        "zhuafen",
+        "sandian"
+       ],
+       "小掄臂／抓分手／三點頭",
+       0.833
+      ],
+      [
+       [
+        "liaowang",
+        "laoying",
+        "daqi"
+       ],
+       "瞭望式／老鷹展翅／大起步",
+       0.833
+      ],
+      [
+       [
+        "baishi",
+        "shuangchao",
+        "shanhong"
+       ],
+       "敗式／雙抄花／山洪爆發式",
+       0.833
+      ]
+     ],
+     "meta": true,
+     "measured": {
+      "counters": [
+       0.75,
+       0.525,
+       0.35
+      ],
+      "difficulty": 0.78
+     }
+    },
+    {
+     "stage": 8,
+     "ai": [
+      "shanhong",
+      "laoying",
+      "yunbu"
+     ],
+     "ai_names": "山洪爆發式／老鷹展翅／雲步",
+     "arch": "近戰＋近戰＋近戰",
+     "delay": 3,
+     "eps": 0,
+     "difficulty": 0.791,
+     "counters": [
+      [
+       [
+        "dalun",
+        "laoying",
+        "pinghu"
+       ],
+       "大掄臂／老鷹展翅／平護",
+       0.833
+      ],
+      [
+       [
+        "shuangchao",
+        "zhuafen",
+        "shanhong"
+       ],
+       "雙抄花／抓分手／山洪爆發式",
+       0.833
+      ],
+      [
+       [
+        "fengbai",
+        "dalun",
+        "baishi"
+       ],
+       "風擺柳碎步／大掄臂／敗式",
+       0.75
+      ]
+     ],
+     "meta": true,
+     "measured": {
+      "counters": [
+       0.7,
+       0.75,
+       0.4
+      ],
+      "difficulty": 0.812
+     }
+    },
+    {
+     "stage": 9,
+     "ai": [
+      "shan",
+      "shuangchao",
+      "laoying"
+     ],
+     "ai_names": "閃身步／雙抄花／老鷹展翅",
+     "arch": "位移＋遠程＋近戰",
+     "delay": 3,
+     "eps": 0,
+     "difficulty": 0.81,
+     "counters": [
+      [
+       [
+        "bear",
+        "zhuafen",
+        "laoying"
+       ],
+       "狗熊哆嗦毛／抓分手／老鷹展翅",
+       0.917
+      ],
+      [
+       [
+        "fengbai",
+        "shuangchao",
+        "shanhong"
+       ],
+       "風擺柳碎步／雙抄花／山洪爆發式",
+       0.833
+      ],
+      [
+       [
+        "xiachuan",
+        "shanhong",
+        "laoying"
+       ],
+       "下穿拳傾護／山洪爆發式／老鷹展翅",
+       0.75
+      ]
+     ],
+     "meta": true,
+     "measured": {
+      "counters": [
+       0.65,
+       0.65,
+       0.7
+      ],
+      "difficulty": 0.854
+     }
+    },
+    {
+     "stage": 10,
+     "ai": [
+      "fengbai",
+      "shuangchao",
+      "shanhong"
+     ],
+     "ai_names": "風擺柳碎步／雙抄花／山洪爆發式",
+     "arch": "遠程＋近戰＋防守",
+     "delay": 3,
+     "eps": 0,
+     "difficulty": 0.832,
+     "counters": [
+      [
+       [
+        "fengbai",
+        "zhuafen",
+        "shanhong"
+       ],
+       "風擺柳碎步／抓分手／山洪爆發式",
+       0.917
+      ],
+      [
+       [
+        "fengbai",
+        "shanhong",
+        "sandian"
+       ],
+       "風擺柳碎步／山洪爆發式／三點頭",
+       0.917
+      ],
+      [
+       [
+        "fengbai",
+        "xiaolun",
+        "zhuafen"
+       ],
+       "風擺柳碎步／小掄臂／抓分手",
+       0.833
+      ]
+     ],
+     "meta": true,
+     "measured": {
+      "counters": [
+       0.75,
+       0.738,
+       0.613
+      ],
+      "difficulty": 0.879
+     }
+    }
+   ],
+   "max_cleared_by_one_combo": 9,
+   "combos_clear_all": 0,
+   "combos_with_no_hard_stage": 0,
+   "measured_curve_ok": 8
+  },
+  {
+   "version": 10,
+   "name": "百家混戰版",
+   "desc": "每一關都是不同流派",
+   "stages": [
+    {
+     "stage": 1,
+     "ai": [
+      "guabian",
+      "shuangchao",
+      "biandan"
+     ],
+     "ai_names": "掛鞭式／雙抄花／扁擔式",
+     "arch": "遠程＋遠程＋增益",
+     "delay": 8,
+     "eps": 0.3,
+     "difficulty": 0.158,
+     "counters": [
+      [
+       [
+        "shan",
+        "ball",
+        "bear"
+       ],
+       "閃身步／浪子踢球／狗熊哆嗦毛",
+       0.946
+      ],
+      [
+       [
+        "baishi",
+        "xiachuan",
+        "daqi"
+       ],
+       "敗式／下穿拳傾護／大起步",
+       0.946
+      ],
+      [
+       [
+        "baishi",
+        "shanhong",
+        "sandian"
+       ],
+       "敗式／山洪爆發式／三點頭",
+       0.946
+      ]
+     ],
+     "meta": false,
+     "measured": {
+      "counters": [
+       0.975,
+       1.0,
+       1.0
+      ],
+      "difficulty": 0.157
+     }
+    },
+    {
+     "stage": 2,
+     "ai": [
+      "ball",
+      "guabian",
+      "pinghu"
+     ],
+     "ai_names": "浪子踢球／掛鞭式／平護",
+     "arch": "遠程＋遠程＋防守",
+     "delay": 7,
+     "eps": 0.22,
+     "difficulty": 0.212,
+     "counters": [
+      [
+       [
+        "laoying",
+        "yunbu",
+        "daqi"
+       ],
+       "老鷹展翅／雲步／大起步",
+       0.941
+      ],
+      [
+       [
+        "sandian",
+        "daqi",
+        "pinghu"
+       ],
+       "三點頭／大起步／平護",
+       0.941
+      ],
+      [
+       [
+        "sandian",
+        "yunbu",
+        "daqi"
+       ],
+       "三點頭／雲步／大起步",
+       0.941
+      ]
+     ],
+     "meta": false,
+     "measured": {
+      "counters": [
+       1.0,
+       1.0,
+       1.0
+      ],
+      "difficulty": 0.135
+     }
+    },
+    {
+     "stage": 3,
+     "ai": [
+      "xiaolun",
+      "liaowang",
+      "biandan"
+     ],
+     "ai_names": "小掄臂／瞭望式／扁擔式",
+     "arch": "近戰＋增益＋增益",
+     "delay": 7,
+     "eps": 0.22,
+     "difficulty": 0.307,
+     "counters": [
+      [
+       [
+        "laoying",
+        "yunbu",
+        "pinghu"
+       ],
+       "老鷹展翅／雲步／平護",
+       0.941
+      ],
+      [
+       [
+        "shan",
+        "ball",
+        "fengbai"
+       ],
+       "閃身步／浪子踢球／風擺柳碎步",
+       0.941
+      ],
+      [
+       [
+        "shan",
+        "ball",
+        "xiaolun"
+       ],
+       "閃身步／浪子踢球／小掄臂",
+       0.941
+      ]
+     ],
+     "meta": false,
+     "measured": {
+      "counters": [
+       1.0,
+       1.0,
+       1.0
+      ],
+      "difficulty": 0.225
+     }
+    },
+    {
+     "stage": 4,
+     "ai": [
+      "shan",
+      "baishi",
+      "daqi"
+     ],
+     "ai_names": "閃身步／敗式／大起步",
+     "arch": "位移＋近戰＋防守",
+     "delay": 6,
+     "eps": 0.15,
+     "difficulty": 0.357,
+     "counters": [
+      [
+       [
+        "shanhong",
+        "sandian",
+        "feiji"
+       ],
+       "山洪爆發式／三點頭／飛機輪",
+       0.935
+      ],
+      [
+       [
+        "shanhong",
+        "sandian",
+        "yunbu"
+       ],
+       "山洪爆發式／三點頭／雲步",
+       0.935
+      ],
+      [
+       [
+        "shanhong",
+        "sandian",
+        "pinghu"
+       ],
+       "山洪爆發式／三點頭／平護",
+       0.935
+      ]
+     ],
+     "meta": false,
+     "measured": {
+      "counters": [
+       0.975,
+       0.975,
+       1.0
+      ],
+      "difficulty": 0.28
+     }
+    },
+    {
+     "stage": 5,
+     "ai": [
+      "dalun",
+      "zhuafen",
+      "xiachuan"
+     ],
+     "ai_names": "大掄臂／抓分手／下穿拳傾護",
+     "arch": "近戰＋近戰＋抓技",
+     "delay": 6,
+     "eps": 0.15,
+     "difficulty": 0.415,
+     "counters": [
+      [
+       [
+        "sandian",
+        "laoying",
+        "pinghu"
+       ],
+       "三點頭／老鷹展翅／平護",
+       0.935
+      ],
+      [
+       [
+        "shanhong",
+        "feiji",
+        "pinghu"
+       ],
+       "山洪爆發式／飛機輪／平護",
+       0.935
+      ],
+      [
+       [
+        "shanhong",
+        "daqi",
+        "pinghu"
+       ],
+       "山洪爆發式／大起步／平護",
+       0.935
+      ]
+     ],
+     "meta": false,
+     "measured": {
+      "counters": [
+       0.925,
+       0.925,
+       1.0
+      ],
+      "difficulty": 0.35
+     }
+    },
+    {
+     "stage": 6,
+     "ai": [
+      "ball",
+      "shuangchao",
+      "zhuafen"
+     ],
+     "ai_names": "浪子踢球／雙抄花／抓分手",
+     "arch": "遠程＋遠程＋抓技",
+     "delay": 5,
+     "eps": 0.1,
+     "difficulty": 0.51,
+     "counters": [
+      [
+       [
+        "sandian",
+        "daqi",
+        "pinghu"
+       ],
+       "三點頭／大起步／平護",
+       0.931
+      ],
+      [
+       [
+        "xiaolun",
+        "sandian",
+        "daqi"
+       ],
+       "小掄臂／三點頭／大起步",
+       0.931
+      ],
+      [
+       [
+        "xiaolun",
+        "sandian",
+        "pinghu"
+       ],
+       "小掄臂／三點頭／平護",
+       0.931
+      ]
+     ],
+     "meta": true,
+     "measured": {
+      "counters": [
+       0.975,
+       1.0,
+       1.0
+      ],
+      "difficulty": 0.52
+     }
+    },
+    {
+     "stage": 7,
+     "ai": [
+      "baishi",
+      "zhuafen",
+      "pinghu"
+     ],
+     "ai_names": "敗式／抓分手／平護",
+     "arch": "防守＋防守＋抓技",
+     "delay": 5,
+     "eps": 0.1,
+     "difficulty": 0.533,
+     "counters": [
+      [
+       [
+        "biandan",
+        "laoying",
+        "pinghu"
+       ],
+       "扁擔式／老鷹展翅／平護",
+       0.931
+      ],
+      [
+       [
+        "biandan",
+        "laoying",
+        "yunbu"
+       ],
+       "扁擔式／老鷹展翅／雲步",
+       0.931
+      ],
+      [
+       [
+        "shuangchao",
+        "biandan",
+        "shanhong"
+       ],
+       "雙抄花／扁擔式／山洪爆發式",
+       0.931
+      ]
+     ],
+     "meta": false,
+     "measured": {
+      "counters": [
+       0.775,
+       0.75,
+       1.0
+      ],
+      "difficulty": 0.461
+     }
+    },
+    {
+     "stage": 8,
+     "ai": [
+      "xiaolun",
+      "sandian",
+      "laoying"
+     ],
+     "ai_names": "小掄臂／三點頭／老鷹展翅",
+     "arch": "近戰＋近戰＋近戰",
+     "delay": 4,
+     "eps": 0.05,
+     "difficulty": 0.655,
+     "counters": [
+      [
+       [
+        "sandian",
+        "feiji",
+        "pinghu"
+       ],
+       "三點頭／飛機輪／平護",
+       0.922
+      ],
+      [
+       [
+        "shan",
+        "biandan",
+        "laoying"
+       ],
+       "閃身步／扁擔式／老鷹展翅",
+       0.922
+      ],
+      [
+       [
+        "shan",
+        "shuangchao",
+        "xiachuan"
+       ],
+       "閃身步／雙抄花／下穿拳傾護",
+       0.922
+      ]
+     ],
+     "meta": false,
+     "measured": {
+      "counters": [
+       0.85,
+       0.975,
+       0.8
+      ],
+      "difficulty": 0.58
+     }
+    },
+    {
+     "stage": 9,
+     "ai": [
+      "shan",
+      "shuangchao",
+      "laoying"
+     ],
+     "ai_names": "閃身步／雙抄花／老鷹展翅",
+     "arch": "位移＋遠程＋近戰",
+     "delay": 4,
+     "eps": 0.05,
+     "difficulty": 0.8,
+     "counters": [
+      [
+       [
+        "bear",
+        "zhuafen",
+        "laoying"
+       ],
+       "狗熊哆嗦毛／抓分手／老鷹展翅",
+       0.922
+      ],
+      [
+       [
+        "fengbai",
+        "shuangchao",
+        "shanhong"
+       ],
+       "風擺柳碎步／雙抄花／山洪爆發式",
+       0.843
+      ],
+      [
+       [
+        "xiachuan",
+        "shanhong",
+        "laoying"
+       ],
+       "下穿拳傾護／山洪爆發式／老鷹展翅",
+       0.763
+      ]
+     ],
+     "meta": true,
+     "measured": {
+      "counters": [
+       0.725,
+       0.85,
+       0.65
+      ],
+      "difficulty": 0.86
+     }
+    },
+    {
+     "stage": 10,
+     "ai": [
+      "fengbai",
+      "shuangchao",
+      "shanhong"
+     ],
+     "ai_names": "風擺柳碎步／雙抄花／山洪爆發式",
+     "arch": "遠程＋近戰＋防守",
+     "delay": 3,
+     "eps": 0,
+     "difficulty": 0.832,
+     "counters": [
+      [
+       [
+        "fengbai",
+        "zhuafen",
+        "shanhong"
+       ],
+       "風擺柳碎步／抓分手／山洪爆發式",
+       0.917
+      ],
+      [
+       [
+        "fengbai",
+        "shanhong",
+        "sandian"
+       ],
+       "風擺柳碎步／山洪爆發式／三點頭",
+       0.917
+      ],
+      [
+       [
+        "fengbai",
+        "xiaolun",
+        "zhuafen"
+       ],
+       "風擺柳碎步／小掄臂／抓分手",
+       0.833
+      ]
+     ],
+     "meta": true,
+     "measured": {
+      "counters": [
+       0.8,
+       0.675,
+       0.775
+      ],
+      "difficulty": 0.892
+     }
+    }
+   ],
+   "max_cleared_by_one_combo": 9,
+   "combos_clear_all": 0,
+   "combos_with_no_hard_stage": 2,
+   "measured_curve_ok": 8
+  }
+ ],
+ "knobs": [
+  [
+   3,
+   0
+  ],
+  [
+   4,
+   0.05
+  ],
+  [
+   5,
+   0.1
+  ],
+  [
+   6,
+   0.15
+  ],
+  [
+   7,
+   0.22
+  ],
+  [
+   8,
+   0.3
+  ]
+ ]
+}

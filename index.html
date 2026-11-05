@@ -1,0 +1,336 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#0b1622">
+<!-- 加入主畫面後以全螢幕 App 打開（iPhone Safari 不支援網頁全螢幕，只能靠這個） -->
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
+<link rel="icon" href="assets/icons/icon-192.png" type="image/png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="閃身步">
+<title>閃身步大亂鬥</title>
+<link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+<div id="wrap"><canvas id="c" width="1280" height="720"></canvas></div>
+<div id="tools">
+  <button id="home" class="tl" title="回首頁">🏠</button>
+  <button id="menuBtn" class="tl" title="選單">☰</button>
+  <div id="menuDrop" class="hide">
+    <button id="acctBtn" class="mi"><i>👤</i>帳號</button>
+    <button id="gMenuBtn" class="mi"><i>🔗</i><span id="gMenuTxt">綁定 Google 帳號</span></button>
+    <button id="dailyBtn" class="mi"><i>📅</i>每日簽到<span id="dailyDot" class="hide"></span></button>
+    <button id="wardBtn" class="mi"><i>👕</i>造型衣櫃</button>
+    <button id="achBtn" class="mi"><i>🏆</i>成就</button>
+    <button id="prBtn" class="mi"><i>🧪</i>招式練習場</button>
+    <button id="maBtn" class="mi" style="display:none"><i>⚡</i>挑戰馬師傅（試玩）</button><!-- 馬師傅計畫暫停：先藏起來 -->
+    <button id="mute" class="mi"></button>
+    <button id="stickBtn" class="mi"><i>🕹️</i>搖桿操作</button>
+    <button id="aiBtn" class="mi devOnly"><i>🤖</i>AI 對手</button>
+    <button id="apBtn" class="mi devOnly"><i>🧠</i>AI 組合對練（試玩）</button>
+    <button id="lvBtn" class="mi devOnly"><i>🏁</i>AI 關卡（試玩）</button>
+    <button id="setBtn" class="mi"><i>⚙️</i>設定</button>
+  </div>
+</div>
+<div id="coinPill" title="鼓幣"><i>🪙</i><span id="coinNum">0</span></div>
+<div id="bar"><button id="leave" class="tb hide">🚪 離開房間</button></div>
+<div id="nameBox" class="pnl hide"><div class="card">
+  <h2>幫自己取個名字</h2>
+  <div class="sub2">闖關有排行榜，要先取個名字<br><b style="color:#ffb37a">取了之後就不能改</b>，想清楚再按確定</div>
+  <input id="nameIn" maxlength="12" placeholder="最多 12 個字" autocomplete="nickname">
+  <div id="nameErr"></div>
+  <button id="nameGo" class="big">確定</button>
+  <button id="nameNo" class="big alt">先不要</button>
+</div></div>
+<div id="acct" class="pnl hide"><div class="card">
+  <h2>👤 帳號</h2>
+  <div class="row2"><span>名字</span><b id="acName"></b></div>
+  <div class="row2"><span>鼓幣</span><b id="acCoins">0</b></div>
+  <div id="acRows"></div>
+  <div class="sec">Google 帳號</div>
+  <div id="gArea"><div id="gMsg" class="sub2"></div><div id="gBtn"></div></div>
+  <div id="acctSave"></div>
+  <button class="big alt pClose">返回</button>
+</div></div>
+<div id="sets" class="pnl hide"><div class="card">
+  <h2>⚙️ 設定</h2>
+  <button id="setMute" class="big alt"></button>
+  <button id="fs" class="big alt">⛶ 全螢幕</button>
+  <div class="sub2" style="margin-top:8px">鍵盤：M 開關音效</div>
+  <button class="big pClose">返回</button>
+</div></div>
+<div id="ach" class="pnl hide"><div class="card" style="width:min(96vw,760px)">
+  <h2>🏆 成就</h2>
+  <div class="sub2" id="achSum"></div>
+  <div id="achGrid"></div>
+  <button class="big alt pClose">返回</button>
+</div></div>
+<div id="cpuPick" class="pnl hide"><div class="card">
+  <h2>選電腦強度</h2>
+  <div id="cpuLvs"></div>
+  <button class="big alt" id="cpuBack">返回</button>
+</div></div>
+<div id="omPanel" class="pnl hide"><div class="card">
+  <h2>其他模式</h2>
+  <div class="omCards">
+    <button class="omC" data-m="rg"><span class="ic">⚔️</span><span class="t">闖關模式</span></button>
+    <button class="omC" data-m="ma"><span class="ic">⚡</span><span class="t">挑戰馬師傅</span></button>
+    <button class="omC" data-m="local"><span class="ic">👥</span><span class="t">本地雙人</span></button>
+    <button class="omC" data-m="rank"><span class="ic">🏆</span><span class="t">排位賽</span></button>
+    <button class="omC" data-m="bw" id="bwCard"><span class="ic">🏮</span><span class="t">四人合作</span><span class="d">1～4 人一起闖夜市</span></button>
+  </div>
+  <button class="big alt fsBack" id="omBack">返回</button>
+</div></div>
+<div id="rkPanel" class="pnl hide"><div class="card">
+  <h2>閃身步排位賽</h2>
+  <div class="rkV" id="rkHome">
+    <div class="rkCrest" id="rkIc"></div>
+    <div class="rkTName" id="rkTier"></div>
+    <div class="rkPts" id="rkPts"></div>
+    <div class="rkBar"><i id="rkFill"></i></div>
+    <div class="rkTiers" id="rkTiers"></div>
+    <div id="rkPicker" class="hide"></div>
+    <div class="rkBtns"><button class="rkGhost" id="rkBack">返回</button><button class="rkGo" id="rkGo">開始配對</button></div>
+  </div>
+  <div class="rkV hide" id="rkQueue">
+    <canvas id="rkQueueCv" width="560" height="280"></canvas>
+    <div id="rkQTime">配對中 00:00</div>
+    <div class="rkBtns" style="width:min(100%,300px)"><button class="rkGhost" id="rkCancel">取消配對</button></div>
+  </div>
+  <div class="rkV hide" id="rkDraft">
+    <div class="rkVs">
+      <div class="rkSide" id="rkMe"></div>
+      <div class="rkMid"><b id="rkStep"></b><div class="rkRing"><i id="rkRingI"></i><span class="tm" id="rkTm">30</span></div><small id="rkOrder"></small><div id="rkPool"></div></div>
+      <div class="rkSide" id="rkFoe"></div>
+    </div>
+  </div>
+  <div class="rkV hide" id="rkRes">
+    <div id="rkResT" style="font-size:clamp(28px,6vh,46px);font-weight:900"></div>
+    <div class="rkDelta" id="rkDelta"></div>
+    <div class="rkCrest" id="rkIc2" style="width:clamp(80px,18vh,150px)"></div>
+    <div class="rkTName" id="rkTier2" style="font-size:clamp(22px,5vh,38px)"></div>
+    <div class="rkPts" id="rkPts2"></div>
+    <div class="rkBtns"><button class="rkGhost" id="rkHomeBtn">回排位首頁</button><button class="rkGo" id="rkAgain">再配一場</button></div>
+  </div>
+</div></div>
+<div id="maPanel" class="pnl hide"><div class="card">
+  <h2>⚡ 挑戰馬師傅</h2>
+  <div class="maPath" id="maPath"></div>
+  <div id="maInfo"></div>
+  <div class="maBtns"><button class="big alt" id="maBack">返回</button><button class="big" id="maGo">選三招開打</button></div>
+</div></div>
+<div id="prPanel" class="hide">
+  <div class="hd">
+    <b>🧪 招式練習場</b>
+    <div style="color:#9fc4ea;margin-top:2px">先點上面的格子，再點下面的招放進去</div>
+    <div id="prSlots"></div>
+    <div class="prRow"><button id="prCd">無冷卻：開</button><button id="prFoe">對手：木樁</button></div>
+    <div class="prRow"><button id="prRand">隨機 3 招</button><button id="prReset">站回原位</button><button id="prClr">清紀錄</button></div>
+    <div class="devOnly" style="color:#ffe36b;margin-top:6px;font-weight:bold">⚔ 帶這三招挑戰馬師傅（三戰兩勝）</div>
+    <div class="prRow devOnly"><button class="prMa" data-t="1">1 階</button><button class="prMa" data-t="2">2 階</button><button class="prMa" data-t="3">3 階</button></div>
+  </div>
+  <div id="prList"></div>
+  <div id="prLog"></div>
+</div>
+<div id="ask" class="pnl hide" style="z-index:25"><div class="card">
+  <div id="askMsg" style="font-size:20px;margin:6px 0 14px;line-height:1.5"></div>
+  <div style="display:flex;gap:10px"><button id="askNo" class="big alt">取消</button><button id="askYes" class="big">確定</button></div>
+</div></div>
+<button id="perfShare" class="hide"></button>
+<div id="perfPanel" class="hide"><div class="pp">
+  <div id="ppTip"></div>
+  <div class="ppRow">
+    <button data-k="line" style="background:#06c755">LINE</button>
+    <button data-k="fb" style="background:#1877f2">Facebook</button>
+    <button data-k="ig" style="background:linear-gradient(45deg,#f9a825,#e1306c,#833ab4)">Instagram</button>
+    <button data-k="th" style="background:#111">Threads</button>
+    <button data-k="x" style="background:#000">X</button>
+    <button data-k="copy" style="background:#556">🔗 複製連結</button>
+    <button data-k="more" style="background:#556">⋯ 更多</button>
+  </div>
+  <button data-k="close" class="ppX">關閉</button>
+</div></div>
+<div id="lobby" class="hide"><div class="card">
+  <h2>線上對戰</h2>
+  <div id="lbMain">
+    <button id="lbCreate" class="big">建立房間：經典（閃・踢・熊）</button>
+    <button id="lbCreateX" class="big ext">建立房間：擴充（自選三招）</button>
+    <div class="join"><input id="lbCode" inputmode="numeric" pattern="[0-9]*" maxlength="4" placeholder="輸入房號" autocomplete="off"><button id="lbJoin" class="big">加入</button></div>
+    <button id="lbSpecBtn" class="qrBtn">👀 觀戰區：看別人正在打的對戰</button>
+  </div>
+  <div id="lbSpec" class="hide">
+    <div class="sub">正在進行的真人對戰（每 5 秒更新），點一場就能看</div>
+    <div id="spList"></div>
+    <button id="spBack" class="qrBtn">← 回線上對戰</button>
+  </div>
+  <div id="lbWait" class="hide">
+    <div>房號</div><div id="lbRoom" class="code">----</div>
+    <div id="lbMsg">等待對手加入…</div>
+    <div class="sub" id="lbHint">把房號或邀請連結傳給朋友</div>
+    <button id="lbCopy">複製邀請連結</button>
+    <button id="lbQr" class="qrBtn">📱 顯示 QR code（給旁邊的人掃）</button>
+    <div id="qrBig" class="hide"><div class="qrBox"><div id="qrImg"></div><div class="qrT">手機掃碼，直接跟我對打</div><div class="qrR">房號 <b id="qrRoom">----</b></div><div class="qrS">不用下載、不用註冊・點一下關閉</div></div></div>
+  </div>
+  <div id="lbErr"></div>
+  <button id="lbBack">返回</button>
+</div></div>
+<div id="ladder" class="hide"><div class="card">
+  <h2>天梯挑戰</h2>
+  <div id="ldStart">
+    <div class="sub">10 階登頂，每階 10 小關，一關一回合。一口氣打完 10 小關才上得了下一階；輸了從這一階第 1 關重來，已經爬上的階不會掉。</div>
+    <div id="ldStairs"></div>
+    <div id="ldPick"></div>
+    <button id="ldGo" class="big">開始挑戰</button>
+    <button id="ldMvBtn" class="big alt">📜 天梯招式庫（帶 <span id="ldMvN">0</span> / 10 招）</button>
+  </div>
+  <div id="ldMoves" class="hide">
+    <div class="rgCoinsBig">鼓幣 <b id="ldCoins">0</b></div>
+    <div class="sub">用鼓幣買 30 招，最多帶 10 招進天梯（J／K／L 還是閃、踢、熊，帶的招用數字鍵 1～0；手機是藍色小鈕）</div>
+    <div id="ldMvGrid"></div>
+    <button id="ldMvBack" class="big">返回</button>
+  </div>
+  <div id="ldResult" class="hide">
+    <div id="ldResTitle">挑戰結束</div><div id="ldScore">0</div><div id="ldMsg"></div>
+    <div id="ldCoinMsg"></div>
+    <button id="ldAgain" class="big">再挑戰一次</button>
+  </div>
+  <div id="ldErr"></div>
+  <div id="ldBoard"><div class="bh">排行榜｜前 100 名</div><ol id="ldList"><li><span>載入中…</span></li></ol></div>
+  <button id="ldBack">回標題</button>
+</div></div>
+<div id="fsHelp" class="hide"><div class="card">
+  <h3>iPhone 怎麼全螢幕玩</h3>
+  <div>iPhone 的 Safari 不讓網頁自己變全螢幕，要先把遊戲加到主畫面：</div>
+  <ol>
+    <li>點 Safari 下方（或右上）的「分享」按鈕 <b>⬆︎</b></li>
+    <li>往下滑，選「<b>加入主畫面</b>」</li>
+    <li>回到手機主畫面，點「閃身步」圖示打開</li>
+  </ol>
+  <div style="color:#9fc4ea;font-size:14px;margin-bottom:12px">從主畫面打開就是全螢幕、沒有網址列，手機橫放玩最順。</div>
+  <button id="fsOk">知道了</button>
+</div></div>
+<div id="rgPanel" class="hide"><div class="card">
+  <div id="rgTitle"></div>
+  <div id="rgCardsWrap"><div id="rgCards"></div><div style="color:#9fc4ea;font-size:14px;margin-top:10px">點卡片，或按鍵盤數字鍵</div><button id="rgReroll" class="hide"></button></div>
+  <div id="rgStartWrap" class="hide">
+    <button id="rgCont" class="hide"></button>
+    <div id="rgDiffs">
+      <button data-d="easy"><b>簡單</b></button>
+      <button data-d="normal"><b>中等</b></button>
+      <button data-d="hard"><b>困難</b></button>
+    </div>
+    <div id="rgTabs"><button data-d="easy">簡單榜</button><button data-d="normal">中等榜</button><button data-d="hard">困難榜</button></div>
+    <ol class="rgList"></ol>
+    <div class="rgRow"><button id="rgTreeBtn">🌳 傳承樹</button><button id="rgBack">回標題</button></div>
+  </div>
+  <div id="rgTreeWrap" class="hide">
+    <div class="rgCoinsBig">鼓幣 <b id="rgTreeCoins">0</b></div>
+    <div class="sub2">每打一輪都會拿到鼓幣，在這裡換成永久的強化，下一輪就生效｜存檔碼 <b id="rgTreeCode" style="color:#ffe36b"></b></div>
+    <div id="rgTree"></div>
+    <div class="rgRow"><button id="rgTreeBack">返回</button></div>
+  </div>
+  <div id="rgOverWrap" class="hide">
+    <div id="rgNear"></div>
+    <div id="rgStats"></div>
+    <div id="rgResult"></div><ol class="rgList"></ol>
+    <div class="rgRow"><button id="rgAgain">再闖一次</button><button id="rgTreeBtn2">🌳 傳承樹</button><button id="rgHome">換難度</button></div>
+  </div>
+  <div id="rgErr"></div>
+</div></div>
+<div id="meta" class="hide"><div class="card">
+  <div id="metaTitle"></div>
+  <div class="rgCoinsBig">鼓幣 <b id="metaCoins">0</b></div>
+  <div id="dailyWrap" class="hide">
+    <div class="sub2">每天上線領一次，7 天一輪；漏簽不會歸零，下次接著領</div>
+    <div id="dailyDays"></div>
+    <button id="dailyGo"></button>
+  </div>
+  <div id="wardWrap" class="hide">
+    <div class="sub2">用鼓幣買造型；所有模式都能穿，線上對戰對手也看得到（本地雙人的 2P 可以另外選）</div>
+    <div id="ward"></div>
+  </div>
+  <div id="saveBox">
+    <div>存檔碼 <b id="saveCode"></b>　<span class="sub3">進度會自動備份到伺服器；換手機或清掉瀏覽器資料時，輸入這組碼就能找回</span></div>
+    <div class="saveRow"><input id="saveIn" maxlength="9" placeholder="輸入存檔碼找回進度" autocomplete="off"><button id="saveGo">找回</button></div>
+    <div id="saveMsg"></div>
+  </div>
+  <div class="rgRow"><button id="metaBack">返回</button></div>
+</div></div>
+<div id="mvPick" class="hide"><div class="card">
+  <h2>擴充模式：選 3 招</h2>
+  <div class="sub">對手看不到你選了什麼，出招後才會揭曉。選的順序就是 J／K／L（手機是三顆招式鈕）</div>
+  <div id="mpSlots"></div>
+  <div id="mpGrid"></div>
+  <div id="mpMsg"></div>
+  <div id="mpBtns"><button id="mpBack" class="hide">返回</button><button id="mpRandom">隨機選</button><button id="mpOk">確定</button></div>
+</div></div>
+<div id="aiPick" class="hide"><div class="card">
+  <h2>AI 組合對練（試玩）</h2>
+  <div class="sub">電腦用 30 招通用 AI。先點「你」或「電腦」選要改哪一邊，再點下面的招；電腦也可以直接挑強組合。</div>
+  <div id="apLock"></div>
+  <select id="apModel"><option value="skill">電腦：新版（逐招特訓，本地試玩）</option><option value="old">電腦：舊版（做關卡用的通用 AI）</option></select>
+  <div id="apSides">
+    <div class="apSide" data-s="0"><b>你</b><div class="apSlots" id="apMe"></div></div>
+    <div class="apSide" data-s="1"><b>電腦</b><div class="apSlots" id="apAi"></div><select id="apPreset"></select></div>
+  </div>
+  <div id="apGrid"></div>
+  <div id="apMsg"></div>
+  <div id="apBtns"><button id="apBack">返回</button><button id="apGo">開打</button></div>
+</div></div>
+<div id="lvPick" class="hide"><div class="card">
+  <h2>AI 關卡（試玩）</h2>
+  <div class="sub">10 個版本、每版 10 關，由簡單到困難。點一關，再選自己要帶的三招。</div>
+  <div id="lvVers"></div>
+  <div id="lvDesc"></div>
+  <label id="lvShowWrap"><input type="checkbox" id="lvShow"> 顯示每關的破解組合</label>
+  <div id="lvStages"></div>
+  <div id="lvBtns"><button id="lvBack">返回</button></div>
+</div></div>
+<div id="rot">📱 橫放手機玩起來更順手</div>
+<button id="chestBtn" class="hide" title="寶箱"><span id="cbBadge" class="hide"></span><span id="cbIcon"></span><div id="cbBar"><div id="cbFill"></div></div><div id="cbTxt"></div></button>
+<div id="chestFx" class="hide">
+  <div id="cfRays"></div>
+  <div id="cfChest"></div>
+  <div id="cfFlash"></div>
+  <div id="cfTap">點一下打開寶箱</div>
+  <div id="cfReward"><div id="cfTag"></div><div id="cfCard"><canvas id="cfCv" width="400" height="452"></canvas><div id="cfBig"></div><div id="cfName"></div><div id="cfDesc"></div></div><button id="cfOk">收下</button></div>
+</div>
+<div id="pads">
+  <div class="cluster" id="cl">
+    <div class="row skrow"><button class="pb sk" data-a="S1">閃</button><button class="pb sk" data-a="S2">踢</button><button class="pb sk" data-a="S3">熊</button></div>
+    <div class="row"><button class="pb" data-a="L">◀</button><button class="pb" data-a="U">▲</button><button class="pb" data-a="R">▶</button></div>
+  </div>
+  <div class="cluster" id="cr">
+    <div class="row exrow hide"><button class="pb sk xb" data-x="0"></button><button class="pb sk xb" data-x="1"></button><button class="pb sk xb" data-x="2"></button><button class="pb sk xb" data-x="3"></button><button class="pb sk xb" data-x="4"></button><button class="pb sk xb" data-x="5"></button><button class="pb sk xb" data-x="6"></button><button class="pb sk xb" data-x="7"></button><button class="pb sk xb" data-x="8"></button><button class="pb sk xb" data-x="9"></button></div>
+    <div class="row skrow"><button class="pb sk" data-a="S1">閃</button><button class="pb sk" data-a="S2">踢</button><button class="pb sk" data-a="S3">熊</button></div>
+    <div class="row mvrow"><button class="pb" data-a="L">◀</button><button class="pb" data-a="U">▲</button><button class="pb" data-a="R">▶</button></div>
+  </div>
+  <div id="stickZone"><div id="stickBase"><div id="stickKnob"></div></div></div>
+  <div id="arc"><button class="pb fist" data-code="TouchUp">跳</button><button class="pb sk" data-a="S1" data-code="KeyJ">閃</button><button class="pb sk" data-a="S2" data-code="KeyK">踢</button><button class="pb sk" data-a="S3" data-code="KeyL">熊</button><button class="pb sk bwx hide" data-code="KeyI">招3</button><button class="pb sk bwx hide" data-code="KeyU">閃</button></div>
+</div>
+<button id="bwNetBtn" class="hide">📱 線上邀請（手機掃碼加入）</button>
+<button id="bwJoinBtn" class="hide">🔢 輸入房號加入</button>
+<button id="bwBackBtn" class="hide"></button>
+<button id="bwKickBtn" class="hide">👥 踢人</button>
+<button id="bwPickBtn" class="hide">🎯 自選三招</button>
+<div id="bwPick" class="hide"><div class="card">
+  <h2>自選三招</h2>
+  <div class="sub">點三招，點的順序就是招1／招2／招3（電腦 J／K／L 或 1／2／3，手機三顆招式鈕）。再點一次可以取消</div>
+  <div id="bpWho" style="display:flex;gap:6px;justify-content:center;margin-bottom:8px"></div>
+  <div id="bpSlots"></div>
+  <div id="bpGrid"></div>
+  <div id="bpMsg"></div>
+  <div id="bpBtns"><button id="bpNo" style="background:#555;color:#fff">取消</button><button id="bpOk" style="background:#e8601c;color:#fff">確定</button></div>
+</div></div>
+<div id="bwKickBox" class="hide"><div class="jb"><div class="jt">把誰請出房間？</div><div id="bwKickList"></div><button id="bwKickNo" style="margin-top:12px;background:#555;color:#fff">關閉</button></div></div>
+<div id="bwWait" class="hide"></div>
+<div id="bwJoinBox" class="hide"><div class="jb"><div class="jt">輸入房主的房號</div><input id="bwJoinIn" inputmode="numeric" maxlength="6" placeholder="5 位數" autocomplete="off"><div class="jm" id="bwJoinMsg"></div><button id="bwJoinGo" style="background:#e8601c;color:#ffe600">加入</button><button id="bwJoinNo" style="background:#556;color:#fff">取消</button></div></div>
+<div id="bwQr" class="hide"><div class="qrBox"><div id="bwQrImg"></div><div class="qrT">手機掃碼，加入四人合作</div><div class="qrR">房號 <b id="bwQrRoom">-----</b></div><div class="qrS">不用下載、不用註冊・最多 4 人・點一下關閉</div></div></div>
+<script src="assets/js/static-mode.js"></script>
+<script src="assets/js/app.js"></script>
+</body>
+</html>
