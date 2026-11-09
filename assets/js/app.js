@@ -1,16 +1,23 @@
 'use strict';
 const cv = document.getElementById('c');
 let ctx = cv.getContext('2d', { alpha: false });
-const W = 1280, H = 720, GROUND = 610;
+const {
+  W, GROUND, SPEED, GRAV, JUMPV, CD, BEAR, L, KICK_POSE, Fighter, skeleton, kickFoot, launchBalls,
+  startBaseSkill, clampX, hurtbox, shanTeleport, canHit, interruptOnHit, knockOut, impactStop,
+  advanceFighter: advanceBattleFighter, pushFighters, advanceProjectiles, roundWinner, markRoundWinner
+} = ShanshenbuBattleRules;
+const H = 720;
 const D2R = Math.PI / 180;
 
 /* ================= 音效 ================= */
-const params = new URLSearchParams(location.search);
+const query = new URLSearchParams(location.search);
+const replayView = query.get('replay') === '1';
+const params = replayView ? new URLSearchParams() : query;
 // 開發人員後台工具（AI 對手／組合對練／AI 關卡、練習場的馬師傅 1～3 階）：網址加 ?dev=1 才出現，這台會記住；?dev=0 關掉
 { let dev = false; try { if (params.has('dev')) localStorage.setItem('ssb_dev', params.get('dev') === '1' ? '1' : ''); dev = localStorage.getItem('ssb_dev') === '1'; } catch (e) {}
   document.body.classList.toggle('dev', dev); }
 // 靜音只在本次開啟有效（不記住），?mute=1 給測試用
-let muted = params.get('mute') === '1';
+let muted = query.get('mute') === '1';
 const muteBtn = document.getElementById('mute');
 function refreshMute() {
   muteBtn.innerHTML = muted ? '<i>🔇</i>音效：關' : '<i>🔊</i>音效：開';
@@ -24,10 +31,11 @@ menuDrop.addEventListener('click', e => { if (e.target.closest('.mi')) menuDrop.
 addEventListener('pointerdown', e => { if (!e.target.closest('#tools')) menuDrop.classList.add('hide'); });
 // iPhone Safari 不理 user-scalable=no：連點兩下會放大、兩指會縮放。擋掉手勢縮放，連點的第二下不讓它變成放大
 // （輸入框、可捲動的面板不擋，免得選單點不到）
-document.addEventListener('gesturestart', e => e.preventDefault(), { passive: false });
-document.addEventListener('dblclick', e => e.preventDefault(), { passive: false });
+document.addEventListener('gesturestart', e => { if (!replayView) e.preventDefault(); }, { passive: false });
+document.addEventListener('dblclick', e => { if (!replayView) e.preventDefault(); }, { passive: false });
 let lastTouchEnd = 0;
 document.addEventListener('touchend', e => {
+  if (replayView) return;
   const now = Date.now(), quick = now - lastTouchEnd < 350; lastTouchEnd = now;
   if (quick && !e.target.closest('input,select,textarea,.pnl,#meta,#lobby,#mvPick,#rgPanel,#chestFx,#prPanel,#aiPick,#lvPick,#ladder,#bwJoinBox,#bwPick,#bwKickBox')) e.preventDefault();
 }, { passive: false });
@@ -40,10 +48,10 @@ function ac() { if (!AC) { try { AC = new (window.AudioContext || window.webkitA
 try { if (navigator.audioSession) navigator.audioSession.type = 'playback'; } catch (e) {}
 function unlockAudio() {
   const a = ac(); if (!a) return;
-  if (a.state !== 'running') a.resume();
+  if (a.state !== 'running') a.resume().catch(() => {});
   try { const b = a.createBufferSource(); b.buffer = a.createBuffer(1, 1, 22050); b.connect(a.destination); b.start(); } catch (e) {} // iOS 解鎖
 }
-for (const ev of ['pointerdown', 'touchend', 'click', 'keydown']) addEventListener(ev, unlockAudio, { capture: true });
+if (!replayView) for (const ev of ['pointerdown', 'touchend', 'click', 'keydown']) addEventListener(ev, unlockAudio, { capture: true });
 
 // 原片人聲：老師喊「閃身步／浪子踢球／狗熊哆嗦毛」＋ 狗熊段「隆咚框」吆喝
 // 先解碼成 AudioBuffer，出招當下零延遲播放；解碼失敗（例如直接開本機檔）退回 <audio>
@@ -55,14 +63,22 @@ function rbSfx(k) {
   const key = RB.simF + k; if (RB.sfx.has(key)) return false;
   RB.sfx.set(key, RB.simF); return RB.F - RB.simF < 12;
 }
-for (const k of ['shan', 'ball', 'bear', 'chant']) {
-  const el = new Audio('assets/sfx/' + k + '.mp3?v=3'); el.preload = 'auto'; CLIPS[k] = el;
-  fetch('assets/sfx/' + k + '.mp3?v=3').then(r => r.arrayBuffer()).then(b => ac().decodeAudioData(b)).then(d => { BUF[k] = d; }).catch(() => {});
+const BASE_CLIPS = ['shan', 'ball', 'bear', 'chant'];
+function loadBaseClips() {
+  if (CLIPS.shan) return;
+  for (const key of BASE_CLIPS) {
+    const url = 'assets/sfx/' + key + '.mp3?v=3';
+    const audio = new Audio(url); audio.preload = 'auto'; CLIPS[key] = audio;
+    fetch(url).then(r => r.arrayBuffer()).then(data => ac()?.decodeAudioData(data)).then(buffer => {
+      if (buffer) BUF[key] = buffer;
+    }).catch(() => {});
+  }
 }
+if (!replayView) loadBaseClips();
 // 每位角色各自的「隆咚框」吆喝（兩人同時放狗熊也不互相打斷）
 const chantNodes = new Map();
 function loadClip(k) {
-  if (CLIPS[k] || !(k.startsWith('mv_') || k.startsWith('ma_'))) return;
+  if (replayView || CLIPS[k] || !(k.startsWith('mv_') || k.startsWith('ma_'))) return;
   const url = (k.startsWith('ma_') ? 'assets/sfx/ma/' : 'assets/sfx/mv/') + k.slice(3) + '.mp3'; // ma_＝馬師傅語音（有放檔案才用）
   const el = new Audio(url); el.preload = 'auto'; CLIPS[k] = el;
   fetch(url).then(r => r.arrayBuffer()).then(b => ac().decodeAudioData(b)).then(d => { BUF[k] = d; }).catch(() => {});
@@ -70,21 +86,32 @@ function loadClip(k) {
 // 四人合作線上：role host＝房主（跑整場、送畫面）／guest＝客人（只送按鍵）；snd＝要轉給客人的聲音
 const BWN = { role: null, ws: null, ok: false, room: '', key: '', guests: {}, snd: [], sendT: 0, pend: 0, held: 0, ents: new Map(), slots: {}, padSig: '', seq: 0 };
 const bwSndOn = () => BWN.role === 'host' && BWN.ok;
-function playClip(k, vol = 1) {
+function playClip(k, vol = 1, playback) {
   if (!rbSfx('c' + k)) return null;
   loadClip(k);
   if (net.role === 'host' && net.peer && !net.quiet) net.ev.push(['c', k, vol]);
   if (bwSndOn() && !net.quiet) BWN.snd.push(['c', k, vol]);
   if (muted) return null;
   const a = ac();
+  const offset = playback?.offset ?? 0;
   if (a && BUF[k] && a.state === 'running') {
+    if (offset >= BUF[k].duration) return null;
     const src = a.createBufferSource(), g = a.createGain();
-    src.buffer = BUF[k]; g.gain.value = vol; src.connect(g); g.connect(a.destination); src.start();
+    src.buffer = BUF[k];
+    if (playback) src.playbackRate.value = playback.rate;
+    g.gain.value = vol; src.connect(g); g.connect(playback?.output || a.destination); src.start(0, offset);
     return { stop: () => { // 短淡出，避免喀一聲
       try { const t = a.currentTime; g.gain.setValueAtTime(g.gain.value, t); g.gain.linearRampToValueAtTime(0, t + .1); src.stop(t + .12); } catch (e) {}
     } };
   }
-  const el = CLIPS[k].cloneNode(); el.volume = vol; el.play().catch(() => {});
+  const el = CLIPS[k]?.cloneNode();
+  if (!el) return null;
+  el.volume = vol;
+  if (playback) {
+    el.playbackRate = playback.rate;
+    if (offset) el.currentTime = offset;
+  }
+  el.play().catch(() => {});
   return { stop: () => el.pause() };
 }
 function startChant(ft, clip = 'chant') { // clip：狗熊的「隆咚框」，或搖頭晃腦的 mv_yaotou_chant
@@ -107,12 +134,12 @@ function noiseBuf(a, dur) {
 }
 // 音效用的亂數跟對戰模擬分開：線上對戰重算時同一個聲音不會再響，不能因此讓兩邊的對戰亂數對不上
 const fxRand = Math.random;
-function synth(type) {
+function synth(type, destination) {
   if (!rbSfx('s' + type)) return;
   if (net.role === 'host' && net.peer) net.ev.push(['s', type]);
   if (bwSndOn()) BWN.snd.push(['s', type]);
   if (muted) return; const a = ac(); if (!a) return; const t = a.currentTime;
-  const out = a.createGain(); out.connect(a.destination);
+  const out = a.createGain(); out.connect(destination || a.destination);
   if (type === 'clap') { // 拍手：很短的一聲雜訊（搖頭晃腦手拍到手）
     const s = a.createBufferSource(); s.buffer = noiseBuf(a, .06);
     const f = a.createBiquadFilter(); f.type = 'bandpass'; f.frequency.value = 1800; f.Q.value = 1.2;
@@ -151,6 +178,7 @@ function synth(type) {
 /* ================= 輸入 ================= */
 const keys = new Set(), pressed = new Set();
 addEventListener('keydown', e => {
+  if (replayView) return;
   if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Space'].includes(e.code)) e.preventDefault();
   if (!keys.has(e.code)) pressed.add(e.code);
   keys.add(e.code); ac(); if (AC && AC.state === 'suspended') AC.resume();
@@ -326,7 +354,7 @@ for (const v of SHAN_V) {
 const K1 = P({ lean: 4, head: 6, nod: 7, bA: -70, bE: 32, fA: 70, fE: -32, bT: 6, bK: -24, fT: 10, fK: -26, dy: 8 });
 const K1b = P({ lean: 5, head: 7, nod: 8, bA: -68, bE: 34, fA: 68, fE: -34, bT: 8, bK: -32, fT: 12, fK: -34, dy: 12 });  // 膝再彎一點（彈）
 const K2 = P({ lean: 6, head: 6, nod: 7, bA: -74, bE: 30, fA: 74, fE: -30, bT: -14, bK: -86, fT: 10, fK: -24, dy: 6 }); // 右腳往後勾
-const K3 = P({ lean: -2, head: -8, turn: 8, bA: -98, bE: -26, fA: 98, fE: 26, bT: 36, bK: 8, fT: 6, fK: -14, dy: -2 }); // 轉頭、手往上、踢出
+const K3 = P(KICK_POSE); // 轉頭、手往上、踢出
 const kp = (base, o) => P(Object.assign({}, base, o));
 const BALL_V = [
   { name: 'A 三段忠實', hook: K2, flick: K3,
@@ -342,8 +370,6 @@ const BALL_V = [
   { name: 'E 勾住停頓再爆踢', hook: kp(K2, { bK: -96 }), flick: kp(K3, { bT: 50, lean: -6, turn: 10, dy: -6 }),
     keys: [[0, N], [.12, K1], [.2, kp(K2, { bK: -96 })], [.36, kp(K2, { bK: -100, dy: 8 })], [.4, kp(K3, { bT: 50, lean: -6, turn: 10, dy: -6 })], [.6, kp(K3, { bT: 46, turn: 10, dy: -4 })], [.72, K1], [.85, N]] },
 ];
-// 球從「往前踢的那隻腳」飛出（現在踢的是後腳）
-function kickFoot(sk, f) { return sk.footF[0] * f >= sk.footB[0] * f ? sk.footF : sk.footB; }
 const BL = { bT: -45, bK: 24, fT: 45, fK: -24 };                                       // 深馬步
 const bl = o => P(Object.assign({}, BL, o));
 const CLAW_UP = bl({ head: -6, bA: -152, bE: -52, fA: 152, fE: 52, dy: 4 });           // 熊爪舉頂
@@ -379,29 +405,6 @@ function bearPose(t, vi = ANIM.bear) {
   const last = V.endFrom || V.cycle[(Math.floor((BEAR.activeEnd - .25) / V.step)) % n], u = (t - BEAR.activeEnd) / .3;
   if (V.end) return u < .4 ? lerpPose(last, V.end, ease(u / .4)) : V.end;
   return lerpPose(last, N, ease(Math.min(1, u)));
-}
-
-const L = { TH: 60, SH: 58, UA: 44, FA: 42, TORSO: 86, HIPW: 17, SHW: 28, HEADR: 21 };
-// D＝身體比例（預設 L；角色可以有自己的 look.dims，drawFighter 會算好傳進來，彎腰縮短的 tl 也已經乘進 D.TORSO）
-function skeleton(p, f, D = L) {
-  const v = (a, len) => [Math.sin(a * D2R) * f * len, Math.cos(a * D2R) * len];
-  const add = (a, b) => [a[0] + b[0], a[1] + b[1]];
-  const hipB = [-D.HIPW * f, 0], hipF = [D.HIPW * f, 0];
-  const kneeB = add(hipB, v(p.bT, D.TH)), footB = add(kneeB, v(p.bT + p.bK, D.SH));
-  const kneeF = add(hipF, v(p.fT, D.TH)), footF = add(kneeF, v(p.fT + p.fK, D.SH));
-  const u = [Math.sin(p.lean * D2R) * f, -Math.cos(p.lean * D2R)];
-  const perp = [Math.cos(p.lean * D2R) * f, Math.sin(p.lean * D2R)];
-  const neck = [u[0] * D.TORSO, u[1] * D.TORSO];
-  const shB = [neck[0] - perp[0] * D.SHW - u[0] * 8, neck[1] - perp[1] * D.SHW - u[1] * 8];
-  const shF = [neck[0] + perp[0] * D.SHW - u[0] * 8, neck[1] + perp[1] * D.SHW - u[1] * 8];
-  // 手臂角度相對軀幹：繞軀幹傾斜旋轉
-  const va = (a, len) => v(a + p.lean, len);
-  const elB = add(shB, va(p.bA, D.UA)), haB = add(elB, va(p.bA + p.bE, D.FA));
-  const elF = add(shF, va(p.fA, D.UA)), haF = add(elF, va(p.fA + p.fE, D.FA));
-  const hd = (p.lean + p.head) * D2R;
-  const head = [neck[0] + Math.sin(hd) * f * (D.HEADR + 8), neck[1] - Math.cos(hd) * (D.HEADR + 8)];
-  const footY = Math.max(footB[1], footF[1]);
-  return { hipB, hipF, kneeB, footB, kneeF, footF, neck, shB, shF, elB, haB, elF, haF, head, hd, footY, u, perp };
 }
 
 /* ================= 新招式（B 站 BV1WaaN6BEND p01 安徽花鼓燈、p03 山東鼓子秧歌，逐格分解）=================
@@ -981,7 +984,7 @@ const MOVES = {
 // 暫時下架的招（2026-10-27）：天梯、闖關、擴充模式、練習場都抽不到；招式資料先留著，日後更新再上架
 const MOVE_OFF = new Set(['dahu', 'pingchou', 'fenshou', 'cheshui', 'xieta', 'yaozhong', 'lisao', 'chayao', 'zaiquan', 'yipen', 'chengu', 'duochan', 'shizi']);
 const MOVE_IDS = Object.keys(MOVES).filter(k => !MOVE_OFF.has(k) && !MOVES[k].demo); // demo：試作中的招（搖頭晃腦 5 版），只在練習場給人試
-const SHOW_DEMO = document.body.classList.contains('dev') || /^(shanshenbu-test\.|127\.0\.0\.1|localhost)/.test(location.hostname);
+const SHOW_DEMO = !replayView && (document.body.classList.contains('dev') || /^(shanshenbu-test\.|127\.0\.0\.1|localhost)/.test(location.hostname));
 if (SHOW_DEMO) ['mv_yaotou', 'mv_yaotou_chant', 'mv_cxk_changtiao', 'mv_cxk_music', 'mv_cxk_jntm', 'mv_cxk_dribble', 'mv_cxk_dance2', 'mv_cxk_nigan', 'mv_cxk_aiyo', 'mv_cxk_niganaiyo'].forEach(loadClip); // 試作招的語音先載好，第一次出招就聽得到
 
 // 闖關：學到的新招各自的強化（威力、冷卻、範圍、多發、持續時間、效果強度、暈眩）
@@ -1603,22 +1606,6 @@ function drawScooter(sk, f) {
 }
 
 /* ================= 角色邏輯 ================= */
-const SPEED = 300, GRAV = 2600, JUMPV = 950;
-const CD = { shan: 1.0, ball: 1.4, bear: 4.0 };
-// 狗熊哆嗦毛時間軸：喊「狗熊哆嗦毛」(約 1.25s) → 接「隆咚框 隆咚框」一路吆喝到招式結束
-const BEAR = { chantAt: 1.22, activeEnd: 2.6, dur: 2.9, hitEvery: .18, dmg: 3 };
-class Fighter {
-  constructor(id, x, face) { this.id = id; this.load = ['shan', 'ball', 'bear']; this.used = [0, 0, 0]; this.cleanW = 0; this.perf = 0; this.reset(x, face); } // load：三格招式（J／K／L）；cleanW：這場滿血贏了幾回合；perf：1 完封、2 PERFECT
-  reset(x, face) {
-    this.x = x; this.y = 0; this.vx = 0; this.vy = 0; this.face = face;
-    this.hp = 200; this.hpShow = 200; this.act = null; this.stun = 0; this.cd = { shan: 0, ball: 0, bear: 0 };
-    this.walkPh = 0; this.inv = 0; this.ko = false; this.win = false; this.flash = 0; this.hitCount = 0;
-    this.guard = null; this.guardT = 0; this.armorT = 0; this.armorMul = 1; this.spdT = 0; this.spdMul = 1; this.powT = 0; this.powMul = 1; this.healT = 0; this.healRate = 0; this.floatT = 0; this.mvcd = {};
-    this.ccOnlyT = 0; this.pushT = 0; this.pushV = 0;
-  }
-  get grounded() { return this.y <= 0; }
-  canAct() { return !this.act && this.stun <= 0 && !this.ko && !this.win; }
-}
 let p1, p2, balls = [], ghosts = [], fx = [], captions = [], shake = 0, hitstop = 0;
 let mode = 'title', vsCPU = true, round = 1, wins = [0, 0], timer = 60, banner = null, stateT = 0, menuSel = 0;
 
@@ -1675,23 +1662,12 @@ function caption(ft, text) {
 
 function doSkill(ft, foe, inp, which) {
   const prevShanCd = ft.cd.shan, quiet = rgQuiet(ft) || ft.char === 'ma'; // 馬師傅 Boss 不唸原本三招的語音
+  startBaseSkill(ft, foe, inp, which);
   if (which === 'shan') {
-    // 方向：上＝往上閃；按著朝敵人＝前；按著背對敵人＝後；沒按＝前
-    let dir = 'fwd';
-    const toFoe = Math.sign(foe.x - ft.x) || ft.face;
-    if (inp.U) dir = 'up';
-    else if ((inp.L && toFoe > 0) || (inp.R && toFoe < 0)) dir = 'back';
-    const travel = dir === 'back' ? -toFoe : toFoe;
-    ft.act = { type: 'shan', t: 0, dur: .55, dir, travel, done: false };
-    ft.cd.shan = CD.shan; ft.vx = 0;
     caption(ft, '閃身步'); if (!quiet) playClip('shan'); synth('whoosh');
   } else if (which === 'ball') {
-    ft.act = { type: 'ball', t: 0, dur: .85, spawned: false, launched: false };
-    ft.cd.ball = CD.ball; ft.vx = 0;
     caption(ft, '浪子踢球'); if (!quiet) playClip('ball');
   } else if (which === 'bear') {
-    ft.act = { type: 'bear', t: 0, dur: BEAR.dur, nextHit: .3, hits: 0 };
-    ft.cd.bear = CD.bear;
     caption(ft, '狗熊哆嗦毛'); if (!quiet) playClip('bear', .9);
     stopChant(ft); // 先喊完「狗熊哆嗦毛」，再接原片的「隆咚框」吆喝（見 updateFighter）
   }
@@ -1723,10 +1699,8 @@ function useSlot(ft, foe, inp, i) {
   const k = ft.load[i]; ft.used[i] = 1; ft._last = k; // 練習場記錄「這下是哪一招打的」
   if (ORIG[k]) doSkill(ft, foe, inp, k); else doMove(ft, foe, k);
 }
-function hurtbox(ft) { return { x0: ft.x - 30, x1: ft.x + 30, y0: GROUND - ft.y - 265, y1: GROUND - ft.y }; }
-
 function applyHit(att, tgt, dmg, stunT, kb, kind) {
-  if (tgt.ko || tgt.inv > 0) return false;
+  if (!canHit(tgt)) return false;
   const gc = guardCheck(att, tgt, dmg, kb, kind); if (gc) return gc; // 新招的格擋／反擊／反彈
   if (att.maCC) stunT = Math.max(stunT * att.maCC, .5); // 馬師傅 3 階：被他打到會被控更久
   let mul = (att.mods ? att.mods.dmg : att.dmgMul || 1) * (att.powT > 0 ? att.powMul : 1), crit = false; // 闖關：強化／關卡倍率；瞭望式加力
@@ -1757,14 +1731,14 @@ function applyHit(att, tgt, dmg, stunT, kb, kind) {
   tgt.hp = Math.max(0, tgt.hp - dmg); if (PR.on) prHit(att, dmg);
   if (isMa(tgt.char) || isMa(att.char)) maOnHit(att, tgt);
   if (tgt.act && (tgt.act.type === 'bear' || tgt.act.chant)) stopChantIf(tgt);
-  tgt.act = null; tgt.stun = Math.max(tgt.stun, stunT); tgt.vx = kb; tgt.flash = .12;
+  interruptOnHit(tgt, stunT, kb);
   if (tm && tm.tenacity && stunT > 0) tgt.postCC = tm.tenacity; // 不倒翁：暈完一段時間免控
   const hb = hurtbox(tgt);
   fx.push({ type: 'spark', x: tgt.x - Math.sign(kb) * 10, y: hb.y0 + 90 + Math.random() * 60, t: 0, big: kind === 'ball' });
   fx.push({ type: 'num', x: tgt.x + (Math.random() * 30 - 15), y: hb.y0 - 10, t: 0, text: '-' + dmg });
-  shake = Math.max(shake, kind === 'ball' ? 10 : 5); hitstop = kind === 'ball' ? .07 : .025;
+  shake = Math.max(shake, kind === 'ball' ? 10 : 5); hitstop = impactStop(kind);
   synth(kind === 'ball' ? 'kick' : 'hit');
-  if (tgt.hp <= 0) { tgt.ko = true; tgt.stun = 0; tgt.vy = 500; tgt.y = Math.max(tgt.y, 1); tgt.vx = kb * 1.6; }
+  knockOut(tgt, kb);
   charHurtVoice(tgt);
   return true;
 }
@@ -1772,10 +1746,8 @@ function stopChantIf(ft) { stopChant(ft); }
 
 // 閃身步瞬移＋殘影（房主模擬、對手端本機預測共用）
 function shanMove(ft, a) {
-  a.done = true;
   const ox = ft.x, oy = ft.y;
-  if (a.dir === 'up') { ft.y = Math.min(ft.y + 230, 330); ft.vy = 120; }
-  else ft.x = clampX(ft.x + a.travel * 250);
+  shanTeleport(ft, a);
   for (let i = 0; i < 5; i++) {
     const k = i / 5;
     ghosts.push({ ft, x: ox + (ft.x - ox) * k, y: oy + (ft.y - oy) * k, pose: a.dir === 'up' ? SHAN_UP : SV().hold, f: a.dir === 'up' ? ft.face : a.travel, t: -i * .02, life: .35 });
@@ -1790,16 +1762,7 @@ function shanMove(ft, a) {
     for (const tg of rgFoes(ft)) if (Math.abs(tg.x - ft.x) < 140 && tg.y < 40) applyHit(ft, tg, 12, .4, (Math.sign(tg.x - ft.x) || 1) * 260, 'mv');
   }
 }
-function updateFighter(ft, foe, dt) {
-  const inp = inputFor(ft); ft.inp = inp; // 風擺柳出招中要看玩家現在按哪邊
-  buffTick(ft, dt);
-  for (const k in ft.cd) ft.cd[k] = Math.max(0, ft.cd[k] - dt);
-  if (ft.mods && ft.shanCh < ft.mods.shanMax && ft.cd.shan <= 0) { ft.shanCh++; if (ft.shanCh < ft.mods.shanMax) ft.cd.shan = CD.shan * ft.mods.cdMul; }
-  ft.inv = Math.max(0, ft.inv - dt); ft.flash = Math.max(0, ft.flash - dt);
-  if (ft.stun > 0) {
-    ft.stun -= dt; ft.vx *= Math.pow(.02, dt);
-    if (ft.stun <= 0 && ft.postCC) { ft.ccImmT = Math.max(ft.ccImmT || 0, ft.postCC); ft.postCC = 0; fx.push({ type: 'txt', ft, text: '不倒翁！', color: '#ffd34d', t: 0 }); }
-  }
+function tryEscape(ft, foe, inp, dt) {
   if (ft.stun > 0 && !ft.ko && !ft.win) { // 解控招（風擺柳碎步）：被暈、被鎖住的時候也能放，放了就脫身
     const j = [inp.S1, inp.S2, inp.S3].findIndex((pr, n) => pr && MOVES[ft.load[n]] && MOVES[ft.load[n]].panic && !(ft.mvcd[ft.load[n]] > 0));
     // 天梯／闖關帶的招用數字鍵 1～0 放，也要能解控
@@ -1822,69 +1785,37 @@ function updateFighter(ft, foe, dt) {
     } else if (xi >= 0) { ft.stun = 0; ft.act = null; fx.push({ type: 'txt', ft, text: '解控！', color: '#ffd34d', t: 0 }); doMove(ft, foe, ft.extra[xi]); }
   }
 
-  if (ft.canAct()) {
-    ft.face = Math.sign(foe.x - ft.x) || ft.face;
-    const slot = [inp.S1, inp.S2, inp.S3].findIndex((pr, i) => pr && slotReady(ft, ft.load[i]));
-    if (slot >= 0) useSlot(ft, foe, inp, slot);
-    else if (inp.X && ft.extra && ft.extra.some((k, j) => inp.X[j] && mvReady(ft, k))) doMove(ft, foe, ft.extra.find((k, j) => inp.X[j] && mvReady(ft, k))); // 闖關學到的新招
-    else {
-      const mv = ((inp.R ? 1 : 0) - (inp.L ? 1 : 0)) * (ft.spdT > 0 ? ft.spdMul : 1) * (ft.mods ? ft.mods.spd : ft.baseSpd || 1);
-      if (ft.grounded) { ft.vx = mv * SPEED; if (inp.Up) { ft.vy = JUMPV; ft.y = .01; } }
-      else ft.vx += (mv * SPEED - ft.vx) * Math.min(1, dt * 4);
-      if (mv && ft.grounded) ft.walkPh += dt * 11; else ft.walkPh = 0;
-    }
-  }
-
-  const a = ft.act;
-  if (a) {
-    a.t += dt;
-    if (a.type === 'shan') {
-      ft.inv = (a.t > .03 && a.t < .3) ? .02 : ft.inv;
-      if (!a.done && a.t >= .1) shanMove(ft, a);
-    } else if (a.type === 'ball') {
-      if (!a.spawned && a.t >= .2) { a.spawned = true; fx.push({ type: 'conjure', ft, t: 0 }); synth('pop'); }
-      if (!a.launched && a.t >= .4) {
-        a.launched = true;
-        const fl = BV().flick, sk = skeleton(fl, ft.face), foot = kickFoot(sk, ft.face);
-        const baseY = GROUND - ft.y - sk.footY - 8 + fl.dy;
-        const m = ft.mods, nb = 1 + (m ? m.multi : 0), big = m ? m.ballBig : 1;
-        for (let i = 0; i < nb; i++) balls.push({ owner: ft, x: ft.x + foot[0] + ft.face * 14, y: baseY + foot[1] - 6 - i * 52, vx: ft.face * 820, spin: 0, t: 0,
-          pierce: m ? m.pierce : 0, r: 15 * big, kbv: 260 * big });
-        synth('kick');
-      }
-    } else if (a.type === 'mv') {
-      moveTick(ft, foe, a, dt);
-    } else if (a.type === 'bear') {
-      if (a.t < .28) ft.vx = ft.face * 420; else ft.vx = 0;
-      if (!a.chant && a.t >= BEAR.chantAt) { a.chant = true; if (ft.char !== 'ma') startChant(ft); }
-      if (a.t >= a.nextHit && a.t < BEAR.activeEnd) {
-        a.nextHit += BEAR.hitEvery / (ft.mods ? ft.mods.bearRate : 1);
-        for (const tg of (RG.on ? rgFoes(ft) : [foe])) { // 闖關：打得到的全都打
-          const dx = (tg.x - ft.x) * ft.face;
-          if (dx > -25 && dx < 175 * (ft.mods ? ft.mods.bearRange : 1) && Math.abs(tg.y - ft.y) < 140) {
-            if (applyHit(ft, tg, BEAR.dmg, .38, ft.face * 60, 'bear')) {
-              a.hits++;
-              if (a.hits % 3 === 1) fx.push({ type: 'ctrl', ft: tg, t: 0 });
-            }
-          }
-        }
-      }
-    }
-    if (a.t >= a.dur) { if (a.type === 'bear' || a.chant) stopChant(ft); ft.act = null; }
-  }
-
-  // 物理
-  ft.x = clampX(ft.x + ft.vx * dt);
-  if (ft.y > 0 || ft.vy > 0) {
-    const floating = (a && a.type === 'shan' && a.dir === 'up' && a.t < .34) || ft.floatT > 0;
-    ft.vy -= GRAV * dt * (floating ? .25 : 1);
-    ft.y += ft.vy * dt;
-    if (ft.y <= 0) { ft.y = 0; ft.vy = 0; if (ft.ko) synth('thud'); }
-  }
-  if (ft.grounded && !a && ft.stun <= 0 && !ft.ko && !(inputFor(ft).L || inputFor(ft).R)) ft.vx = 0;
-  if (ft.ko && ft.grounded) ft.vx *= Math.pow(.01, dt);
 }
-const clampX = x => Math.max(70, Math.min(W - 70, x));
+
+const browserBattle = {
+  inputFor, buffTick, tryEscape, slotReady, useSlot, moveTick, shanMove, applyHit, stopChant, zoneTick,
+  afterStunTick(ft) {
+    if (ft.stun <= 0 && ft.postCC) {
+      ft.ccImmT = Math.max(ft.ccImmT || 0, ft.postCC);
+      ft.postCC = 0;
+      fx.push({ type: 'txt', ft, text: '不倒翁！', color: '#ffd34d', t: 0 });
+    }
+  },
+  useExtra(ft, foe, inp) {
+    const skill = inp.X && ft.extra && ft.extra.find((k, j) => inp.X[j] && mvReady(ft, k));
+    if (!skill) return false;
+    doMove(ft, foe, skill);
+    return true;
+  },
+  onBallPrep(ft) { fx.push({ type: 'conjure', ft, t: 0 }); synth('pop'); },
+  launchBall(ft) { launchBalls(balls, ft, BV().flick); synth('kick'); },
+  onBearChant(ft) { if (ft.char !== 'ma') startChant(ft); },
+  bearTargets(ft, foe) { return RG.on ? rgFoes(ft) : [foe]; },
+  onBearHit(ft, action) { if (action.hits % 3 === 1) fx.push({ type: 'ctrl', ft, t: 0 }); },
+  onKnockoutLanding() { synth('thud'); },
+  onReflect(ft) { fx.push({ type: 'txt', ft, text: '反彈！', color: '#9fe0ff', t: 0 }); synth('pop'); },
+  onPass(ft) { fx.push({ type: 'txt', ft, text: '閃過！', color: '#8fffb0', t: 0 }); },
+  onConfused(ft) { fx.push({ type: 'txt', ft, text: '左右顛倒！', color: '#5fd38a', t: 0 }); }
+};
+
+function updateFighter(ft, foe, dt) {
+  advanceBattleFighter(ft, foe, dt, browserBattle);
+}
 
 function poseOf(ft, now) {
   const a = ft.act;
@@ -1927,20 +1858,23 @@ function poseOf(ft, now) {
 }
 
 /* ================= 電腦 AI ================= */
-let cpuInput = { L: false, R: false, U: false, S1: false, S2: false, S3: false, Up: false }, cpuT = 0, cpuHold = { L: false, R: false, U: false };
+const QuickPlayCpu = globalThis.ShanshenbuQuickPlayCpu;
+const ruleCpu = QuickPlayCpu.createCpuState(), cpuInput = ruleCpu.input;
 function updateCPU(dt) {
-  cpuInput.S1 = cpuInput.S2 = cpuInput.S3 = cpuInput.Up = false;
-  cpuT -= dt; if (cpuT > 0) { Object.assign(cpuInput, cpuHold); return; }
-  cpuT = (.14 + Math.random() * .1) * Math.max(.45, 1 - .06 * LV()); // 天梯：越後面反應越快
-  const cpuT0 = cpuT;
-  const me = p2, foe = p1, dx = foe.x - me.x, dist = Math.abs(dx), dirTo = Math.sign(dx) || -1;
+  const me = p2, foe = p1, L = LV();
+  if (!((ladder.on || MC.on || me.char === 'ma') && me.atk)) {
+    QuickPlayCpu.tickRuleCpu(ruleCpu, { p1, p2, balls }, dt, Math.random, L);
+    return;
+  }
+
+  // 天梯：電腦用自己隨機抽到的 3～6 招；挑戰馬師傅也走這套
+  if (!QuickPlayCpu.advanceRuleDecision(ruleCpu, dt, Math.random, L)) return;
+  const dx = foe.x - me.x, dist = Math.abs(dx), dirTo = Math.sign(dx) || -1;
   const hold = { L: false, R: false, U: false };
   const toward = d => { if (d > 0) hold.R = true; else hold.L = true; };
-  const threat = balls.find(b => b.owner === foe && Math.sign(me.x - b.x) === Math.sign(b.vx) && Math.abs(me.x - b.x) < 330);
-  if (!me.canAct()) { cpuHold = hold; Object.assign(cpuInput, hold); return; }
-  const L = LV();
-  if ((ladder.on || MC.on || me.char === 'ma') && me.atk) { // 天梯：電腦用自己隨機抽到的 3～6 招；挑戰馬師傅也走這套
-    me.ldCool -= cpuT0;
+  const threat = QuickPlayCpu.incomingProjectile(me, foe, balls);
+  if (me.canAct()) {
+    me.ldCool -= ruleCpu.think;
     const dodge = threat && me.atk.includes('shan') && me.cd.shan <= 0 && Math.random() < Math.min(.9, .5 + .04 * L);
     const k = dodge ? 'shan' : me.ldCool <= 0 || (threat && Math.random() < .5) ? bossPick(me, dist, threat, foe) : null;
     if (k) {
@@ -1952,21 +1886,9 @@ function updateCPU(dt) {
     else if (dist < 120 && Math.random() < .4) toward(-dirTo);
     else if (Math.random() < .3) toward(dirTo);
     if (Math.random() < .03) cpuInput.Up = true;
-    cpuHold = hold; Object.assign(cpuInput, hold); return;
   }
-  if (threat && me.cd.shan <= 0 && Math.random() < Math.min(.92, .55 + .05 * L)) {
-    if (Math.random() < .6) hold.U = true; else toward(-dirTo);
-    cpuInput.S1 = true;
-  } else if (foe.act && foe.act.type === 'bear' && dist < 220 && me.cd.shan <= 0 && Math.random() < Math.min(.9, .5 + .04 * L)) {
-    toward(-dirTo); cpuInput.S1 = true;
-  } else if (dist < 165 && me.cd.bear <= 0 && Math.random() < Math.min(.9, .6 + .03 * L)) cpuInput.S3 = true;
-  else if (dist > 260 && me.cd.ball <= 0 && Math.random() < Math.min(.8, .45 + .03 * L)) cpuInput.S2 = true;
-  else if (dist > 420 && me.cd.shan <= 0 && Math.random() < .12) cpuInput.S1 = true;
-  else if (dist > 210) toward(dirTo);
-  else if (dist < 130 && Math.random() < .4) toward(-dirTo);
-  else if (Math.random() < .3) toward(dirTo);
-  if (Math.random() < .04) cpuInput.Up = true;
-  cpuHold = hold; Object.assign(cpuInput, hold);
+  ruleCpu.hold = hold;
+  Object.assign(cpuInput, hold);
 }
 
 /* ================= AI 對手（試玩）：訓練出來的神經網路（tools/ai，三招同招對練）=================
@@ -1978,7 +1900,7 @@ function nnLoad(tier) {
   NN.models[tier] = 'loading';
   fetch('assets/ai/base3_' + tier + '.json').then(r => r.json()).then(j => { NN.models[tier] = { dims: j.dims, W: j.W.map(a => Float32Array.from(a)), b: j.b.map(a => Float32Array.from(a)) }; }).catch(() => { NN.models[tier] = null; });
 }
-nnLoad(NN.tier);
+if (!replayView) nnLoad(NN.tier);
 const nnModel = () => { const m = NN.models[NN.tier]; return m && m !== 'loading' ? m : null; };
 // 30 招通用 AI（第 2 階段）：只在「AI 組合對練」裡用，雙方可以帶任意三招
 // 新版（逐招特訓，tools/assets/ai/runs/skill2 最強一代）看 v3 盤面；用哪一版存在 ssb_nnv，AI 組合對練畫面可以切
@@ -1994,22 +1916,9 @@ function nnLoadGeneral(g = NN.matchGen || NN.gen) {
 // 一般「對戰電腦」雙方都是基本三招 → 三招 AI；AI 組合對練 → 通用 AI（天梯、闖關、練習場照舊）
 const nnOn = () => vsCPU && !ladder.on && !RG.on && !PR.on && !net.role && p2 && (p2.char !== 'ma' || NN.maAI) && (NN.comboMatch ? !!NN.genModel()
   : !!nnModel() && ['shan', 'ball', 'bear'].every((k, i) => p2.load[i] === k && p1.load[i] === k));
-function nnObserve(me, foe, loadMe = ['shan', 'ball', 'bear'], loadFoe = ['shan', 'ball', 'bear']) {
-  const f = foe.x >= me.x ? 1 : -1, o = [];
-  for (const [ft, load] of [[me, loadMe], [foe, loadFoe]]) {
-    const a = ft.act;
-    o.push(ft.hp / 200, ft.y / 300, ft.vy / 1000, ft.vx * f / 800, Math.min(ft.stun, 2), ft.inv > 0 ? 1 : 0, ft.ko ? 1 : 0, ft.canAct() ? 1 : 0, ft.grounded ? 1 : 0, ft.armorT > 0 || ft.ccOnlyT > 0 ? 1 : 0);
-    o.push(a ? 0 : 1); for (const t of ['shan', 'ball', 'bear', 'mv']) o.push(a && a.type === t ? 1 : 0); o.push(a ? Math.min(a.t || 0, 3) / 3 : 0);
-    for (const k of load) o.push(Math.min(1, CD[k] != null ? ft.cd[k] / CD[k] : (ft.mvcd[k] || 0) / MOVES[k].cd));
-  }
-  const back = f > 0 ? me.x : W - me.x, foeBack = f > 0 ? W - foe.x : foe.x;
-  o.push((foe.x - me.x) * f / 1280, (foe.y - me.y) / 300, back / 1280, foeBack / 1280, timer / 60);
-  const bs = balls.map(b => ({ b, d: Math.abs(b.x - me.x) })).sort((p, q) => p.d - q.d);
-  for (let i = 0; i < 3; i++) {
-    const e = bs[i]; if (!e) { o.push(0, 0, 0, 0, 0); continue; }
-    const b = e.b; o.push(1, (b.x - me.x) * f / 1280, (GROUND - b.y - me.y) / 300, b.vx * f / 820, b.owner === me ? 1 : -1);
-  }
-  return o;
+function nnObserve(me, foe, loadMe, loadFoe) {
+  return QuickPlayCpu.observe({ balls, timer, width: W, ground: GROUND, cooldowns: CD }, me, foe, loadMe, loadFoe,
+    (ft, k) => (ft.mvcd[k] || 0) / MOVES[k].cd);
 }
 // 盤面 v2（照 tools/assets/ai/env.js 的 observe2）：再加上雙方帶的三招、正在放第幾格、擋招種類、加速／加力／回血、飛行道具種類
 const NN_POOL = ['shan', 'ball', 'bear', 'dahu', 'fengbai', 'pingchou', 'fenshou', 'xiaolun', 'dalun', 'cheshui', 'xieta', 'baishi', 'yaozhong', 'guabian', 'liaowang', 'lisao',
@@ -2046,17 +1955,6 @@ function nnObserve3(me, foe, loadMe, loadFoe) {
   }
   return o;
 }
-function nnAct(m, obs) { // 往前算一次，依機率抽動作
-  let x = obs;
-  for (let l = 0; l < m.W.length; l++) {
-    const Wl = m.W[l], bl = m.b[l], nIn = m.dims[l], nOut = m.dims[l + 1], y = new Float32Array(nOut), last = l === m.W.length - 1;
-    for (let o = 0; o < nOut; o++) { let s = bl[o]; const off = o * nIn; for (let i = 0; i < nIn; i++) s += Wl[off + i] * x[i]; y[o] = last ? s : Math.tanh(s); }
-    x = y;
-  }
-  const mx = Math.max(...x), p = Array.from(x, z => Math.exp(z - mx)), s = p.reduce((a, b) => a + b, 0);
-  let u = Math.random() * s; for (let i = 0; i < p.length; i++) { u -= p[i]; if (u <= 0) return i; }
-  return p.length - 1;
-}
 // 手殘操作（排位低段）：朝一個方向走一陣子才換方向，偶爾才按招，不看距離也不看時機；動作編號＝方向(0 退、1 停、2 進)＋3×按鍵
 function nnClumsy(lv) {
   if (!(NN.cTick > 0)) { const r = Math.random(); NN.cDir = r < .45 ? 2 : r < .65 ? 1 : 0; NN.cTick = 8 + Math.floor(Math.random() * 16); }
@@ -2065,18 +1963,17 @@ function nnClumsy(lv) {
   return NN.cDir + 3 * btn;
 }
 function nnTick(dt) { // 代替 updateCPU：結果一樣寫進 cpuInput
-  cpuInput.Up = cpuInput.S1 = cpuInput.S2 = cpuInput.S3 = false; if (cpuInput.X) cpuInput.X = [false]; // 按一下就放開；左右、上繼續按著
-  NN.acc += dt; if (NN.acc < 4 / 60) return; NN.acc -= 4 / 60; if (NN.acc > 4 / 60) NN.acc = 0;
+  if (!QuickPlayCpu.advanceModelDecision(NN, cpuInput, dt)) return;
   const lv = NN.comboMatch && (NN.level || NN.mc), delay = lv ? lv.delay : 3; // 關卡：電腦的反應延遲（1/15 秒為單位）和失誤率
-  NN.hist.push(!NN.comboMatch ? nnObserve(p2, p1) : NN.genModel().dims[0] > 300 ? nnObserve3(p2, p1, p2.load, p1.load) : nnObserve2(p2, p1, p2.load, p1.load)); while (NN.hist.length > delay + 1) NN.hist.shift();
+  const obs = !NN.comboMatch ? nnObserve(p2, p1) : NN.genModel().dims[0] > 300 ? nnObserve3(p2, p1, p2.load, p1.load) : nnObserve2(p2, p1, p2.load, p1.load);
+  const delayed = QuickPlayCpu.delayObservation(NN, obs, delay);
   // 走神（排位低段）：偶爾整段時間什麼都不做，站著給人打，比亂按更像新手
   if (lv && lv.lapse) { if (NN.zz > 0) NN.zz--; else if (Math.random() < lv.lapse) NN.zz = lv.lapseLen; } else NN.zz = 0;
-  let a = NN.zz > 0 ? 1 : lv && lv.dumb && Math.random() < lv.dumb ? nnClumsy(lv) : lv && lv.eps && Math.random() < lv.eps ? Math.floor(Math.random() * 18) : nnAct(NN.comboMatch ? NN.genModel() : nnModel(), NN.hist[0]);
+  let a = NN.zz > 0 ? 1 : lv && lv.dumb && Math.random() < lv.dumb ? nnClumsy(lv) : lv && lv.eps && Math.random() < lv.eps ? Math.floor(Math.random() * 18) : QuickPlayCpu.inferAction(NN.comboMatch ? NN.genModel() : nnModel(), delayed);
   // 出招間隔（排位低段）：出過招要隔一段時間才能再出，這段時間只能走動，按鍵不算
   if (lv && lv.gap) { if (NN.wait > 0) { NN.wait--; if (a >= 6) a %= 3; } else if (a >= 6) NN.wait = lv.gap * 15 * (.7 + Math.random() * .6); }
-  const f = p1.x >= p2.x ? 1 : -1, dir = ((a % 3) - 1) * f, btn = ['none', 'jump', 'S1', 'S2', 'S3', 'upS1'][(a / 3) | 0];
-  Object.assign(cpuInput, { L: dir < 0, R: dir > 0, U: btn === 'upS1', Up: btn === 'jump', S1: btn === 'S1' || btn === 'upS1', S2: btn === 'S2', S3: btn === 'S3' });
-  if (p2.extra) Object.assign(cpuInput, btn === 'upS1' ? { U: false, S1: false, X: [true] } : { X: [false] }); // AI 馬師傅：上＋招1＝第 4 招閃電五連鞭（跟訓練時一樣，tools/assets/ai/env.js）
+  QuickPlayCpu.decodeAction(a, p2, p1, cpuInput);
+  if (p2.extra) Object.assign(cpuInput, cpuInput.U ? { U: false, S1: false, X: [true] } : { X: [false] }); // AI 馬師傅：上＋招1＝第 4 招閃電五連鞭（跟訓練時一樣，tools/assets/ai/env.js）
   if (RK.on) rkNudge(); // 排位：模型僵住不出招時推它一把
 }
 
@@ -2104,26 +2001,8 @@ function update(dt) {
   if (hitstop > 0) { hitstop -= dt; return; }
   if (vsCPU && !nn) updateCPU(dt);
   updateFighter(p1, p2, dt); updateFighter(p2, p1, dt);
-  // 互推，避免重疊
-  const dx = p2.x - p1.x;
-  if (Math.abs(dx) < 50 && Math.abs(p1.y - p2.y) < 150 && !p1.ko && !p2.ko && !(p1.act && p1.act.ghost) && !(p2.act && p2.act.ghost)) {
-    const push = (50 - Math.abs(dx)) / 2 * (Math.sign(dx) || 1);
-    p1.x = clampX(p1.x - push); p2.x = clampX(p2.x + push);
-  }
-  for (const b of balls) {
-    if (b.kind === 'zone') { zoneTick(b, dt); continue; }
-    b.t += dt; b.x += b.vx * dt; b.spin += dt * 18 * Math.sign(b.vx);
-    if (b.g) { b.vy += b.g * dt; b.y += b.vy * dt; if (b.y > GROUND - 8) b.dead = true; }
-    else if (b.kind !== 'wave') b.y += Math.sin(b.t * 14) * .6;
-    const tgt = b.owner === p1 ? p2 : p1, hb = hurtbox(tgt);
-    if (!b.dead && b.x > hb.x0 - 14 && b.x < hb.x1 + 14 && b.y > hb.y0 && b.y < hb.y1 + 10) {
-      const r = applyHit(b.owner, tgt, b.dmg || 16, b.stun || .42, Math.sign(b.vx) * (b.kbv || 260), 'ball');
-      if (r === 'reflect') { b.owner = tgt; b.vx = -b.vx * 1.15; b.x = tgt.x + Math.sign(b.vx) * 40; fx.push({ type: 'txt', ft: tgt, text: '反彈！', color: '#9fe0ff', t: 0 }); synth('pop'); }
-      else if (r === 'pass') { if (!b.passed) { b.passed = true; fx.push({ type: 'txt', ft: tgt, text: '閃過！', color: '#8fffb0', t: 0 }); } }
-      else if (r) { b.dead = true; if (b.conf && r === true) { tgt.confT = b.conf; fx.push({ type: 'txt', ft: tgt, text: '左右顛倒！', color: '#5fd38a', t: 0 }); } } // 胡言亂語：打中的人左右鍵相反
-    }
-  }
-  balls = balls.filter(b => !b.dead && !(b.life && b.t > b.life) && b.x > -60 && b.x < W + 60);
+  pushFighters(p1, p2);
+  balls = advanceProjectiles(balls, p1, p2, dt, browserBattle);
   timer -= dt;
   if (PR.on) prTick(); // 練習場：不會死、不計時、可以無冷卻
   if (p1.ko || p2.ko || timer <= 0) endRound();
@@ -2158,12 +2037,12 @@ function physicsOnly(dt) {
 }
 function endRound() {
   stopChant();
-  let w;
-  if (p1.ko && !p2.ko) w = 1; else if (p2.ko && !p1.ko) w = 0;
-  else w = p1.hp === p2.hp ? -1 : (p1.hp > p2.hp ? 0 : 1);
+  const w = roundWinner(p1, p2);
   let perf = 0;
   if (w >= 0) {
-    wins[w]++; const winner = w === 0 ? p1 : p2; winner.act = null; winner.stun = 0; winner.win = true;
+    wins[w]++;
+    const winner = w === 0 ? p1 : p2;
+    markRoundWinner(winner);
     if (winner.hp >= (winner.maxHp || 200)) winner.cleanW++;
     // 滿貫：這回合打完整場結束、對手一回合都沒贏 → 完封（三戰兩勝才算）；每回合都滿血贏 → PERFECT（挑戰馬師傅一局定勝負也算）
     if (!ladder.on && !PR.on && wins[w] >= winNeed() && wins[1 - w] === 0) perf = winner.cleanW >= wins[w] ? 2 : winNeed() >= 2 ? 1 : 0;
@@ -2193,6 +2072,7 @@ function menuInput() {
   else if (pressed.has('Enter') || pressed.has('Space')) menuPick(menuSel);
 }
 cv.addEventListener('click', e => {
+  if (replayView) return;
   ac();
   if (mode === 'title') {
     const r = cv.getBoundingClientRect(), x = (e.clientX - r.left) * W / r.width, y = (e.clientY - r.top) * H / r.height;
@@ -3635,7 +3515,13 @@ function frame(now) {
   const onTitle = mode === 'title' || mode === 'lobby' || mode === 'mvpick' || !p1;
   // 首頁＋手機橫放（比 16:9 寬）：畫布照 #wrap 兩邊的牆板一模一樣畫，接成一整片藍，中間不會多一層顏色不同的「濾鏡」
   if (onTitle && innerWidth / innerHeight >= 16 / 9 - .01) drawFlatStage(); else drawStage();
-  if (onTitle) { drawTitle(tsec); ctx.restore(); requestAnimationFrame(frame); return; }
+  if (onTitle) drawTitle(tsec); else drawBattle(tsec, dt);
+  ctx.restore();
+  if (!onTitle) perfUi();
+  requestAnimationFrame(frame);
+}
+
+function drawBattle(tsec, dt) {
   const FTS = RG.on ? [...RG.enemies, p1] : [p1, p2];
   for (const ft of FTS) shadow(ft);
   // 殘影
@@ -3730,9 +3616,6 @@ function frame(now) {
     ctx.font = 'bold 30px "Microsoft JhengHei",sans-serif';
     if (stateT > 1.5 && !ladder.on) outlineText(RK.on ? '按 Enter 或點畫面：看排位分數' : net.role === 'host' ? '按 Enter 或點畫面：再來一場' : net.role === 'guest' ? '等待房主開下一場…' : net.role === 'spec' ? '等他們開下一場…（按 🏠 離開觀戰）' : MC.on ? '按 Enter 或點畫面：回關卡圖' : '按 Enter 回標題', W / 2, pwOver ? 352 : 440, '#fff', 6);
   }
-  ctx.restore();
-  perfUi();
-  requestAnimationFrame(frame);
 }
 /* ---- 滿貫分享：結算畫面出來後拍一張截圖，跳出「分享」鈕（手機叫出分享選單、電腦存圖＋複製文字） ---- */
 const perfShot = { blob: null, taken: false };
@@ -4513,7 +4396,7 @@ $('qrBig').onclick = () => $('qrBig').classList.add('hide');
 /* ================= 遊玩統計（只送匿名代號，後台 /admin 才看得到） ================= */
 const stat = (() => {
   const rnd = () => Math.random().toString(36).slice(2, 12) + Date.now().toString(36);
-  let off = location.protocol === 'file:' || location.hostname.startsWith('shanshenbu-test'), vid = null;
+  let off = replayView || location.protocol === 'file:' || location.hostname.startsWith('shanshenbu-test'), vid = null;
   try { off = off || localStorage.getItem('ssb_me') === '1'; vid = localStorage.getItem('ssb_vid'); if (!vid) { vid = rnd(); localStorage.setItem('ssb_vid', vid); } } catch (e) {}
   vid = vid || rnd();
   const sid = rnd();
@@ -5370,7 +5253,7 @@ let metaFromTitle = false;
 $('dailyBtn').onclick = () => metaOpen('daily');
 $('wardBtn').onclick = () => metaOpen('ward');
 // 一開網頁：有進度就順手備份一次。不再一進來就要取名：玩到要上排行榜的模式（闖關）才問。簽到不自動跳（按鈕上有紅點提醒）
-setTimeout(() => {
+if (!replayView) setTimeout(() => {
   const pf = profLoad();
   if (pf.coinsEarned > 0 || pf.login.n > 0) profSync();
 }, 900);
@@ -5702,7 +5585,7 @@ topRefresh();
 // 原片擷取（assets/sfx/ma/）：wulian 閃電鞭影片開頭；其他都是「原版視頻」那段
 const MA_LINES = { wulian: '下面我打一個閃電五連鞭', kuai: '很快啊！', deng: '一個左正蹬，一個右鞭腿，一個左刺拳', dayi: '我大意了啊，沒有閃', wude: '這兩個年輕人不講武德', pian: '來騙！來偷襲！', haozi: '我勸這位年輕人，耗子尾汁' };
 const MA_HAS = {};
-for (const k in MA_LINES) fetch('assets/sfx/ma/' + k + '.mp3', { method: 'HEAD' }).then(r => { MA_HAS[k] = r.ok; }).catch(() => {});
+if (!replayView) for (const k in MA_LINES) fetch('assets/sfx/ma/' + k + '.mp3', { method: 'HEAD' }).then(r => { MA_HAS[k] = r.ok; }).catch(() => {});
 function maSay(ft, key, force) {
   if (!ft) return;
   // 別一直講（招式綁定的台詞 force 一定講）。線上（rollback）用模擬的格數算間隔，不用真實時間：倒帶重算時兩邊結果才一樣
@@ -6591,6 +6474,224 @@ function sandboxUI() {
   });
   pickSkill('shan'); refresh();
 }
-if (params.get('pick') === '1') pickPage();
+function openReplayViewer() {
+  const fileInput = $('replayFile'), play = $('replayPlay'), seek = $('replaySeek');
+  const speed = $('replaySpeed'), time = $('replayTime'), status = $('replayStatus'), mute = $('replayMute');
+  const fighterNumbers = ['x', 'y', 'hp', 'face', 'vx', 'vy', 'stun', 'inv', 'walkPh', 'flash'];
+  const fighterFields = [...fighterNumbers, 'act', 'ko', 'win', 'cd', 'used'];
+  const ballNumbers = ['x', 'y', 'vx', 'spin', 't', 'r'];
+  const skills = ['shan', 'ball', 'bear'];
+  const fighters = ['p1', 'p2'];
+  const activeClips = new Set(), chants = new Map();
+  let audioOutput = null;
+  const winners = new Map([
+    ['player_1', '1P 獲勝！'], ['player_2', '2P 獲勝！'],
+    ['player', '1P 獲勝！'], ['cpu', '電腦獲勝！'], ['draw', '平手！'],
+  ]);
+  let replay, animation = 0, index = 0, startAt = 0, startIndex = 0, loadId = 0;
+
+  mode = 'replay';
+  document.title = '訓練對戰回放｜閃身步大亂鬥';
+  document.documentElement.classList.add('replay-viewer');
+  document.body.classList.add('replay-viewer');
+  $('replayPanel').classList.remove('hide');
+  mute.textContent = muted ? '音效：關' : '音效：開';
+  drawStage();
+
+  function validFighter(ft) {
+    if (!ft || !fighterNumbers.every(key => Number.isFinite(ft[key])) || ![-1, 1].includes(ft.face)) return false;
+    if (typeof ft.ko !== 'boolean' || typeof ft.win !== 'boolean') return false;
+    if (!ft.cd || !['shan', 'ball', 'bear'].every(key => Number.isFinite(ft.cd[key]))) return false;
+    if (!Array.isArray(ft.used) || ft.used.length !== 3 || !ft.used.every(Number.isFinite)) return false;
+    const act = ft.act;
+    if (act === null) return true;
+    if (!act || !Number.isFinite(act.t) || !['shan', 'ball', 'bear'].includes(act.type)) return false;
+    return act.type !== 'shan' || (['up', 'fwd', 'back'].includes(act.dir) && [-1, 1].includes(act.travel));
+  }
+
+  function validFrame(frame) {
+    return frame && validFighter(frame.p1) && validFighter(frame.p2) && Number.isFinite(frame.timer) &&
+      Array.isArray(frame.balls) && frame.balls.every(ball => ball && ballNumbers.every(key => Number.isFinite(ball[key])) &&
+        ball.r > 0 && [1, 2].includes(ball.owner));
+  }
+
+  function validReplay(data) {
+    return data && data.format === 'shanshenbu-replay' && data.version === 1 && data.fps === 60 &&
+      ['versus', 'quick_play'].includes(data.mode) && Array.isArray(data.frames) && data.frames.length > 0 &&
+      data.result && (data.result.winner === null || winners.has(data.result.winner)) &&
+      [null, 'ko', 'timeout'].includes(data.result.reason) && data.frames.every(validFrame);
+  }
+
+  function loadFighter(ft, snapshot) {
+    for (const key of fighterFields) ft[key] = snapshot[key];
+    ft.hpShow = snapshot.hp;
+    ft.koT = snapshot.ko ? .5 : 0;
+  }
+
+  function showFrame(next) {
+    index = next;
+    const snapshot = replay.frames[index];
+    const { result, fps } = replay;
+    loadFighter(p1, snapshot.p1);
+    loadFighter(p2, snapshot.p2);
+    balls = snapshot.balls.map(ball => ({ ...ball, owner: ball.owner === 1 ? p1 : p2 }));
+    timer = snapshot.timer;
+    const end = replay.frames.length - 1;
+    banner = index === end && result.winner !== null ? {
+      text: result.reason === 'ko' ? 'K.O.' : '時間到', sub: winners.get(result.winner), t: .25,
+    } : null;
+    seek.value = index;
+    time.value = `${(index / fps).toFixed(2)} / ${(end / fps).toFixed(2)} 秒`;
+    ctx.save();
+    drawStage();
+    drawBattle(index / fps, 0);
+    ctx.restore();
+  }
+
+  function replayClip(key, volume, offset = 0) {
+    const clip = playClip(key, volume, { output: audioOutput, rate: Number(speed.value), offset });
+    if (clip) activeClips.add(clip);
+    return clip;
+  }
+
+  function stopReplayClips() {
+    for (const clip of activeClips) clip.stop();
+    activeClips.clear();
+    chants.clear();
+  }
+
+  function stopReplayAudio() {
+    stopReplayClips();
+    audioOutput?.disconnect();
+    audioOutput = null;
+  }
+
+  function startReplayChant(player, action) {
+    const offset = Math.max(0, action.t - BEAR.chantAt);
+    const clip = replayClip('chant', .85, offset);
+    if (clip) chants.set(player, clip);
+  }
+
+  function startReplayAudio() {
+    stopReplayAudio();
+    if (muted) return;
+    unlockAudio();
+    loadBaseClips();
+    const context = ac();
+    if (context) {
+      audioOutput = context.createGain();
+      audioOutput.connect(context.destination);
+    }
+    for (const player of fighters) {
+      const action = replay.frames[index][player].act;
+      if (action?.chant) startReplayChant(player, action);
+    }
+  }
+
+  function playFrameSounds(before, after) {
+    // V1 replays store battle states. Cooldown increases also catch moves interrupted on their first tick.
+    for (const [side, player] of fighters.entries()) {
+      const previous = before[player], current = after[player];
+      for (const skill of skills) {
+        if (current.cd[skill] <= previous.cd[skill]) continue;
+        replayClip(skill, skill === 'bear' ? .9 : 1);
+        if (skill === 'shan') synth('whoosh', audioOutput);
+      }
+      const previousBall = previous.act?.type === 'ball' ? previous.act : null;
+      const currentBall = current.act?.type === 'ball' ? current.act : null;
+      if (currentBall?.spawned && !previousBall?.spawned) synth('pop', audioOutput);
+      const freshBall = ball => ball.owner === side + 1 && ball.t <= 1 / replay.fps;
+      if ((currentBall?.launched && !previousBall?.launched) ||
+          (after.balls.some(freshBall) && !before.balls.some(freshBall))) synth('kick', audioOutput);
+
+      if (current.act?.chant && !previous.act?.chant) {
+        startReplayChant(player, current.act);
+      } else if (previous.act?.chant && !current.act?.chant && chants.has(player)) {
+        const chant = chants.get(player);
+        chant.stop();
+        activeClips.delete(chant);
+        chants.delete(player);
+      }
+      // Basic projectiles knock back much faster than the bear combo, even on the KO tick.
+      if (current.hp < previous.hp) synth(Math.abs(current.vx) > 100 ? 'kick' : 'hit', audioOutput);
+    }
+  }
+
+  function pause(silence = true) {
+    cancelAnimationFrame(animation);
+    animation = 0;
+    play.textContent = '播放';
+    if (silence) stopReplayAudio();
+  }
+
+  function tick(now) {
+    const end = replay.frames.length - 1;
+    const elapsed = Math.max(0, now - startAt) * replay.fps * Number(speed.value) / 1000;
+    const next = Math.min(end, startIndex + Math.floor(elapsed));
+    if (!muted) {
+      for (let i = index + 1; i <= next; i++) playFrameSounds(replay.frames[i - 1], replay.frames[i]);
+    }
+    if (next !== index) showFrame(next);
+    if (next === end) {
+      pause(false);
+      stopReplayClips();
+      if (replay.result.reason) synth('gong', audioOutput);
+    } else animation = requestAnimationFrame(tick);
+  }
+
+  play.addEventListener('click', () => {
+    if (animation) { pause(); return; }
+    if (index === replay.frames.length - 1) showFrame(0);
+    startIndex = index;
+    startAt = performance.now();
+    startReplayAudio();
+    play.textContent = '暫停';
+    animation = requestAnimationFrame(tick);
+  });
+  seek.addEventListener('input', () => { pause(); showFrame(Number(seek.value)); });
+  speed.addEventListener('change', () => {
+    startIndex = index;
+    startAt = performance.now();
+    if (animation) startReplayAudio();
+  });
+  mute.addEventListener('click', () => {
+    muted = !muted;
+    mute.textContent = muted ? '音效：關' : '音效：開';
+    if (animation) startReplayAudio();
+    else stopReplayAudio();
+  });
+  document.addEventListener('visibilitychange', () => { if (document.hidden) pause(); });
+
+  fileInput.addEventListener('click', () => { fileInput.value = ''; });
+  fileInput.addEventListener('change', async () => {
+    const file = fileInput.files[0];
+    if (!file) return;
+    const id = ++loadId;
+    pause();
+    play.disabled = seek.disabled = speed.disabled = true;
+    status.textContent = '讀取回放中…';
+    try {
+      const data = JSON.parse(await file.text());
+      if (id !== loadId) return;
+      if (!validReplay(data)) throw new Error('不支援的回放格式');
+      replay = data;
+      if (!muted) loadBaseClips();
+      p1 = new Fighter('p1', 380, 1);
+      p2 = new Fighter('p2', 900, -1);
+      vsCPU = replay.mode === 'quick_play';
+      seek.max = replay.frames.length - 1;
+      const matchup = vsCPU ? '玩家 vs. 電腦' : '1P vs. 2P';
+      status.textContent = `${file.name} · ${matchup} · ${replay.frames.length} 幀`;
+      showFrame(0);
+    } catch (error) {
+      if (id === loadId) status.textContent = replay ? '回放檔無效，仍顯示上一段回放。' : '無法開啟回放。請選擇有效的第 1 版 JSON 回放檔。';
+    } finally {
+      if (id === loadId) play.disabled = seek.disabled = speed.disabled = !replay || replay.frames.length === 1;
+    }
+  });
+}
+
+if (replayView) openReplayViewer();
+else if (params.get('pick') === '1') pickPage();
 else { if (SB) sandboxUI(); requestAnimationFrame(frame); }
 

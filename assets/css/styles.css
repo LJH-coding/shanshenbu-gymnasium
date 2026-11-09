@@ -502,3 +502,24 @@
   #cfName{font:bold 26px "Microsoft JhengHei",sans-serif;color:#ffe600;margin-top:4px;text-shadow:0 2px 0 #000}
   #cfDesc{font-size:15px;color:#dbe9f7;margin-top:4px;min-height:20px}
   #cfOk{margin-top:14px;font:bold 20px "Microsoft JhengHei",sans-serif;padding:10px 40px;border:0;border-radius:12px;background:#1fbf7f;color:#fff8c4;cursor:pointer}
+
+  #replayLink{box-sizing:border-box;text-decoration:none}
+  body.fight #replayLink{display:none}
+  html.replay-viewer{touch-action:pan-y}
+  body.replay-viewer{display:flex;flex-direction:column;gap:12px;box-sizing:border-box;overflow:auto;touch-action:pan-y;
+    padding:max(12px,env(safe-area-inset-top)) max(12px,env(safe-area-inset-right)) max(12px,env(safe-area-inset-bottom)) max(12px,env(safe-area-inset-left))}
+  body.replay-viewer :is(#tools,#coinPill,#bar,#pads,#rot,#chestBtn,#staticBadge){display:none}
+  body.replay-viewer #wrap{position:static;inset:auto;flex:1 0 auto;justify-content:center;padding:0;background:none}
+  body.replay-viewer #wrap canvas{width:min(100%,1120px,max(320px,calc((100dvh - 176px)*16/9)));border-radius:12px}
+  #replayPanel{order:-1;box-sizing:border-box;width:min(100%,1120px);align-self:center;display:grid;gap:8px;
+    padding:12px 16px;border:1px solid #49759b;border-radius:12px;background:#13304f;color:#e4f0fc;touch-action:auto}
+  #replayPanel h1{margin:0;font-size:clamp(18px,4vw,25px);flex:1}
+  #replayPanel a{color:#ffdd75;white-space:nowrap}
+  .replay-row{display:flex;align-items:center;gap:8px 12px;flex-wrap:wrap}
+  #replayFile{max-width:100%;font:inherit}
+  #replayPlay{min-width:4.5em}
+  #replayPlay:disabled{opacity:.5;cursor:default}
+  #replaySeek{flex:1 1 110px;min-width:0;accent-color:#ffd34d;touch-action:none}
+  #replayTime{font-variant-numeric:tabular-nums;white-space:nowrap}
+  #replaySpeed{font:inherit}
+  #replayStatus{margin:0;color:#b8d1e8;overflow-wrap:anywhere}

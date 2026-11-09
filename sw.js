@@ -1,19 +1,21 @@
-const CACHE = 'shanshenbu-static-v1';
+const CACHE = 'shanshenbu-static-v4';
 const APP_SHELL = [
   './',
   './index.html',
   './manifest.webmanifest',
-  './assets/css/styles.css',
+  './assets/css/styles.css?v=3',
   './assets/js/static-mode.js',
-  './assets/js/app.js',
+  './shanshenbu_gym/js/battle-rules.js',
+  './shanshenbu_gym/js/quick-play-cpu.js',
+  './assets/js/app.js?v=4',
   './assets/icons/icon-192.png',
   './assets/icons/icon-512.png',
   './assets/icons/maskable-512.png',
   './assets/icons/apple-touch-icon.png',
-  './assets/sfx/shan.mp3',
-  './assets/sfx/ball.mp3',
-  './assets/sfx/bear.mp3',
-  './assets/sfx/chant.mp3'
+  './assets/sfx/shan.mp3?v=3',
+  './assets/sfx/ball.mp3?v=3',
+  './assets/sfx/bear.mp3?v=3',
+  './assets/sfx/chant.mp3?v=3'
 ];
 
 self.addEventListener('install', event => {

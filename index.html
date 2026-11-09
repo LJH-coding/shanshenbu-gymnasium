@@ -13,10 +13,27 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="閃身步">
 <title>閃身步大亂鬥</title>
-<link rel="stylesheet" href="assets/css/styles.css">
+<link rel="stylesheet" href="assets/css/styles.css?v=3">
 </head>
 <body>
 <div id="wrap"><canvas id="c" width="1280" height="720"></canvas></div>
+<section id="replayPanel" class="hide" aria-labelledby="replayHeading">
+  <div class="replay-row"><h1 id="replayHeading">訓練對戰回放</h1><a href="./">返回遊戲</a></div>
+  <div class="replay-row">
+    <label for="replayFile">開啟回放檔</label>
+    <input id="replayFile" type="file" accept=".json,application/json">
+  </div>
+  <div class="replay-row">
+    <button id="replayPlay" class="tb" type="button" disabled>播放</button>
+    <button id="replayMute" class="tb" type="button">音效：開</button>
+    <input id="replaySeek" type="range" min="0" max="0" value="0" aria-label="回放進度" disabled>
+    <output id="replayTime" for="replaySeek" aria-live="off">0.00 / 0.00 秒</output>
+    <select id="replaySpeed" aria-label="播放速度" disabled>
+      <option value="0.5">0.5×</option><option value="1" selected>1×</option><option value="2">2×</option>
+    </select>
+  </div>
+  <p id="replayStatus" role="status">選擇從訓練程式匯出的 JSON 回放檔。</p>
+</section>
 <div id="tools">
   <button id="home" class="tl" title="回首頁">🏠</button>
   <button id="menuBtn" class="tl" title="選單">☰</button>
@@ -27,6 +44,7 @@
     <button id="wardBtn" class="mi"><i>👕</i>造型衣櫃</button>
     <button id="achBtn" class="mi"><i>🏆</i>成就</button>
     <button id="prBtn" class="mi"><i>🧪</i>招式練習場</button>
+    <a id="replayLink" class="mi" href="?replay=1"><i aria-hidden="true">▶</i>訓練對戰回放</a>
     <button id="maBtn" class="mi" style="display:none"><i>⚡</i>挑戰馬師傅（試玩）</button><!-- 馬師傅計畫暫停：先藏起來 -->
     <button id="mute" class="mi"></button>
     <button id="stickBtn" class="mi"><i>🕹️</i>搖桿操作</button>
@@ -331,6 +349,8 @@
 <div id="bwJoinBox" class="hide"><div class="jb"><div class="jt">輸入房主的房號</div><input id="bwJoinIn" inputmode="numeric" maxlength="6" placeholder="5 位數" autocomplete="off"><div class="jm" id="bwJoinMsg"></div><button id="bwJoinGo" style="background:#e8601c;color:#ffe600">加入</button><button id="bwJoinNo" style="background:#556;color:#fff">取消</button></div></div>
 <div id="bwQr" class="hide"><div class="qrBox"><div id="bwQrImg"></div><div class="qrT">手機掃碼，加入四人合作</div><div class="qrR">房號 <b id="bwQrRoom">-----</b></div><div class="qrS">不用下載、不用註冊・最多 4 人・點一下關閉</div></div></div>
 <script src="assets/js/static-mode.js"></script>
-<script src="assets/js/app.js"></script>
+<script src="shanshenbu_gym/js/battle-rules.js"></script>
+<script src="shanshenbu_gym/js/quick-play-cpu.js"></script>
+<script src="assets/js/app.js?v=4"></script>
 </body>
 </html>
